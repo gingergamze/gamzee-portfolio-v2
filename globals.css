@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-montserrat), system-ui, sans-serif;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+.sun-spin {
+  animation: spin-slow 10s linear infinite;
+}
+
+.sun-spin:hover {
+  animation-play-state: paused;
+  cursor: pointer;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+@keyframes orbit {
+  from { transform: translate(-50%, -50%) rotate(0deg) translateX(40px); }
+  to { transform: translate(-50%, -50%) rotate(360deg) translateX(40px); }
+}
+@keyframes float-lr {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(5px); }
+}
+
+.animate-float-lr {
+  animation: float-lr 2.5s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.scroll-arrow {
+  animation: scrollBounce 1.4s ease-in-out infinite;
+}
