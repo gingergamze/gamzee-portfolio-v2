@@ -1,10 +1,19 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import ChatWidget from './ChatWidget';
 
 const ACCENT = '#B4470E';
 
 export default function Home() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <>
       {/* NAVBAR */}
@@ -14,14 +23,17 @@ export default function Home() {
         width: 'calc(100% - 40px)', maxWidth: '2000px', zIndex: 100,
       }}>
         <nav style={{
-          background: 'transparent',
-          border: '0.7px solid rgba(28,25,23,0.15)',
+          background: scrolled ? 'rgba(247,244,239,0.92)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          border: scrolled ? '0.7px solid rgba(28,25,23,0.12)' : '0.7px solid rgba(28,25,23,0.15)',
           borderRadius: '18px',
           padding: '14px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: 'none',
+          boxShadow: scrolled ? '0 2px 20px rgba(28,25,23,0.06)' : 'none',
+          transition: 'all 0.3s ease',
         }}>
           <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '20px' }}>
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
@@ -69,7 +81,7 @@ export default function Home() {
             pointerEvents: 'none',
           }}
         >
-          <source src="/sunvid-bg.mp4" type="video/mp4" />
+          <source src="/sunn.mp4" type="video/mp4" />
         </video>
 
         {/* ===== Cloud Dancer wash so text stays readable ===== */}
@@ -122,7 +134,7 @@ export default function Home() {
             marginLeft: '2px',
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 900,
-            fontSize: 'clamp(13px, 1.4vw, 24px)',
+            fontSize: 'clamp(93px, 1.4vw, 24px)',
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
             color: '#d04d03',
@@ -133,7 +145,7 @@ export default function Home() {
             margin: -3,
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 600,
-            fontSize: 'clamp(40px, 9vw, 100px)',
+            fontSize: 'clamp(20px, 9vw, 80px)',
             lineHeight: 0.99,
             letterSpacing: '-0.045em',
             color: '#1C1917',
@@ -151,7 +163,7 @@ export default function Home() {
         zIndex: 1,
         marginTop: 0,
         background: '#F7F4EF',
-        borderRadius: '8px 8px 0 0',
+        borderRadius: '4px 4px 0 0',
         border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
       }}>
@@ -162,7 +174,7 @@ export default function Home() {
           alignItems: 'center',
           padding: 'clamp(140px,28vh,320px) clamp(24px,5vw,72px) clamp(140px,28vh,320px)',
         }}>
-          {/* LEFT — big title ABOUT ME SECTION COLOR */}
+          {/* LEFT — big title WHAT I DO SECTION COLOR */}
           <div>
           <h2 style={{
               fontFamily: 'var(--font-plus-jakarta-sans)',
@@ -246,21 +258,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* DISCIPLINE */}
-            <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Discipline</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['UX Design', 'UX Research', 'Systems Thinking', 'Strategy'].map(d => (
-                  <span key={d} style={{ fontSize: '15px', color: '#1C1917' }}>{d}</span>
-                ))}
-              </div>
-            </div>
+           
 
-            {/* TOOLS */}
+            {/* PROBLEMS I SOLVE */}
             <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Tools</div>
+              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Problems I Solve</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['Figma', 'Spotfire', 'Cursor', 'Notion'].map(t => (
+                {['Information Overload ', 'No clear ownership ', 'Workflow mismatch ', 'Poor Information Hierarchy', 'Low data trust '].map(t => (
                   <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
                 ))}
               </div>
