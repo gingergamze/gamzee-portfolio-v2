@@ -14,16 +14,14 @@ export default function Home() {
         width: 'calc(100% - 40px)', maxWidth: '2000px', zIndex: 100,
       }}>
         <nav style={{
-          background: 'rgba(247,244,239,0.92)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '0.5px solid rgba(28,25,23,0.12)',
+          background: 'transparent',
+          border: '0.7px solid rgba(28,25,23,0.15)',
           borderRadius: '18px',
           padding: '14px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 2px 20px rgba(28,25,23,0.06)',
+          boxShadow: 'none',
         }}>
           <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '20px' }}>
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
@@ -71,7 +69,7 @@ export default function Home() {
             pointerEvents: 'none',
           }}
         >
-          <source src="/sunvid-compressed.mp4" type="video/mp4" />
+          <source src="/sunvid-bg.mp4" type="video/mp4" />
         </video>
 
         {/* ===== Cloud Dancer wash so text stays readable ===== */}
