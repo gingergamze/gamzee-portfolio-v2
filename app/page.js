@@ -64,13 +64,12 @@ export default function Home() {
       }}>
 
         {/* ===== HERO BACKGROUND VIDEO — lives only in the hero ===== */}
-        {/* ===== HERO BACKGROUND VIDEO — lives only in the hero ===== */}
         <video
           autoPlay
           loop
           muted
           playsInline
-          onLoadedMetadata={(e) => { e.target.playbackRate = 0.5; }}
+          onLoadedMetadata={(e) => { e.target.playbackRate = 0.25; }}
           style={{
             position: 'absolute',
             inset: 0,
@@ -129,29 +128,29 @@ export default function Home() {
 
         {/* Kicker + headline */}
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <p style={{
+          <p className="hero-kicker" style={{
             margin: '0 0 32px',
-            marginLeft: '2px',
+            marginLeft: '-2px',
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 900,
-            fontSize: 'clamp(93px, 1.4vw, 24px)',
-            letterSpacing: '0.16em',
+            fontSize: 'clamp(90px, 1.4vw, 18px)',
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: '#d04d03',
           }}>
             Design & strategy
           </p>
-          <h1 style={{
+          <h1 className="hero-headline" style={{
             margin: -3,
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 600,
-            fontSize: 'clamp(20px, 9vw, 80px)',
+            fontSize: 'clamp(20px, 9vw, 60px)',
             lineHeight: 0.99,
             letterSpacing: '-0.045em',
             color: '#1C1917',
           }}>
-            For complex workflows<br />
-            and data-rich products
+            For complex workflows and data-rich products <br />
+            
           </h1>
         </div>
       </header>
@@ -164,55 +163,37 @@ export default function Home() {
         marginTop: 0,
         background: '#F7F4EF',
         borderRadius: '4px 4px 0 0',
-        border: '0.7px solid rgba(28,25,23,0.1)',
+        border: '0.4px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
       }}>
+        {/* Single left-aligned column: heading on top, text stacked below */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 'clamp(32px,6vw,100px)',
-          alignItems: 'center',
-          padding: 'clamp(140px,28vh,320px) clamp(24px,5vw,72px) clamp(140px,28vh,320px)',
+          padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
         }}>
-          {/* LEFT — big title WHAT I DO SECTION COLOR */}
-          <div>
           <h2 style={{
-              fontFamily: 'var(--font-plus-jakarta-sans)',
-              fontWeight: 600,
-              fontSize: 'clamp(40px, 9vw, 100px)',
-              lineHeight: 0.99,
-              letterSpacing: '-0.045em',
-              color: '#1C1917',
-              margin: 0,
-            }}>
-              What I do
-            </h2>
-          </div>
+            fontFamily: 'var(--font-plus-jakarta-sans)',
+            fontWeight: 600,
+            fontSize: 'clamp(20px, 9vw, 60px)',
+            lineHeight: 0.99,
+            letterSpacing: '-0.045em',
+            color: '#1C1917',
+            margin: '0 0 40px',
+          }}>
+            What I do
+          </h2>
 
-          {/* RIGHT — paragraph + tagline */}
-          <div style={{ paddingTop: '8px' }}>
-            <p style={{
-              fontSize: 'clamp(18px,2vw,26px)',
-              lineHeight: 1.5,
-              color: '#3D3631',
-              margin: '0 0 40px',
-              maxWidth: '52ch',
-            }}>
-              I find where products and workflows underperform and I fix them where it costs the business.
-            </p>
+          <p style={{
+            fontSize: 'clamp(18px,2vw,11px)',
+            lineHeight: 1.5,
+            color: '#1C1917',
+            margin: '0 0 32px',
+            maxWidth: '152ch',
+          }}>
+            I find where products and workflows underperform. Then I fix them where it costs the business. 
+          </p>
 
-            <p style={{
-              fontSize: '12px',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: '#7C756E',
-              fontWeight: 600,
-              margin: '0 0 24px',
-            }}>
-              Enterprise — B2B — SaaS — Internal Tools
-            </p>
-
-          </div>
+          
+          
         </div>
       </section>
 
@@ -233,7 +214,7 @@ export default function Home() {
           <h2 style={{
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 600,
-            fontSize: 'clamp(40px, 9vw, 100px)',
+            fontSize: 'clamp(20px, 9vw, 60px)',
             letterSpacing: '-0.045em',
             lineHeight: 0.99,
             color: '#1C1917',
@@ -247,7 +228,7 @@ export default function Home() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: 'clamp(24px,4vw,48px)',
-            borderTop: '0.5px solid rgba(28,25,23,0.2)',
+            
             paddingTop: '40px',
           }}>
             {/* TIMEFRAME */}
@@ -258,13 +239,11 @@ export default function Home() {
               </div>
             </div>
 
-           
-
             {/* PROBLEMS I SOLVE */}
             <div>
               <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Problems I Solve</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['Information Overload ', 'No clear ownership ', 'Workflow mismatch ', 'Poor Information Hierarchy', 'Low data trust '].map(t => (
+                {['Information Overload ',  'Workflow mismatch ', 'Poor Information Hierarchy', 'Low data trust '].map(t => (
                   <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
                 ))}
               </div>
@@ -274,7 +253,7 @@ export default function Home() {
             <div>
               <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Focused Products</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {['Enterprise', 'Complex software', 'Data-heavy internal applications', 'operational software', 'B2B platforms for professional users', 'Workflow and decision-making software'].map(tag => (
+                {['Enterprise', , 'Data-heavy internal applications', 'operational softwares', 'B2B platforms for professional users', 'Workflow and decision-making softwares'].map(tag => (
                   <span key={tag} style={{
                     fontSize: '12px',
                     fontWeight: 700,
