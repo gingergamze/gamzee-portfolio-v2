@@ -7,7 +7,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hello My name is Sunny 🌞, ask me anything about Gamze's work. I am here to help!" }
+    { role: 'assistant', content: "Hello, My name is Sunny 🌞, ask me anything about Gamze's work. I'm here to help!" }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);

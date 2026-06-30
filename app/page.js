@@ -39,7 +39,7 @@ export default function Home() {
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
               <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
-              <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Designer &<br />Strategist</div>
+              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Designer &amp; Strategist</div>
             </div>
           </a>
           <div className="nav-contact-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
