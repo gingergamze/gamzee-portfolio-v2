@@ -62,8 +62,7 @@ export default function ChatWidget() {
       {isOpen && (
         <div
           style={{ position: 'fixed', bottom: '120px', right: '24px', zIndex: 50, height: '480px', maxHeight: 'calc(100vh - 220px)', animation: 'slideUp 0.3s ease-out' }}
-          className="w-80 sm:w-96 bg-white border border-zinc-200 rounded-2xl shadow-xl flex flex-col overflow-hidden">
-
+          className="chat-panel w-80 sm:w-96 bg-white border border-zinc-200 rounded-2xl shadow-xl flex flex-col overflow-hidden">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100 bg-white">
             <div className="flex items-center gap-2">
