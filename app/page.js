@@ -16,6 +16,20 @@ export default function Home() {
 
   return (
     <>
+      {/* TOP MASK — hides content scrolling up behind the floating navbar (only once scrolled) */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '104px',
+        background: '#F7F4EF',
+        zIndex: 99,
+        opacity: scrolled ? 1 : 0,
+        transition: 'opacity 0.3s ease',
+        pointerEvents: 'none',
+      }} />
+
       {/* NAVBAR */}
       <div style={{
         position: 'fixed', top: '20px', left: '50%',
