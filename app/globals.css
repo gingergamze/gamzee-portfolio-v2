@@ -77,3 +77,13 @@
 @media (max-width: 820px) {
   .meta-grid { grid-template-columns: 1fr; }
 }
+/* CONTACT link — mobile only */
+@media (max-width: 600px) {
+  .nav-contact {
+    font-size: 10px !important;
+  }
+  .nav-contact-wrap {
+    align-self: flex-start !important;
+    margin-top: 2px !important;
+  }
+}
