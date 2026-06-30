@@ -61,7 +61,7 @@ export default function ChatWidget() {
       {/* Chat panel */}
       {isOpen && (
         <div
-          style={{ position: 'fixed', bottom: '120px', right: '24px', zIndex: 50, height: '480px', animation: 'slideUp 0.3s ease-out' }}
+          style={{ position: 'fixed', bottom: '120px', right: '24px', zIndex: 50, height: '480px', maxHeight: 'calc(100vh - 220px)', animation: 'slideUp 0.3s ease-out' }}
           className="w-80 sm:w-96 bg-white border border-zinc-200 rounded-2xl shadow-xl flex flex-col overflow-hidden">
 
           {/* Header */}
