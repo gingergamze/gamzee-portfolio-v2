@@ -43,7 +43,7 @@ export default function Home() {
             </div>
           </a>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
-            <a href="/contact" style={{ fontSize: '12px', fontWeight: 600, color: '#1C1917', textDecoration: 'none', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Contact</a>
+            <a href="/contact" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 600, color: '#1C1917', textDecoration: 'none', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Contact</a>
           </div>
         </nav>
       </div>
