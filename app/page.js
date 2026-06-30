@@ -133,7 +133,7 @@ export default function Home() {
             marginLeft: '-2px',
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 900,
-            fontSize: 'clamp(90px, 1.4vw, 18px)',
+            fontSize: 'clamp(24px, 7vw, 90px)',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: '#d04d03',
