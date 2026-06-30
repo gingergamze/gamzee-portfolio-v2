@@ -28,18 +28,18 @@ export default function Home() {
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           border: scrolled ? '0.7px solid rgba(28,25,23,0.12)' : '0.7px solid rgba(28,25,23,0.15)',
           borderRadius: '18px',
-          padding: '14px 20px',
+          padding: '14px clamp(10px, 3vw, 20px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           boxShadow: scrolled ? '0 2px 20px rgba(28,25,23,0.06)' : 'none',
           transition: 'all 0.3s ease',
         }}>
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: 'clamp(0px, 1.5vw, 20px)' }}>
+          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
               <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
-              <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1 }}>Product Designer & Strategist</div>
+              <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Designer &<br />Strategist</div>
             </div>
           </a>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
