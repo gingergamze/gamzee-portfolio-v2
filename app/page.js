@@ -26,8 +26,8 @@ export default function Home() {
           background: scrolled ? 'rgba(247,244,239,0.92)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-          border: scrolled ? '0.7px solid rgba(28,25,23,0.12)' : '0.7px solid rgba(28,25,23,0.15)',
-          borderRadius: '18px',
+          border: scrolled ? '0.3px solid rgba(28,25,23,0.12)' : '0.3px solid rgba(28,25,23,0.15)',
+          borderRadius: '14px',
           padding: '14px clamp(10px, 3vw, 20px)',
           display: 'flex',
           alignItems: 'center',
@@ -233,7 +233,7 @@ export default function Home() {
           }}>
             {/* TIMEFRAME */}
             <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Timeframe</div>
+              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Timeframe</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <span style={{ fontSize: '15px', color: '#1C1917' }}>Year 2022–26</span>
               </div>
@@ -241,9 +241,9 @@ export default function Home() {
 
             {/* PROBLEMS I SOLVE */}
             <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Problems I Solve</div>
+              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Problems I Solve</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['Information Overload ',  'Workflow mismatch ', 'Poor Information Hierarchy', 'Low data trust '].map(t => (
+                {['Slow Decisions, Wasted Time ', 'Poor Information Hierarchy', 'Low Data Trust '].map(t => (
                   <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
                 ))}
               </div>
@@ -251,7 +251,7 @@ export default function Home() {
 
             {/* FOCUSED PRODUCTS — tag boxes */}
             <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: '40px' }}>Focused Products</div>
+              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Focused Products</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {['Enterprise', , 'Data-heavy internal applications', 'operational softwares', 'B2B platforms for professional users', 'Workflow and decision-making softwares'].map(tag => (
                   <span key={tag} style={{
