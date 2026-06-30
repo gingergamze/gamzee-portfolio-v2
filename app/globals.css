@@ -81,9 +81,11 @@
 @media (max-width: 600px) {
   .nav-contact {
     font-size: 10px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   .nav-contact-wrap {
     align-self: flex-start !important;
-    margin-top: 2px !important;
+    margin-top: 8px !important;
   }
 }
