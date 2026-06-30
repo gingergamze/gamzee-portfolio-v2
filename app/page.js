@@ -220,7 +220,7 @@ export default function Home() {
         borderRadius: '8px 8px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
-        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
+        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(16px,3vh,32px)',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0' }}>
 
@@ -237,21 +237,139 @@ export default function Home() {
             Selected Work
           </h2>
 
-          {/* Metadata bar */}
+        </div>
+      </section>
+
+      {/* WORK SHOWCASE — 3 big media frames with descriptions */}
+      <section style={{
+        position: 'relative',
+        zIndex: 2,
+        background: '#F7F4EF',
+        padding: 'clamp(16px,3vh,32px) clamp(24px,5vw,72px) clamp(60px,10vh,120px)',
+      }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'clamp(60px,10vh,120px)' }}>
+
+          {/* ---- FRAME 1 ---- */}
+          <div>
+            {/* MEDIA — replace the inner placeholder with <img src="/your-image.jpg" .../> or a <video> */}
+            <div style={{
+              width: '100%',
+              aspectRatio: '16 / 9',
+              borderRadius: '14px',
+              border: '1px solid rgba(28,25,23,0.15)',
+              background: 'rgba(28,25,23,0.04)',
+              overflow: 'hidden',
+              display: 'grid',
+              placeItems: 'center',
+              marginBottom: '24px',
+            }}>
+              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 1</span>
+            </div>
+            <h3 style={{
+              fontFamily: 'var(--font-plus-jakarta-sans)',
+              fontWeight: 600,
+              fontSize: 'clamp(22px,4vw,34px)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.05,
+              color: '#1C1917',
+              margin: '0 0 12px',
+            }}>
+              Project title one
+            </h3>
+            <p style={{
+              fontSize: 'clamp(15px,2vw,18px)',
+              lineHeight: 1.55,
+              color: '#3D3631',
+              margin: 0,
+              maxWidth: '60ch',
+            }}>
+              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
+            </p>
+          </div>
+
+          {/* ---- FRAME 2 ---- */}
+          <div>
+            <div style={{
+              width: '100%',
+              aspectRatio: '16 / 9',
+              borderRadius: '14px',
+              border: '1px solid rgba(28,25,23,0.15)',
+              background: 'rgba(28,25,23,0.04)',
+              overflow: 'hidden',
+              display: 'grid',
+              placeItems: 'center',
+              marginBottom: '24px',
+            }}>
+              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 2</span>
+            </div>
+            <h3 style={{
+              fontFamily: 'var(--font-plus-jakarta-sans)',
+              fontWeight: 600,
+              fontSize: 'clamp(22px,4vw,34px)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.05,
+              color: '#1C1917',
+              margin: '0 0 12px',
+            }}>
+              Project title two
+            </h3>
+            <p style={{
+              fontSize: 'clamp(15px,2vw,18px)',
+              lineHeight: 1.55,
+              color: '#3D3631',
+              margin: 0,
+              maxWidth: '60ch',
+            }}>
+              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
+            </p>
+          </div>
+
+          {/* ---- FRAME 3 ---- */}
+          <div>
+            <div style={{
+              width: '100%',
+              aspectRatio: '16 / 9',
+              borderRadius: '14px',
+              border: '1px solid rgba(28,25,23,0.15)',
+              background: 'rgba(28,25,23,0.04)',
+              overflow: 'hidden',
+              display: 'grid',
+              placeItems: 'center',
+              marginBottom: '24px',
+            }}>
+              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 3</span>
+            </div>
+            <h3 style={{
+              fontFamily: 'var(--font-plus-jakarta-sans)',
+              fontWeight: 600,
+              fontSize: 'clamp(22px,4vw,34px)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1.05,
+              color: '#1C1917',
+              margin: '0 0 12px',
+            }}>
+              Project title three
+            </h3>
+            <p style={{
+              fontSize: 'clamp(15px,2vw,18px)',
+              lineHeight: 1.55,
+              color: '#3D3631',
+              margin: 0,
+              maxWidth: '60ch',
+            }}>
+              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
+            </p>
+          </div>
+
+          {/* ---- METADATA BAR — moved here, under the last case study ---- */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: 'clamp(48px,8vw,48px) clamp(24px,4vw,48px)',
-            
-            paddingTop: '40px',
+            borderTop: '0.5px solid rgba(28,25,23,0.2)',
+            paddingTop: 'clamp(40px,6vh,64px)',
           }}>
-            {/* TIMEFRAME */}
-            <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Timeframe</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <span style={{ fontSize: '15px', color: '#1C1917' }}>Year 2022–26</span>
-              </div>
-            </div>
+            
 
             {/* PROBLEMS I SOLVE */}
             <div>
@@ -283,6 +401,7 @@ export default function Home() {
             </div>
 
           </div>
+
         </div>
       </section>
 
