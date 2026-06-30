@@ -227,7 +227,7 @@ export default function Home() {
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 'clamp(24px,4vw,48px)',
+            gap: 'clamp(48px,8vw,48px) clamp(24px,4vw,48px)',
             
             paddingTop: '40px',
           }}>
