@@ -101,19 +101,18 @@
     left: 16px !important;
   }
 }
-/* Subtitle: one line on desktop, two lines on mobile */
+/* Subtitle: always one line, on every screen */
 .nav-subtitle {
   white-space: nowrap;
-}
-@media (max-width: 600px) {
-  .nav-subtitle {
-    white-space: normal;
-    max-width: 9ch;
-  }
 }
 /* Hide CONTACT in navbar on mobile only */
 @media (max-width: 600px) {
   .nav-contact-wrap {
     display: none !important;
   }
+}
+/* Desktop only: align navbar logo & contact with the hero text edges */
+@media (min-width: 601px) {
+  .nav-logo { padding-left: 32px !important; }
+  .nav-contact-wrap { padding-right: 32px !important; }
 }

@@ -373,7 +373,7 @@ export default function Home() {
 
             {/* PROBLEMS I SOLVE */}
             <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Problems I Solve</div>
+              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>TOP Problems I Solve</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {['Slow Decisions, Wasted Time ', 'Poor Information Hierarchy', 'Low Data Trust '].map(t => (
                   <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
