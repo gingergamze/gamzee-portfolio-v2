@@ -42,14 +42,14 @@ export default function Home() {
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           border: scrolled ? '0.3px solid rgba(28,25,23,0.12)' : '0.3px solid rgba(28,25,23,0.15)',
           borderRadius: '14px',
-          padding: '14px clamp(10px, 3vw, 20px)',
+          padding: '14px clamp(10px, 0.7vw, 20px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           boxShadow: scrolled ? '0 2px 20px rgba(28,25,23,0.06)' : 'none',
           transition: 'all 0.3s ease',
         }}>
-          <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
+          <a href="#" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
               <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
