@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ChatWidget from './ChatWidget';
 
 const ACCENT = '#B4470E';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+  const cardRefs = useRef([]);
+  const [activeCard, setActiveCard] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
@@ -14,9 +16,116 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Scroll-driven scale/fade for the stacking cards
+  useEffect(() => {
+    const STICK_TOP = 120;
+    const MIN_SCALE = 0.88;
+    const MIN_OPACITY = 0.55;
+
+    const onScroll = () => {
+      const cards = cardRefs.current.filter(Boolean);
+      cards.forEach((card, i) => {
+        const next = cards[i + 1];
+        if (!next) {
+          card.style.transform = 'scale(1)';
+          card.style.opacity = '1';
+          return;
+        }
+        const nextTop = next.getBoundingClientRect().top;
+        const start = window.innerHeight;
+        const end = STICK_TOP + 20;
+        let p = (start - nextTop) / (start - end);
+        p = Math.max(0, Math.min(1, p));
+        const scale = 1 - (1 - MIN_SCALE) * p;
+        const opacity = 1 - (1 - MIN_OPACITY) * p;
+        card.style.transform = `scale(${scale.toFixed(4)})`;
+        card.style.opacity = opacity.toFixed(3);
+      });
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  const cardShell = {
+    position: 'sticky',
+    top: '120px',
+    background: '#EDE8DF',
+    border: '1px solid rgba(28,25,23,0.11)',
+    borderRadius: '16px',
+    boxShadow: '0 -6px 28px rgba(28,25,23,0.10)',
+    overflow: 'hidden',
+    transformOrigin: 'center top',
+    willChange: 'transform, opacity',
+    transition: 'transform 0.1s linear, opacity 0.1s linear',
+  };
+
+  const peekStrip = {
+    padding: '18px clamp(24px,4vw,56px)',
+    borderBottom: '1px solid rgba(255,255,255,0.10)',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  };
+
+  const mediaBox = {
+    width: '100%',
+    height: 'clamp(300px,95vh,650px)',
+    borderRadius: '10px',
+    border: '1px solid rgba(255,255,255,0.14)',
+    background: 'rgba(28,25,23,0.04)',
+    overflow: 'hidden',
+    display: 'grid',
+    placeItems: 'center',
+    marginBottom: '28px',
+  };
+
+  const titleStyle = {
+    fontFamily: 'var(--font-plus-jakarta-sans)',
+    fontWeight: 600,
+    fontSize: 'clamp(22px,4vw,40px)',
+    letterSpacing: '-0.03em',
+    lineHeight: 1.05,
+    color: '#1C1917',
+    margin: '0 0 14px',
+  };
+
+  const descStyle = {
+    fontSize: 'clamp(15px,1.8vw,20px)',
+    lineHeight: 1.55,
+    color: '#3D3631',
+    margin: 0,
+    maxWidth: '72ch',
+  };
+
+  const stripLabel = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' };
+  const stripTag = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#d04d03' };
+  const mediaLabel = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' };
+
+  const cards = [
+    { n: '01', name: 'Sintek Procurement Platform', title: 'Sintek Procurement Platform', type: 'image', media: '/asmltest.jpg' },
+    { n: '02', name: 'ASML Similarity Model', title: 'ASML Similarity Model', type: 'video', media: '/A1.mp4' },
+    { n: '03', name: 'Project title three', title: 'Project title three', type: 'image', media: '/project-three.png' },
+  ];
+
+  const stories = [
+    { img: '/profilepicc.png', label: 'Story one' },
+    { img: '/profilepicc.png', label: 'Story two' },
+    { img: '/profilepicc.png', label: 'Story three' },
+    { img: '/profilepicc.png', label: 'Story four' },
+    { img: '/profilepicc.png', label: 'Story five' },
+    { img: '/profilepicc.png', label: 'Story six' },
+    { img: '/profilepicc.png', label: 'Story seven' },
+  ];
+
   return (
     <>
-      {/* TOP MASK — hides content scrolling up behind the floating navbar (only once scrolled) */}
+      {/* TOP MASK */}
       <div style={{
         position: 'fixed',
         top: 0,
@@ -53,7 +162,7 @@ export default function Home() {
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
               <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
-              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Designer &amp; Strategist</div>
+              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Senior Product Designer &amp; Strategist</div>
             </div>
           </a>
           <div className="nav-contact-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
@@ -76,8 +185,6 @@ export default function Home() {
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}>
-
-        {/* ===== HERO BACKGROUND VIDEO — lives only in the hero ===== */}
         <video
           autoPlay
           loop
@@ -89,7 +196,7 @@ export default function Home() {
             inset: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',   // fills the hero; try 'contain' to show whole video
+            objectFit: 'cover',
             zIndex: 0,
             pointerEvents: 'none',
           }}
@@ -97,16 +204,14 @@ export default function Home() {
           <source src="/sunn.mp4" type="video/mp4" />
         </video>
 
-        {/* ===== Cloud Dancer wash so text stays readable ===== */}
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(247,244,239,0.55)',  // 👈 last number = wash strength (0 = none, 1 = solid)
+          background: 'rgba(247,244,239,0.55)',
           zIndex: 0,
           pointerEvents: 'none',
         }} />
 
-        {/* Scroll down cue — bottom left of hero */}
         <div className="scroll-cue" style={{
           position: 'absolute',
           zIndex: 1,
@@ -140,7 +245,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Kicker + headline */}
         <div style={{ position: 'relative', zIndex: 1 }}>
           <p className="hero-kicker" style={{
             margin: '0 0 32px',
@@ -163,13 +267,12 @@ export default function Home() {
             letterSpacing: '-0.045em',
             color: '#1C1917',
           }}>
-            For complex workflows and data-rich products <br />
-            
+            For complex workflows and data-rich products
           </h1>
         </div>
       </header>
 
-      {/* ABOUT — now STICKY so Projects scrolls up over it */}
+      {/* ABOUT */}
       <section style={{
         position: 'sticky',
         top: 0,
@@ -180,7 +283,6 @@ export default function Home() {
         border: '0.4px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
       }}>
-        {/* Single left-aligned column: heading on top, text stacked below */}
         <div style={{
           padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
         }}>
@@ -195,7 +297,6 @@ export default function Home() {
           }}>
             What I do
           </h2>
-
           <p style={{
             fontSize: 'clamp(18px,2vw,11px)',
             lineHeight: 1.5,
@@ -203,15 +304,12 @@ export default function Home() {
             margin: '0 0 32px',
             maxWidth: '152ch',
           }}>
-            I find where products and workflows underperform. Then I fix them where it costs the business. 
+            I find where products and workflows underperform. Then I fix them where it costs the business.
           </p>
-
-          
-          
         </div>
       </section>
 
-      {/* PROJECTS — scrolls up over the sticky About */}
+      {/* PROJECTS HEADER */}
       <section style={{
         position: 'relative',
         zIndex: 2,
@@ -223,8 +321,6 @@ export default function Home() {
         padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(16px,3vh,32px)',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0' }}>
-
-          {/* Title */}
           <h2 style={{
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 600,
@@ -236,156 +332,77 @@ export default function Home() {
           }}>
             Selected Work
           </h2>
-
         </div>
       </section>
 
-      {/* WORK SHOWCASE — 3 big media frames with descriptions */}
+      {/* WORK SHOWCASE — stacking cards that shrink as the next covers them */}
       <section style={{
         position: 'relative',
         zIndex: 2,
         background: '#F7F4EF',
-        padding: 'clamp(16px,3vh,32px) clamp(24px,5vw,72px) clamp(60px,10vh,120px)',
+        padding: '0 clamp(24px,4vw,56px)',
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'clamp(60px,10vh,120px)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-          {/* ---- FRAME 1 ---- */}
-          <div>
-            {/* MEDIA — replace the inner placeholder with <img src="/your-image.jpg" .../> or a <video> */}
-            <div style={{
-              width: '100%',
-              aspectRatio: '16 / 9',
-              borderRadius: '14px',
-              border: '1px solid rgba(28,25,23,0.15)',
-              background: 'rgba(28,25,23,0.04)',
-              overflow: 'hidden',
-              display: 'grid',
-              placeItems: 'center',
-              marginBottom: '24px',
-            }}>
-              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 1</span>
-            </div>
-            <h3 style={{
-              fontFamily: 'var(--font-plus-jakarta-sans)',
-              fontWeight: 600,
-              fontSize: 'clamp(22px,4vw,34px)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1.05,
-              color: '#1C1917',
-              margin: '0 0 12px',
-            }}>
-              Project title one
-            </h3>
-            <p style={{
-              fontSize: 'clamp(15px,2vw,18px)',
-              lineHeight: 1.55,
-              color: '#3D3631',
-              margin: 0,
-              maxWidth: '60ch',
-            }}>
-              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
-            </p>
-          </div>
+          {cards.map((c, i) => {
+            const dark = c.dark;
+            return (
+              <div key={c.n} style={{ height: '100vh' }}>
+                <div
+                  ref={(el) => (cardRefs.current[i] = el)}
+                  style={{
+                    ...cardShell,
+                    zIndex: i + 1,
+                    ...(dark && {
+                      background: '#000000',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      boxShadow: '0 -6px 28px rgba(0,0,0,0.45)',
+                    }),
+                  }}
+                >
+                  <div style={{ ...peekStrip, ...(dark && { borderBottom: '1px solid rgba(255,255,255,0.12)' }) }}>
+                    <span style={{ ...stripLabel, ...(dark && { color: 'rgba(255,255,255,0.6)' }) }}>{c.n} — {c.name}</span>
+                    <span style={stripTag}>{c.tag}</span>
+                  </div>
+                  <div style={{ padding: 'clamp(24px,4vw,56px)' }}>
+                    <div style={{ ...mediaBox, ...(dark && { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)' }) }}>
+                      {c.type === 'video' ? (
+                        <video src={c.media} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <img src={c.media} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      )}
+                    </div>
+                    <h3 style={{ ...titleStyle, ...(dark && { color: '#FFFFFF' }) }}>{c.title}</h3>
+                    <p style={{ ...descStyle, ...(dark && { color: 'rgba(255,255,255,0.85)' }) }}>
+                      A short description of the project — the problem, what you designed, and the outcome.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
 
-          {/* ---- FRAME 2 ---- */}
-          <div>
-            <div style={{
-              width: '100%',
-              aspectRatio: '16 / 9',
-              borderRadius: '14px',
-              border: '1px solid rgba(28,25,23,0.15)',
-              background: 'rgba(28,25,23,0.04)',
-              overflow: 'hidden',
-              display: 'grid',
-              placeItems: 'center',
-              marginBottom: '24px',
-            }}>
-              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 2</span>
-            </div>
-            <h3 style={{
-              fontFamily: 'var(--font-plus-jakarta-sans)',
-              fontWeight: 600,
-              fontSize: 'clamp(22px,4vw,34px)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1.05,
-              color: '#1C1917',
-              margin: '0 0 12px',
-            }}>
-              Project title two
-            </h3>
-            <p style={{
-              fontSize: 'clamp(15px,2vw,18px)',
-              lineHeight: 1.55,
-              color: '#3D3631',
-              margin: 0,
-              maxWidth: '60ch',
-            }}>
-              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
-            </p>
-          </div>
-
-          {/* ---- FRAME 3 ---- */}
-          <div>
-            <div style={{
-              width: '100%',
-              aspectRatio: '16 / 9',
-              borderRadius: '14px',
-              border: '1px solid rgba(28,25,23,0.15)',
-              background: 'rgba(28,25,23,0.04)',
-              overflow: 'hidden',
-              display: 'grid',
-              placeItems: 'center',
-              marginBottom: '24px',
-            }}>
-              <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' }}>Image / Video 3</span>
-            </div>
-            <h3 style={{
-              fontFamily: 'var(--font-plus-jakarta-sans)',
-              fontWeight: 600,
-              fontSize: 'clamp(22px,4vw,34px)',
-              letterSpacing: '-0.03em',
-              lineHeight: 1.05,
-              color: '#1C1917',
-              margin: '0 0 12px',
-            }}>
-              Project title three
-            </h3>
-            <p style={{
-              fontSize: 'clamp(15px,2vw,18px)',
-              lineHeight: 1.55,
-              color: '#3D3631',
-              margin: 0,
-              maxWidth: '60ch',
-            }}>
-              A short description of the project — the problem, what you designed, and the outcome. Replace this with your own words.
-            </p>
-          </div>
-
-          {/* ---- METADATA BAR — moved here, under the last case study ---- */}
+          {/* ---- METADATA BAR ---- */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: 'clamp(48px,8vw,48px) clamp(24px,4vw,48px)',
             borderTop: '0.5px solid rgba(28,25,23,0.2)',
-            paddingTop: 'clamp(40px,6vh,64px)',
+            padding: 'clamp(40px,6vh,64px) clamp(24px,4vw,56px) clamp(60px,10vh,120px)',
+            marginTop: 'clamp(40px,6vh,64px)',
           }}>
-            
-
-            {/* PROBLEMS I SOLVE */}
             <div>
               <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>TOP Problems I Solve</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['Slow Decisions, Wasted Time ', 'Poor Information Hierarchy', 'Low Data Trust '].map(t => (
+                {['Slow decision-making, delayed decisions', 'Confusing information structures', 'Low confidence in business data'].map(t => (
                   <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
                 ))}
               </div>
             </div>
-
-            {/* FOCUSED PRODUCTS — tag boxes */}
             <div>
               <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Focused Products</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {['Enterprise', , 'Data-heavy internal applications', 'operational softwares', 'B2B platforms for professional users', 'Workflow and decision-making softwares'].map(tag => (
+                {['Enterprise', 'Data-heavy internal applications', 'Operational softwares', 'B2B platforms for professional users', 'Workflow and decision-making softwares'].map(tag => (
                   <span key={tag} style={{
                     fontSize: '12px',
                     fontWeight: 700,
@@ -399,26 +416,177 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
           </div>
 
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ background: '#F7F4EF', padding: 'clamp(40px,6vh,72px) clamp(20px,5vw,72px) 0', position: 'relative', zIndex: 2 }}>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
-          
-          <div style={{ display: 'flex', gap: '24px' }}>
-            {[['mailto:gamze@gamzee.nl', 'Email'], ['#', 'LinkedIn']].map(([href, label]) => (
-              <a key={label} href={href} style={{ fontSize: '13px', color: 'rgba(28,25,23,0.5)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>{label}</a>
-            ))}
+      {/* ABOUT ME + FOOTER — shared video background */}
+      <section style={{
+        position: 'relative',
+        zIndex: 2,
+        background: '#F7F4EF',
+        borderRadius: '8px 8px 0 0',
+        borderTop: '0.7px solid rgba(28,25,23,0.1)',
+        boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
+        overflow: 'hidden',
+      }}>
+        {/* Background video — spans About me AND footer */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedMetadata={(e) => { e.target.playbackRate = 0.25; }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <source src="/sunn.mp4" type="video/mp4" />
+        </video>
+
+        {/* Readability wash */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(247,244,239,0.55)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }} />
+
+        {/* About me content */}
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: '1400px',
+          margin: '0',
+          padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(80px,14vh,160px)',
+        }}>
+          <h2 style={{
+            fontFamily: 'var(--font-plus-jakarta-sans)',
+            fontWeight: 600,
+            fontSize: 'clamp(20px, 9vw, 60px)',
+            letterSpacing: '-0.045em',
+            lineHeight: 0.99,
+            color: '#1C1917',
+            margin: '0 0 40px',
+          }}>
+            About me
+          </h2>
+          <p style={{
+            fontSize: 'clamp(18px,2vw,20px)',
+            lineHeight: 1.5,
+            color: '#1C1917',
+            margin: '0 0 40px',
+            maxWidth: '72ch',
+          }}>
+            Write your about text here.
+          </p>
+
+          {/* STORY DECK — pile fans both ways, active card centered */}
+          <div style={{ position: 'relative', height: '280px', marginBottom: '20px', width: '260px', marginLeft: '80px' }}>
+            {stories.map((card, i) => {
+              const offset = i - activeCard;
+              const abs = Math.abs(offset);
+              return (
+                <div
+                  key={i}
+                  onClick={() => setActiveCard(i)}
+                  className={offset === 0 && activeCard === 0 ? 'deck-nudge' : undefined}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '260px',
+                    height: '260px',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    background: '#F7F4EF',
+                    border: '1px solid rgba(28,25,23,0.12)',
+                    boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
+                    transform: `translateX(${offset * 42}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
+                    opacity: Math.max(0, 1 - abs * 0.16),
+                    zIndex: 20 - abs,
+                    transformOrigin: 'center center',
+                    transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, box-shadow 0.45s ease',
+                    cursor: 'pointer',
+                    pointerEvents: abs > 3 ? 'none' : 'auto',
+                  }}
+                >
+                  <img src={card.img} alt={card.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                  <div style={{
+                    position: 'absolute',
+                    left: 0, right: 0, bottom: 0,
+                    padding: '10px 14px',
+                    background: 'linear-gradient(to top, rgba(28,25,23,0.7), rgba(28,25,23,0))',
+                    fontFamily: 'var(--font-plus-jakarta-sans)',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: '#F7F4EF',
+                  }}>
+                    {card.label}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Deck controls — centered under the photos */}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '380px' }}>
+            <button
+              onClick={() => setActiveCard((v) => Math.max(0, v - 1))}
+              aria-label="Previous story"
+              style={{
+                width: '30px', height: '30px', borderRadius: '8px',
+                border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
+                cursor: 'pointer', display: 'grid', placeItems: 'center',
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em', color: '#7C756E', minWidth: '40px', textAlign: 'center' }}>
+              {activeCard + 1} / {stories.length}
+            </span>
+            <button
+              onClick={() => setActiveCard((v) => Math.min(stories.length - 1, v + 1))}
+              aria-label="Next story"
+              style={{
+                width: '30px', height: '30px', borderRadius: '8px',
+                border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
+                cursor: 'pointer', display: 'grid', placeItems: 'center',
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
           </div>
         </div>
-        <div style={{ maxWidth: '1280px', margin: '32px auto 0', paddingTop: '24px', paddingBottom: '32px', borderTop: '0.5px solid rgba(28,25,23,0.1)', textAlign: 'center', fontSize: '12px', color: 'rgba(28,25,23,0.35)' }}>
-          © 2026 Gamze Bozkurt — made with curiosity
+
+        {/* Footer — transparent so the video shows through */}
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          padding: 'clamp(40px,6vh,72px) clamp(20px,5vw,72px) 0',
+        }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
+            <div style={{ display: 'flex', gap: '24px' }}>
+              {[['mailto:gamze@gamzee.nl', 'Email'], ['#', 'LinkedIn']].map(([href, label]) => (
+                <a key={label} href={href} style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>{label}</a>
+              ))}
+            </div>
+          </div>
+          <div style={{ maxWidth: '1280px', margin: '32px auto 0', paddingTop: '24px', paddingBottom: '32px', borderTop: '0.5px solid rgba(28,25,23,0.15)', textAlign: 'center', fontSize: '12px', color: 'rgba(28,25,23,0.45)' }}>
+            © 2026 Gamze Bozkurt — made with curiosity
+          </div>
         </div>
-      </footer>
+      </section>
 
       <ChatWidget />
     </>
