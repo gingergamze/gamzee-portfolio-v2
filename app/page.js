@@ -113,14 +113,14 @@ export default function Home() {
     { n: '03', name: 'Project title three', title: 'Project title three', type: 'image', media: '/project-three.png' },
   ];
 
+  // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
+  //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/profilepicc.png', label: 'Story one' },
-    { img: '/profilepicc.png', label: 'Story two' },
-    { img: '/profilepicc.png', label: 'Story three' },
-    { img: '/profilepicc.png', label: 'Story four' },
-    { img: '/profilepicc.png', label: 'Story five' },
-    { img: '/profilepicc.png', label: 'Story six' },
-    { img: '/profilepicc.png', label: 'Story seven' },
+    { img: '/gamzee.png', label: 'Me', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: 'Studied Communication, Business Management and Data Driven Design' },
+    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
+    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: <><strong>Corporate:</strong> Banking Customer Service Design-    <strong>Human Data Interaction Consulting:</strong> Product strategy for internal business tools- <strong>SME:</strong> Optimizing Processes </> },
+    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
+    { img: '/ofis.jpg', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
   ];
 
   return (
@@ -477,17 +477,33 @@ export default function Home() {
             color: '#1C1917',
             margin: '0 0 40px',
           }}>
-            About me
+            About
           </h2>
-          <p style={{
-            fontSize: 'clamp(18px,2vw,20px)',
-            lineHeight: 1.5,
-            color: '#1C1917',
-            margin: '0 0 40px',
-            maxWidth: '72ch',
-          }}>
-            Write your about text here.
-          </p>
+          <div style={{ minHeight: '5em', marginBottom: '40px' }}>
+            <div style={{
+              fontFamily: 'var(--font-plus-jakarta-sans)',
+              fontSize: '13px',
+              fontWeight: 700,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#d04d03',
+              marginBottom: '12px',
+              transition: 'opacity 0.3s ease',
+            }}>
+              {stories[activeCard].label}
+            </div>
+            <p style={{
+              fontSize: 'clamp(18px,2vw,20px)',
+              lineHeight: 1.5,
+              color: '#1C1917',
+              margin: 0,
+              maxWidth: 'none',
+              whiteSpace: 'nowrap',
+              transition: 'opacity 0.3s ease',
+            }}>
+              {stories[activeCard].text}
+            </p>
+          </div>
 
           {/* STORY DECK — pile fans both ways, active card centered */}
           <div style={{ position: 'relative', height: '280px', marginBottom: '20px', width: '260px', marginLeft: '80px' }}>
@@ -511,7 +527,7 @@ export default function Home() {
                     border: '1px solid rgba(28,25,23,0.12)',
                     boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
                     transform: `translateX(${offset * 42}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
-                    opacity: Math.max(0, 1 - abs * 0.16),
+                    opacity: Math.max(0, 1 - abs * 0.72),
                     zIndex: 20 - abs,
                     transformOrigin: 'center center',
                     transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, box-shadow 0.45s ease',
@@ -519,20 +535,9 @@ export default function Home() {
                     pointerEvents: abs > 3 ? 'none' : 'auto',
                   }}
                 >
-                  <img src={card.img} alt={card.label} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  <div style={{
-                    position: 'absolute',
-                    left: 0, right: 0, bottom: 0,
-                    padding: '10px 14px',
-                    background: 'linear-gradient(to top, rgba(28,25,23,0.7), rgba(28,25,23,0))',
-                    fontFamily: 'var(--font-plus-jakarta-sans)',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: '#F7F4EF',
-                  }}>
-                    {card.label}
+                  {/* Image — fills the whole card */}
+                  <div style={{ height: '100%', width: '100%', overflow: 'hidden' }}>
+                    <img src={card.img} alt={card.label} style={{ width: '100%', height: '100%', objectFit: card.fit || 'cover', objectPosition: card.pos || 'center center', transform: card.zoom ? `scale(${card.zoom})` : 'none', transformOrigin: card.pos || 'center center', display: 'block' }} />
                   </div>
                 </div>
               );
@@ -552,9 +557,7 @@ export default function Home() {
             >
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-            <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.08em', color: '#7C756E', minWidth: '40px', textAlign: 'center' }}>
-              {activeCard + 1} / {stories.length}
-            </span>
+           
             <button
               onClick={() => setActiveCard((v) => Math.min(stories.length - 1, v + 1))}
               aria-label="Next story"
@@ -567,6 +570,7 @@ export default function Home() {
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
           </div>
+
         </div>
 
         {/* Footer — transparent so the video shows through */}
@@ -588,7 +592,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ChatWidget />
+      {/* <ChatWidget /> */}
     </>
   );
 }
