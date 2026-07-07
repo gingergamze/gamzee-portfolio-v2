@@ -75,7 +75,7 @@ export default function Home() {
 
   const mediaBox = {
     width: '100%',
-    height: 'clamp(300px,95vh,650px)',
+    height: 'clamp(220px,55vh,440px)',
     borderRadius: '10px',
     border: '1px solid rgba(255,255,255,0.14)',
     background: 'rgba(28,25,23,0.04)',
@@ -88,7 +88,7 @@ export default function Home() {
   const titleStyle = {
     fontFamily: 'var(--font-plus-jakarta-sans)',
     fontWeight: 600,
-    fontSize: 'clamp(22px,4vw,40px)',
+    fontSize: 'clamp(18px,3vw,22px)',
     letterSpacing: '-0.03em',
     lineHeight: 1.05,
     color: '#1C1917',
@@ -96,7 +96,7 @@ export default function Home() {
   };
 
   const descStyle = {
-    fontSize: 'clamp(15px,1.8vw,20px)',
+    fontSize: 'clamp(15px,1.8vw,16px)',
     lineHeight: 1.55,
     color: '#3D3631',
     margin: 0,
@@ -116,9 +116,9 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/gamzee.png', label: 'Me', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: 'Studied Communication, Business Management and Data Driven Design' },
+    { img: '/bg.png', label: 'Background', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: <><strong>Corporate:</strong> Banking Customer Service Design-    <strong>Human Data Interaction Consulting:</strong> Product strategy for internal business tools- <strong>SME:</strong> Optimizing Processes </> },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
-    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: <><strong>Corporate:</strong> Banking Customer Service Design-    <strong>Human Data Interaction Consulting:</strong> Product strategy for internal business tools- <strong>SME:</strong> Optimizing Processes </> },
+    { img: '/propic.png', label: 'Useful Combo ', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Studied Communication, Business Management and Data Driven Design' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
   ];
@@ -342,7 +342,7 @@ export default function Home() {
         background: '#F7F4EF',
         padding: '0 clamp(24px,4vw,56px)',
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
           {cards.map((c, i) => {
             const dark = c.dark;
@@ -364,7 +364,7 @@ export default function Home() {
                     <span style={{ ...stripLabel, ...(dark && { color: 'rgba(255,255,255,0.6)' }) }}>{c.n} — {c.name}</span>
                     <span style={stripTag}>{c.tag}</span>
                   </div>
-                  <div style={{ padding: 'clamp(24px,4vw,56px)' }}>
+                  <div style={{ padding: 'clamp(16px,2.5vw,22px)' }}>
                     <div style={{ ...mediaBox, ...(dark && { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)' }) }}>
                       {c.type === 'video' ? (
                         <video src={c.media} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -546,8 +546,8 @@ export default function Home() {
 
           {/* Deck controls — centered under the photos */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '380px' }}>
-            <button
-              onClick={() => setActiveCard((v) => Math.max(0, v - 1))}
+          <button
+              onClick={() => setActiveCard((v) => (v - 1 + stories.length) % stories.length)}
               aria-label="Previous story"
               style={{
                 width: '30px', height: '30px', borderRadius: '8px',
@@ -559,7 +559,7 @@ export default function Home() {
             </button>
            
             <button
-              onClick={() => setActiveCard((v) => Math.min(stories.length - 1, v + 1))}
+              onClick={() => setActiveCard((v) => (v + 1) % stories.length)}
               aria-label="Next story"
               style={{
                 width: '30px', height: '30px', borderRadius: '8px',
