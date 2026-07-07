@@ -118,7 +118,7 @@ export default function Home() {
   const stories = [
     { img: '/bg.png', label: 'Background', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: <><strong>Corporate:</strong> Banking Customer Service Design-    <strong>Human Data Interaction Consulting:</strong> Product strategy for internal business tools- <strong>SME:</strong> Optimizing Processes </> },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
-    { img: '/propic.png', label: 'Useful Combo ', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Studied Communication, Business Management and Data Driven Design' },
+    { img: '/propic.png', label: 'Studies', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Studied Communication, Business Management and Data Driven Design' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
   ];
