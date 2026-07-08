@@ -298,7 +298,7 @@ export default function Home() {
         top: 0,
         zIndex: 1,
         marginTop: 0,
-        minHeight: '100vh',
+        minHeight: '70vh',
         boxSizing: 'border-box',
         background: '#FCF7EB',
         borderRadius: '12px 12px 0 0',
