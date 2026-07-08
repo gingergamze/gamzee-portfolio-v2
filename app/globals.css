@@ -68,7 +68,24 @@ body {
   from { opacity: 0; filter: blur(14px); transform: translateY(8px); }
   to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
 }
-.hero-kicker { animation: blurIn 0.9s ease both; }
+.hero-kicker {
+  animation: blurIn 0.9s ease both;
+  text-shadow:
+    2px 2px 0 #b34003,
+    4px 4px 0 #9a3703,
+    6px 6px 0 #812e02,
+    8px 8px 0 #672402,
+    10px 10px 16px rgba(28,25,23,0.25);
+}
+@media (max-width: 600px) {
+  .hero-kicker {
+    text-shadow:
+      1px 1px 0 #b34003,
+      2px 2px 0 #9a3703,
+      3px 3px 0 #812e02,
+      4px 4px 8px rgba(28,25,23,0.22);
+  }
+}
 .hero-headline { animation: blurIn 0.9s ease 0.25s both; }
 .meta-grid {
   display: grid;
