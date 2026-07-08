@@ -16,18 +16,19 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Scroll-driven scale/fade for the stacking cards
+  // Scroll-driven scale/fade/tilt for the stacking cards
   useEffect(() => {
     const STICK_TOP = 120;
     const MIN_SCALE = 0.88;
     const MIN_OPACITY = 0.55;
+    const MAX_TILT = 8; // degrees the card tilts back as it recedes
 
     const onScroll = () => {
       const cards = cardRefs.current.filter(Boolean);
       cards.forEach((card, i) => {
         const next = cards[i + 1];
         if (!next) {
-          card.style.transform = 'scale(1)';
+          card.style.transform = 'perspective(1600px) rotateX(0deg) scale(1)';
           card.style.opacity = '1';
           return;
         }
@@ -38,7 +39,8 @@ export default function Home() {
         p = Math.max(0, Math.min(1, p));
         const scale = 1 - (1 - MIN_SCALE) * p;
         const opacity = 1 - (1 - MIN_OPACITY) * p;
-        card.style.transform = `scale(${scale.toFixed(4)})`;
+        const tilt = MAX_TILT * p;
+        card.style.transform = `perspective(1600px) rotateX(${tilt.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
         card.style.opacity = opacity.toFixed(3);
       });
     };
@@ -52,6 +54,24 @@ export default function Home() {
     };
   }, []);
 
+  // Reveal elements on scroll into view (fade + rise)
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+  
   const cardShell = {
     position: 'sticky',
     top: '120px',
@@ -75,7 +95,7 @@ export default function Home() {
 
   const mediaBox = {
     width: '100%',
-    height: 'clamp(220px,55vh,440px)',
+    height: 'clamp(400px,85vh,760px)',
     borderRadius: '10px',
     border: '1px solid rgba(255,255,255,0.14)',
     background: 'rgba(28,25,23,0.04)',
@@ -88,7 +108,7 @@ export default function Home() {
   const titleStyle = {
     fontFamily: 'var(--font-plus-jakarta-sans)',
     fontWeight: 600,
-    fontSize: 'clamp(18px,3vw,22px)',
+    fontSize: 'clamp(18px,3vw,28px)',
     letterSpacing: '-0.03em',
     lineHeight: 1.05,
     color: '#1C1917',
@@ -96,7 +116,7 @@ export default function Home() {
   };
 
   const descStyle = {
-    fontSize: 'clamp(15px,1.8vw,16px)',
+    fontSize: 'clamp(13px,1.5vw,16px)',
     lineHeight: 1.55,
     color: '#3D3631',
     margin: 0,
@@ -116,9 +136,9 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/bg.png', label: 'Background', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: <><strong>Corporate:</strong> Banking Customer Service Design    <strong>Human Data Interaction Consulting:</strong> Product strategy for internal business tools <strong>SME:</strong> Optimizing Processes </> },
+    { img: '/bg.png', label: 'Path so far', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: 'Worked in a bank, data consultancy company and Small Medium Company' },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
-    { img: '/propic.png', label: 'Studies', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
+    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
   ];
@@ -132,7 +152,7 @@ export default function Home() {
         left: 0,
         right: 0,
         height: '104px',
-        background: '#F7F4EF',
+        background: '#FCF7EB',
         zIndex: 99,
         opacity: scrolled ? 1 : 0,
         transition: 'opacity 0.3s ease',
@@ -146,7 +166,7 @@ export default function Home() {
         width: 'calc(100% - 40px)', maxWidth: '2000px', zIndex: 100,
       }}>
         <nav style={{
-          background: scrolled ? 'rgba(247,244,239,0.92)' : 'transparent',
+          background: scrolled ? 'rgba(252,247,235,0.92)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           border: scrolled ? '0.3px solid rgba(28,25,23,0.12)' : '0.3px solid rgba(28,25,23,0.15)',
@@ -177,7 +197,7 @@ export default function Home() {
         top: 0,
         zIndex: 0,
         minHeight: '100vh',
-        background: '#F7F4EF',
+        background: '#FCF7EB',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -207,7 +227,7 @@ export default function Home() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(247,244,239,0.55)',
+          background: 'rgba(252,247,235,0.55)',
           zIndex: 0,
           pointerEvents: 'none',
         }} />
@@ -278,15 +298,17 @@ export default function Home() {
         top: 0,
         zIndex: 1,
         marginTop: 0,
-        background: '#F7F4EF',
-        borderRadius: '4px 4px 0 0',
+        minHeight: '100vh',
+        boxSizing: 'border-box',
+        background: '#FCF7EB',
+        borderRadius: '12px 12px 0 0',
         border: '0.4px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
+        boxShadow: '0 -5px 18px rgba(28,25,23,0.10), inset 0 1px 0 rgba(255,255,255,0.55)',
       }}>
         <div style={{
           padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
         }}>
-          <h2 style={{
+          <h2 className="reveal" style={{
             fontFamily: 'var(--font-plus-jakarta-sans)',
             fontWeight: 600,
             fontSize: 'clamp(20px, 9vw, 60px)',
@@ -297,8 +319,8 @@ export default function Home() {
           }}>
             What I do
           </h2>
-          <p style={{
-            fontSize: 'clamp(18px,2vw,11px)',
+          <p className="reveal" style={{
+            fontSize: 'clamp(18px,2vw,20px)',
             lineHeight: 1.5,
             color: '#1C1917',
             margin: '0 0 32px',
@@ -307,6 +329,39 @@ export default function Home() {
             I find where products and workflows underperform. Then I fix them where it costs the business.
           </p>
         </div>
+
+        <div className="scroll-cue" style={{
+          position: 'absolute',
+          zIndex: 1,
+          left: 'clamp(24px,5vw,72px)',
+          bottom: 'clamp(48px,10vh,120px)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+        }}>
+          <div className="scroll-arrow" style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '10px',
+            border: '0.5px solid rgba(28,25,23,0.2)',
+            display: 'grid',
+            placeItems: 'center',
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <span style={{
+            fontFamily: 'var(--font-plus-jakarta-sans)',
+            fontSize: '12px',
+            fontWeight: 800,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: '#1C1917',
+          }}>
+            Scroll Down
+          </span>
+        </div>
       </section>
 
       {/* PROJECTS HEADER */}
@@ -314,10 +369,10 @@ export default function Home() {
         position: 'relative',
         zIndex: 2,
         marginTop: 'clamp(-60px,-8vh,-40px)',
-        background: '#F7F4EF',
-        borderRadius: '8px 8px 0 0',
+        background: '#FCF7EB',
+        borderRadius: '12px 12px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
+        boxShadow: '0 -5px 18px rgba(28,25,23,0.10), inset 0 1px 0 rgba(255,255,255,0.55)',
         padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(16px,3vh,32px)',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0' }}>
@@ -335,14 +390,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WORK SHOWCASE — stacking cards that shrink as the next covers them */}
+      {/* WORK SHOWCASE — stacking cards that shrink and tilt as the next covers them */}
       <section style={{
         position: 'relative',
         zIndex: 2,
-        background: '#F7F4EF',
+        background: '#FCF7EB',
         padding: '0 clamp(24px,4vw,56px)',
       }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', perspective: '1600px' }}>
 
           {cards.map((c, i) => {
             const dark = c.dark;
@@ -364,7 +419,7 @@ export default function Home() {
                     <span style={{ ...stripLabel, ...(dark && { color: 'rgba(255,255,255,0.6)' }) }}>{c.n} — {c.name}</span>
                     <span style={stripTag}>{c.tag}</span>
                   </div>
-                  <div style={{ padding: 'clamp(16px,2.5vw,22px)' }}>
+                  <div style={{ padding: 'clamp(12px,2vw,24px)' }}>
                     <div style={{ ...mediaBox, ...(dark && { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)' }) }}>
                       {c.type === 'video' ? (
                         <video src={c.media} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -425,7 +480,7 @@ export default function Home() {
       <section style={{
         position: 'relative',
         zIndex: 2,
-        background: '#F7F4EF',
+        background: '#FCF7EB',
         borderRadius: '8px 8px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
@@ -455,7 +510,7 @@ export default function Home() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(247,244,239,0.55)',
+          background: 'rgba(252,247,235,0.55)',
           zIndex: 0,
           pointerEvents: 'none',
         }} />
@@ -523,11 +578,11 @@ export default function Home() {
                     height: '260px',
                     borderRadius: '16px',
                     overflow: 'hidden',
-                    background: '#F7F4EF',
+                    background: '#FCF7EB',
                     border: '1px solid rgba(28,25,23,0.12)',
                     boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
                     transform: `translateX(${offset * 42}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
-                    opacity: Math.max(0, 1 - abs * 0.72),
+                    opacity: Math.max(0, 1 - abs * 0.42),
                     zIndex: 20 - abs,
                     transformOrigin: 'center center',
                     transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, box-shadow 0.45s ease',
@@ -546,7 +601,7 @@ export default function Home() {
 
           {/* Deck controls — centered under the photos */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '380px' }}>
-          <button
+            <button
               onClick={() => setActiveCard((v) => (v - 1 + stories.length) % stories.length)}
               aria-label="Previous story"
               style={{
