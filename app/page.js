@@ -9,6 +9,13 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const cardRefs = useRef([]);
   const [activeCard, setActiveCard] = useState(0);
+  const [activeWork, setActiveWork] = useState(0);
+
+  const works = [
+    { title: 'Sintek Procurement Platform', role: 'Lead Product Designer', year: '2025', domain: 'Enterprise', desc: 'An enterprise-grade internal procurement and supply-chain platform. Consolidated fragmented vendor data into one operational source of truth.', tags: ['Enterprise', 'Supply chain', 'Internal tooling'], type: 'image', media: '/asmltest.jpg' },
+    { title: 'ASML Similarity Model', role: 'Product Designer', year: '2024', domain: 'Data tooling', desc: 'Redesigned an internal TIBCO Spotfire tool into a modern decision app for platform engineers, cutting review cycles.', tags: ['Data tooling', 'Spotfire', 'Decision support'], type: 'video', media: '/A1.mp4' },
+    { title: 'Project title three', role: 'Role', year: 'Year', domain: 'Domain', desc: 'A short description of the project — the problem, what you designed, and the outcome.', tags: ['Tag one', 'Tag two'], type: 'image', media: '/project-three.png' },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
@@ -95,7 +102,10 @@ export default function Home() {
 
   const mediaBox = {
     width: '100%',
-    height: 'clamp(400px,85vh,760px)',
+    maxWidth: '460px',
+    aspectRatio: '1 / 1',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     borderRadius: '10px',
     border: '1px solid rgba(255,255,255,0.14)',
     background: 'rgba(28,25,23,0.04)',
@@ -298,7 +308,7 @@ export default function Home() {
         top: 0,
         zIndex: 1,
         marginTop: 0,
-        minHeight: '70vh',
+        minHeight: '0vh',
         boxSizing: 'border-box',
         background: '#FCF7EB',
         borderRadius: '12px 12px 0 0',
@@ -397,7 +407,7 @@ export default function Home() {
         background: '#FCF7EB',
         padding: '0 clamp(24px,4vw,56px)',
       }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', perspective: '1600px' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto', perspective: '1600px' }}>
 
           {cards.map((c, i) => {
             const dark = c.dark;
@@ -473,6 +483,102 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* SELECTED WORK — TABS VIEW (TRIAL — delete this whole section once you decide) */}
+      <section style={{
+        position: 'relative',
+        zIndex: 2,
+        background: '#FFF8EB',
+        borderTop: '2px dashed rgba(208,77,3,0.4)',
+        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
+      }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#d04d03', marginBottom: '40px' }}>
+            ↑ Gallery above · Tabs view below — trial
+          </div>
+          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
+
+            {/* Left rail — numbered tab cards */}
+            <div className="worktabs-rail" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {works.map((w, i) => {
+                const on = activeWork === i;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setActiveWork(i)}
+                    style={{
+                      display: 'flex', flexDirection: 'column', gap: '7px', width: '100%', textAlign: 'left',
+                      cursor: 'pointer', padding: '16px 18px', borderRadius: '14px',
+                      border: on ? '1px solid rgba(28,25,23,0.10)' : '1px solid transparent',
+                      background: on ? '#FCF7EB' : 'transparent',
+                      boxShadow: on ? '0 8px 24px rgba(28,25,23,0.08)' : 'none',
+                      transition: 'all 0.25s ease',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
+                      <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 800, letterSpacing: '0.06em', color: on ? '#d04d03' : '#BEB29A' }}>0{i + 1}</span>
+                      <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '15px', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.2, color: on ? '#1C1917' : '#7C756E' }}>{w.title}</span>
+                    </div>
+                    <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: on ? '#A79B85' : '#BEB29A', paddingLeft: '27px' }}>{w.domain}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Right panel — framed visual + text block */}
+            <div key={activeWork} className="animate-fade-in">
+              <div style={{
+                position: 'relative', width: '100%', height: 'clamp(190px,30vh,320px)',
+                borderRadius: '18px', overflow: 'hidden',
+                border: '1px solid rgba(28,25,23,0.1)',
+                boxShadow: '0 24px 56px rgba(28,25,23,0.14)',
+                background: 'rgba(28,25,23,0.04)', marginBottom: '26px',
+              }}>
+                {works[activeWork].type === 'video' ? (
+                  <video key={works[activeWork].media} src={works[activeWork].media} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <img src={works[activeWork].media} alt={works[activeWork].title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                )}
+                <div style={{
+                  position: 'absolute', top: '16px', left: '16px',
+                  padding: '6px 13px', borderRadius: '999px',
+                  background: 'rgba(28,25,23,0.82)',
+                  backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+                }}>
+                  <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: '#FFF8EB' }}>0{activeWork + 1} / 0{works.length}</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#d04d03' }}>
+                  {works[activeWork].role} · {works[activeWork].year}
+                </div>
+                <a href="#" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1C1917', textDecoration: 'none' }}>
+                  View project →
+                </a>
+              </div>
+
+              <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: 'clamp(20px,2.6vw,28px)', letterSpacing: '-0.035em', lineHeight: 1.05, color: '#1C1917', margin: '0 0 14px' }}>
+                {works[activeWork].title}
+              </h3>
+
+              <p style={{ fontSize: 'clamp(14px,1.4vw,15px)', lineHeight: 1.6, color: '#3D3631', margin: '0 0 20px', maxWidth: '58ch' }}>
+                {works[activeWork].desc}
+              </p>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {works[activeWork].tags.map((tag) => (
+                  <span key={tag} style={{
+                    fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600,
+                    letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6B635A',
+                    border: '1px solid rgba(28,25,23,0.18)', borderRadius: '8px', padding: '7px 12px',
+                  }}>{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
