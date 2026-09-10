@@ -42,6 +42,15 @@ body {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
+@keyframes pop-forward {
+  0% { opacity: 0; transform: scale(0.93) translateY(14px); }
+  65% { opacity: 1; transform: scale(1.015) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-pop-forward {
+  animation: pop-forward 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: center top;
+}
 @keyframes orbit {
   from { transform: translate(-50%, -50%) rotate(0deg) translateX(40px); }
   to { transform: translate(-50%, -50%) rotate(360deg) translateX(40px); }

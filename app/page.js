@@ -7,7 +7,6 @@ const ACCENT = '#B4470E';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const cardRefs = useRef([]);
   const [activeCard, setActiveCard] = useState(0);
   const [activeWork, setActiveWork] = useState(0);
 
@@ -21,44 +20,6 @@ export default function Home() {
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Scroll-driven scale/fade/tilt for the stacking cards
-  useEffect(() => {
-    const STICK_TOP = 120;
-    const MIN_SCALE = 0.88;
-    const MIN_OPACITY = 0.55;
-    const MAX_TILT = 8; // degrees the card tilts back as it recedes
-
-    const onScroll = () => {
-      const cards = cardRefs.current.filter(Boolean);
-      cards.forEach((card, i) => {
-        const next = cards[i + 1];
-        if (!next) {
-          card.style.transform = 'perspective(1600px) rotateX(0deg) scale(1)';
-          card.style.opacity = '1';
-          return;
-        }
-        const nextTop = next.getBoundingClientRect().top;
-        const start = window.innerHeight;
-        const end = STICK_TOP + 20;
-        let p = (start - nextTop) / (start - end);
-        p = Math.max(0, Math.min(1, p));
-        const scale = 1 - (1 - MIN_SCALE) * p;
-        const opacity = 1 - (1 - MIN_OPACITY) * p;
-        const tilt = MAX_TILT * p;
-        card.style.transform = `perspective(1600px) rotateX(${tilt.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
-        card.style.opacity = opacity.toFixed(3);
-      });
-    };
-
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
   }, []);
 
   // Reveal elements on scroll into view (fade + rise)
@@ -79,78 +40,13 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
   
-  const cardShell = {
-    position: 'sticky',
-    top: '120px',
-    background: '#EDE8DF',
-    border: '1px solid rgba(28,25,23,0.11)',
-    borderRadius: '16px',
-    boxShadow: '0 -6px 28px rgba(28,25,23,0.10)',
-    overflow: 'hidden',
-    transformOrigin: 'center top',
-    willChange: 'transform, opacity',
-    transition: 'transform 0.1s linear, opacity 0.1s linear',
-  };
-
-  const peekStrip = {
-    padding: '18px clamp(24px,4vw,56px)',
-    borderBottom: '1px solid rgba(255,255,255,0.10)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  };
-
-  const mediaBox = {
-    width: '100%',
-    maxWidth: '460px',
-    aspectRatio: '1 / 1',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderRadius: '10px',
-    border: '1px solid rgba(255,255,255,0.14)',
-    background: 'rgba(28,25,23,0.04)',
-    overflow: 'hidden',
-    display: 'grid',
-    placeItems: 'center',
-    marginBottom: '28px',
-  };
-
-  const titleStyle = {
-    fontFamily: 'var(--font-plus-jakarta-sans)',
-    fontWeight: 600,
-    fontSize: 'clamp(18px,3vw,28px)',
-    letterSpacing: '-0.03em',
-    lineHeight: 1.05,
-    color: '#1C1917',
-    margin: '0 0 14px',
-  };
-
-  const descStyle = {
-    fontSize: 'clamp(13px,1.5vw,16px)',
-    lineHeight: 1.55,
-    color: '#3D3631',
-    margin: 0,
-    maxWidth: '72ch',
-  };
-
-  const stripLabel = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' };
-  const stripTag = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#d04d03' };
-  const mediaLabel = { fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7C756E' };
-
-  const cards = [
-    { n: '01', name: 'Sintek Procurement Platform', title: 'Sintek Procurement Platform', type: 'image', media: '/asmltest.jpg' },
-    { n: '02', name: 'ASML Similarity Model', title: 'ASML Similarity Model', type: 'video', media: '/A1.mp4' },
-    { n: '03', name: 'Project title three', title: 'Project title three', type: 'image', media: '/project-three.png' },
-  ];
-
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/bg.png', label: 'Path so far', fit: 'cover', pos: '45% 1%', zoom: 1.19, text: 'Worked in a bank, data consultancy company and Small Medium Company' },
-    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
     { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
+    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
   ];
 
   return (
@@ -374,7 +270,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PROJECTS HEADER */}
+      {/* SELECTED WORK — TABS VIEW */}
       <section style={{
         position: 'relative',
         zIndex: 2,
@@ -383,7 +279,7 @@ export default function Home() {
         borderRadius: '12px 12px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -5px 18px rgba(28,25,23,0.10), inset 0 1px 0 rgba(255,255,255,0.55)',
-        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(16px,3vh,32px)',
+        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0' }}>
           <h2 style={{
@@ -398,107 +294,8 @@ export default function Home() {
             Selected Work
           </h2>
         </div>
-      </section>
-
-      {/* WORK SHOWCASE — stacking cards that shrink and tilt as the next covers them */}
-      <section style={{
-        position: 'relative',
-        zIndex: 2,
-        background: '#FCF7EB',
-        padding: '0 clamp(24px,4vw,56px)',
-      }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto', perspective: '1600px' }}>
-
-          {cards.map((c, i) => {
-            const dark = c.dark;
-            return (
-              <div key={c.n} style={{ height: '100vh' }}>
-                <div
-                  ref={(el) => (cardRefs.current[i] = el)}
-                  style={{
-                    ...cardShell,
-                    zIndex: i + 1,
-                    ...(dark && {
-                      background: '#000000',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      boxShadow: '0 -6px 28px rgba(0,0,0,0.45)',
-                    }),
-                  }}
-                >
-                  <div style={{ ...peekStrip, ...(dark && { borderBottom: '1px solid rgba(255,255,255,0.12)' }) }}>
-                    <span style={{ ...stripLabel, ...(dark && { color: 'rgba(255,255,255,0.6)' }) }}>{c.n} — {c.name}</span>
-                    <span style={stripTag}>{c.tag}</span>
-                  </div>
-                  <div style={{ padding: 'clamp(12px,2vw,24px)' }}>
-                    <div style={{ ...mediaBox, ...(dark && { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)' }) }}>
-                      {c.type === 'video' ? (
-                        <video src={c.media} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        <img src={c.media} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      )}
-                    </div>
-                    <h3 style={{ ...titleStyle, ...(dark && { color: '#FFFFFF' }) }}>{c.title}</h3>
-                    <p style={{ ...descStyle, ...(dark && { color: 'rgba(255,255,255,0.85)' }) }}>
-                      A short description of the project — the problem, what you designed, and the outcome.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* ---- METADATA BAR ---- */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: 'clamp(48px,8vw,48px) clamp(24px,4vw,48px)',
-            borderTop: '0.5px solid rgba(28,25,23,0.2)',
-            padding: 'clamp(40px,6vh,64px) clamp(24px,4vw,56px) clamp(60px,10vh,120px)',
-            marginTop: 'clamp(40px,6vh,64px)',
-          }}>
-            <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>TOP Problems I Solve</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {['Slow decision-making, delayed decisions', 'Confusing information structures', 'Low confidence in business data'].map(t => (
-                  <span key={t} style={{ fontSize: '15px', color: '#1C1917' }}>{t}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917', fontWeight: 600, marginBottom: 'clamp(12px, 4vw, 40px)' }}>Focused Products</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {['Enterprise', 'Data-heavy internal applications', 'Operational softwares', 'B2B platforms for professional users', 'Workflow and decision-making softwares'].map(tag => (
-                  <span key={tag} style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    color: '#1C1917',
-                    border: '1px solid rgba(28,25,23,0.85)',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                  }}>{tag}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SELECTED WORK — TABS VIEW (TRIAL — delete this whole section once you decide) */}
-      <section style={{
-        position: 'relative',
-        zIndex: 2,
-        background: '#FFF8EB',
-        borderTop: '2px dashed rgba(208,77,3,0.4)',
-        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
-      }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#d04d03', marginBottom: '40px' }}>
-            ↑ Gallery above · Tabs view below — trial
-          </div>
-          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
+        <div style={{ maxWidth: '960px', margin: '0' }}>
+          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(40px,6vw,96px)', alignItems: 'start' }}>
 
             {/* Left rail — numbered tab cards */}
             <div className="worktabs-rail" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -528,7 +325,7 @@ export default function Home() {
             </div>
 
             {/* Right panel — framed visual + text block */}
-            <div key={activeWork} className="animate-fade-in">
+            <div key={activeWork} className="animate-pop-forward">
               <div style={{
                 position: 'relative', width: '100%', height: 'clamp(190px,30vh,320px)',
                 borderRadius: '18px', overflow: 'hidden',
@@ -541,14 +338,6 @@ export default function Home() {
                 ) : (
                   <img src={works[activeWork].media} alt={works[activeWork].title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                 )}
-                <div style={{
-                  position: 'absolute', top: '16px', left: '16px',
-                  padding: '6px 13px', borderRadius: '999px',
-                  background: 'rgba(28,25,23,0.82)',
-                  backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-                }}>
-                  <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', color: '#FFF8EB' }}>0{activeWork + 1} / 0{works.length}</span>
-                </div>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '10px' }}>
