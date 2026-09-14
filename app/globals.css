@@ -141,6 +141,13 @@ body {
   .nav-logo { padding-left: 32px !important; }
   .nav-contact-wrap { padding-right: 32px !important; }
 }
+/* Selected Work tabs — stack on mobile instead of a fixed 2-col grid */
+@media (max-width: 700px) {
+  .worktabs {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+}
 /* Story deck — invite interaction */
 @keyframes deckNudge {
   0%   { transform: translateX(0); }

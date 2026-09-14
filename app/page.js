@@ -9,6 +9,55 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [activeCard, setActiveCard] = useState(0);
   const [activeWork, setActiveWork] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 600px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
+  const [contactStatus, setContactStatus] = useState('idle'); // idle | sending | success | error
+  const [emailCopied, setEmailCopied] = useState(false);
+
+  const copyEmail = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText('gamze@gamzee.nl').catch(() => {});
+    }
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 2000);
+  };
+
+  const closeContact = () => {
+    setContactOpen(false);
+    setContactStatus('idle');
+    setContactForm({ name: '', email: '', message: '' });
+  };
+
+  const submitContact = async (e) => {
+    e.preventDefault();
+    setContactStatus('sending');
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/gamze@gamzee.nl', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          message: contactForm.message,
+          _subject: `New message from ${contactForm.name} via gamzee.nl`,
+        }),
+      });
+      if (!res.ok) throw new Error('Request failed');
+      setContactStatus('success');
+    } catch {
+      setContactStatus('error');
+    }
+  };
 
   const works = [
     { title: 'Sintek Procurement Platform', role: 'Lead Product Designer', year: '2025', domain: 'Enterprise', desc: 'An enterprise-grade internal procurement and supply-chain platform. Consolidated fragmented vendor data into one operational source of truth.', tags: ['Enterprise', 'Supply chain', 'Internal tooling'], type: 'image', media: '/asmltest.jpg' },
@@ -43,8 +92,8 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
+    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
   ];
@@ -88,11 +137,17 @@ export default function Home() {
             <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
               <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
-              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Senior Product Designer &amp; Strategist</div>
+              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Design product, services and strategies</div>
             </div>
           </a>
           <div className="nav-contact-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
-            <a href="/contact" className="nav-contact" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 600, color: '#1C1917', textDecoration: 'none', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Contact</a>
+            <button
+              onClick={() => setContactOpen(true)}
+              className="nav-contact"
+              style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 600, color: '#1C1917', background: 'none', border: 'none', cursor: 'pointer', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}
+            >
+              Contact
+            </button>
           </div>
         </nav>
       </div>
@@ -209,7 +264,7 @@ export default function Home() {
         background: '#FCF7EB',
         borderRadius: '12px 12px 0 0',
         border: '0.4px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -5px 18px rgba(28,25,23,0.10), inset 0 1px 0 rgba(255,255,255,0.55)',
+        boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
       }}>
         <div style={{
           padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
@@ -278,7 +333,7 @@ export default function Home() {
         background: '#FCF7EB',
         borderRadius: '12px 12px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -5px 18px rgba(28,25,23,0.10), inset 0 1px 0 rgba(255,255,255,0.55)',
+        boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
         padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0' }}>
@@ -294,8 +349,8 @@ export default function Home() {
             Selected Work
           </h2>
         </div>
-        <div style={{ maxWidth: '960px', margin: '0' }}>
-          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(40px,6vw,96px)', alignItems: 'start' }}>
+        <div style={{ maxWidth: '1200px', margin: '0' }}>
+          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(40px,6vw,96px)', alignItems: 'center' }}>
 
             {/* Left rail — numbered tab cards */}
             <div className="worktabs-rail" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -324,10 +379,10 @@ export default function Home() {
               })}
             </div>
 
-            {/* Right panel — framed visual + text block */}
-            <div key={activeWork} className="animate-pop-forward">
+            {/* Right panel — framed visual + text block, centered in the remaining space */}
+            <div key={activeWork} className="animate-pop-forward" style={{ width: '100%', maxWidth: '760px', justifySelf: 'center' }}>
               <div style={{
-                position: 'relative', width: '100%', height: 'clamp(190px,30vh,320px)',
+                position: 'relative', width: '100%', height: 'clamp(340px,50vh,540px)',
                 borderRadius: '18px', overflow: 'hidden',
                 border: '1px solid rgba(28,25,23,0.1)',
                 boxShadow: '0 24px 56px rgba(28,25,23,0.14)',
@@ -340,13 +395,10 @@ export default function Home() {
                 )}
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', marginBottom: '10px' }}>
+              <div style={{ marginBottom: '10px' }}>
                 <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#d04d03' }}>
                   {works[activeWork].role} · {works[activeWork].year}
                 </div>
-                <a href="#" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1C1917', textDecoration: 'none' }}>
-                  View project →
-                </a>
               </div>
 
               <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: 'clamp(20px,2.6vw,28px)', letterSpacing: '-0.035em', lineHeight: 1.05, color: '#1C1917', margin: '0 0 14px' }}>
@@ -378,7 +430,7 @@ export default function Home() {
         background: '#FCF7EB',
         borderRadius: '8px 8px 0 0',
         borderTop: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -8px 40px rgba(28,25,23,0.15)',
+        boxShadow: '0 -18px 60px rgba(28,25,23,0.30)',
         overflow: 'hidden',
       }}>
         {/* Background video — spans About me AND footer */}
@@ -414,7 +466,7 @@ export default function Home() {
         <div style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '1400px',
+          maxWidth: '2000px',
           margin: '0',
           padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(80px,14vh,160px)',
         }}>
@@ -447,19 +499,28 @@ export default function Home() {
               lineHeight: 1.5,
               color: '#1C1917',
               margin: 0,
-              maxWidth: 'none',
-              whiteSpace: 'nowrap',
+              maxWidth: '640px',
+              whiteSpace: isMobile ? 'normal' : 'nowrap',
               transition: 'opacity 0.3s ease',
             }}>
               {stories[activeCard].text}
             </p>
           </div>
 
-          {/* STORY DECK — pile fans both ways, active card centered */}
-          <div style={{ position: 'relative', height: '280px', marginBottom: '20px', width: '260px', marginLeft: '80px' }}>
+          {/* STORY DECK — pile fans both ways, centered like the Selected Work photo */}
+          <div style={{ width: 'fit-content', margin: '0 auto' }}>
+          <div style={{
+            position: 'relative',
+            height: isMobile ? '190px' : '320px',
+            marginBottom: '20px',
+            width: isMobile ? '170px' : '300px',
+            margin: isMobile ? '0' : '0 auto 20px',
+          }}>
             {stories.map((card, i) => {
               const offset = i - activeCard;
               const abs = Math.abs(offset);
+              const cardSize = isMobile ? 170 : 300;
+              const offsetStep = isMobile ? 22 : 48;
               return (
                 <div
                   key={i}
@@ -469,15 +530,15 @@ export default function Home() {
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: '260px',
-                    height: '260px',
+                    width: `${cardSize}px`,
+                    height: `${cardSize}px`,
                     borderRadius: '16px',
                     overflow: 'hidden',
                     background: '#FCF7EB',
                     border: '1px solid rgba(28,25,23,0.12)',
                     boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
-                    transform: `translateX(${offset * 42}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
-                    opacity: Math.max(0, 1 - abs * 0.42),
+                    transform: `translateX(${offset * offsetStep}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
+                    opacity: offset === 0 ? 1 : Math.max(0, 0.35 - abs * 0.12),
                     zIndex: 20 - abs,
                     transformOrigin: 'center center',
                     transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, box-shadow 0.45s ease',
@@ -495,7 +556,7 @@ export default function Home() {
           </div>
 
           {/* Deck controls — centered under the photos */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: '380px' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: isMobile ? '170px' : '380px' }}>
             <button
               onClick={() => setActiveCard((v) => (v - 1 + stories.length) % stories.length)}
               aria-label="Previous story"
@@ -520,6 +581,7 @@ export default function Home() {
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
           </div>
+          </div>
 
         </div>
 
@@ -531,9 +593,13 @@ export default function Home() {
         }}>
           <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
             <div style={{ display: 'flex', gap: '24px' }}>
-              {[['mailto:gamze@gamzee.nl', 'Email'], ['#', 'LinkedIn']].map(([href, label]) => (
-                <a key={label} href={href} style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>{label}</a>
-              ))}
+              <button
+                onClick={() => setContactOpen(true)}
+                style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}
+              >
+                Email
+              </button>
+              <a href="https://www.linkedin.com/in/gamze-serviceandproductdesignstrategist/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>LinkedIn</a>
             </div>
           </div>
           <div style={{ maxWidth: '1280px', margin: '32px auto 0', paddingTop: '24px', paddingBottom: '32px', borderTop: '0.5px solid rgba(28,25,23,0.15)', textAlign: 'center', fontSize: '12px', color: 'rgba(28,25,23,0.45)' }}>
@@ -541,6 +607,151 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* CONTACT MODAL */}
+      {contactOpen && (
+        <div
+          onClick={closeContact}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 200,
+            background: 'rgba(28,25,23,0.45)',
+            backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '24px',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative', width: '100%', maxWidth: '440px',
+              background: '#FCF7EB', borderRadius: '20px',
+              border: '1px solid rgba(28,25,23,0.1)',
+              boxShadow: '0 32px 80px rgba(28,25,23,0.28)',
+              padding: 'clamp(28px,5vw,40px)',
+            }}
+            className="animate-pop-forward"
+          >
+            <button
+              onClick={closeContact}
+              aria-label="Close"
+              style={{
+                position: 'absolute', top: '18px', right: '18px',
+                width: '32px', height: '32px', borderRadius: '8px',
+                border: '1px solid rgba(28,25,23,0.15)', background: 'transparent',
+                cursor: 'pointer', display: 'grid', placeItems: 'center',
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round"/></svg>
+            </button>
+
+            {contactStatus === 'success' ? (
+              <div style={{ padding: '20px 0' }}>
+                <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: '24px', letterSpacing: '-0.03em', color: '#1C1917', margin: '0 0 12px' }}>
+                  Message sent
+                </h3>
+                <p style={{ fontSize: '15px', lineHeight: 1.6, color: '#3D3631', margin: 0 }}>
+                  Thanks {contactForm.name || 'there'} — it landed straight in my inbox. I'll get back to you soon.
+                </p>
+              </div>
+            ) : (
+              <>
+                <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: '24px', letterSpacing: '-0.03em', color: '#1C1917', margin: '0 0 8px' }}>
+                  Let's talk
+                </h3>
+                <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#7C756E', margin: '0 0 10px' }}>
+                  Send a message — it goes straight to gamze@gamzee.nl.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    margin: '0 0 24px', padding: '6px 12px', borderRadius: '999px',
+                    border: '1px solid rgba(28,25,23,0.15)', background: emailCopied ? '#1C1917' : 'transparent',
+                    color: emailCopied ? '#FFF8EB' : '#1C1917',
+                    fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600,
+                    letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {emailCopied ? (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="#FFF8EB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="#1C1917" strokeWidth="1.3"/><path d="M2.5 10.5V3.5C2.5 2.94772 2.94772 2.5 3.5 2.5H10.5" stroke="#1C1917" strokeWidth="1.3" strokeLinecap="round"/></svg>
+                      Copy email instead
+                    </>
+                  )}
+                </button>
+
+                <form onSubmit={submitContact} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Your name"
+                    value={contactForm.name}
+                    onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))}
+                    style={{
+                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
+                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
+                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none',
+                    }}
+                  />
+                  <input
+                    required
+                    type="email"
+                    placeholder="Your email"
+                    value={contactForm.email}
+                    onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
+                    style={{
+                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
+                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
+                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none',
+                    }}
+                  />
+                  <textarea
+                    required
+                    placeholder="What's on your mind?"
+                    rows={4}
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
+                    style={{
+                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
+                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
+                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none', resize: 'vertical',
+                    }}
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={contactStatus === 'sending'}
+                    style={{
+                      marginTop: '6px', padding: '13px 20px', borderRadius: '10px',
+                      border: 'none', background: '#1C1917', color: '#FFF8EB',
+                      fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', fontWeight: 700,
+                      letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer',
+                      opacity: contactStatus === 'sending' ? 0.6 : 1,
+                    }}
+                  >
+                    {contactStatus === 'sending' ? 'Sending…' : 'Send message'}
+                  </button>
+
+                  {contactStatus === 'error' && (
+                    <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
+                      Something went wrong. You can also email me directly at{' '}
+                      <a href="mailto:gamze@gamzee.nl" style={{ color: '#B4470E', textDecoration: 'underline' }}>gamze@gamzee.nl</a>.
+                    </p>
+                  )}
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* <ChatWidget /> */}
     </>
