@@ -42,3 +42,6 @@ next-env.d.ts
 gamzee-portfolio-v2/
 .next/
 node_modules/
+
+# Claude Code session files
+.claude/

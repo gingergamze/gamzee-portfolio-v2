@@ -1,15 +1,24 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
+import SiteNav from './SiteNav';
+import { works } from './lib/works';
 
 const ACCENT = '#B4470E';
 
 export default function Home() {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  const [atTop, setAtTop] = useState(true);
   const [activeCard, setActiveCard] = useState(0);
-  const [activeWork, setActiveWork] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  // Which Selected Work card is hovered — tracked in React state (not pure
+  // CSS :hover) so it resets cleanly when this page remounts after a
+  // click-through-and-back navigation, instead of staying "stuck" showing
+  // the hover look wherever the cursor happened to be left sitting.
+  const [hoveredWork, setHoveredWork] = useState(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 600px)');
@@ -19,54 +28,11 @@ export default function Home() {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  const [contactOpen, setContactOpen] = useState(false);
-  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
-  const [contactStatus, setContactStatus] = useState('idle'); // idle | sending | success | error
-  const [emailCopied, setEmailCopied] = useState(false);
-
-  const copyEmail = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText('gamze@gamzee.nl').catch(() => {});
-    }
-    setEmailCopied(true);
-    setTimeout(() => setEmailCopied(false), 2000);
-  };
-
-  const closeContact = () => {
-    setContactOpen(false);
-    setContactStatus('idle');
-    setContactForm({ name: '', email: '', message: '' });
-  };
-
-  const submitContact = async (e) => {
-    e.preventDefault();
-    setContactStatus('sending');
-    try {
-      const res = await fetch('https://formsubmit.co/ajax/gamze@gamzee.nl', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: contactForm.name,
-          email: contactForm.email,
-          message: contactForm.message,
-          _subject: `New message from ${contactForm.name} via gamzee.nl`,
-        }),
-      });
-      if (!res.ok) throw new Error('Request failed');
-      setContactStatus('success');
-    } catch {
-      setContactStatus('error');
-    }
-  };
-
-  const works = [
-    { title: 'Sintek Procurement Platform', role: 'Lead Product Designer', year: '2025', domain: 'Enterprise', desc: 'An enterprise-grade internal procurement and supply-chain platform. Consolidated fragmented vendor data into one operational source of truth.', tags: ['Enterprise', 'Supply chain', 'Internal tooling'], type: 'image', media: '/asmltest.jpg' },
-    { title: 'ASML Similarity Model', role: 'Product Designer', year: '2024', domain: 'Data tooling', desc: 'Redesigned an internal TIBCO Spotfire tool into a modern decision app for platform engineers, cutting review cycles.', tags: ['Data tooling', 'Spotfire', 'Decision support'], type: 'video', media: '/A1.mp4' },
-    { title: 'Project title three', role: 'Role', year: 'Year', domain: 'Domain', desc: 'A short description of the project — the problem, what you designed, and the outcome.', tags: ['Tag one', 'Tag two'], type: 'image', media: '/project-three.png' },
-  ];
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.8);
+    const onScroll = () => {
+      setScrolled(window.scrollY > window.innerHeight * 0.8);
+      setAtTop(window.scrollY < 10);
+    };
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -83,7 +49,7 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.35 }
     );
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -92,65 +58,70 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and roadmaps' },
+    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and product roadmaps' },
     { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
-    { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with complex processes, poor cross-functional collaboration, inefficient workflows' },
+    { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with poor cross-functional collaboration, inefficient workflows and complex processes because of their domain' },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
   ];
 
+  // Selected Work card — shared by the pyramid layout below. Width is
+  // computed the same way a 3-across grid would (equal thirds minus two of
+  // the "normal" gaps), so every card is identical in size no matter which
+  // row it sits in or how far apart that row's cards are spaced.
+  const CARD_GAP = 'clamp(24px,3vw,40px)';
+  const CARD_SCALE = 1; // widened back out to pair with the wider 16:9 photo below, height stays ~unchanged
+  const renderWorkCard = (w) => (
+    <div
+      key={w.slug}
+      className={`work-card${hoveredWork === w.slug ? ' is-hovered' : ''}`}
+      onClick={() => router.push(`/work/${w.slug}`)}
+      onMouseEnter={() => setHoveredWork(w.slug)}
+      onMouseLeave={() => setHoveredWork(null)}
+      role="link"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter') router.push(`/work/${w.slug}`); }}
+      style={{
+        borderRadius: '40px', overflow: 'hidden', cursor: 'pointer',
+        background: 'transparent',
+        width: `calc((100% - 2 * ${CARD_GAP}) / 3 * ${CARD_SCALE})`,
+        // Every card stretches to the tallest in its row, and the caption
+        // block (flex: 1) fills the remainder — so frames stay identical
+        // in size regardless of how many lines the title/description wrap.
+        display: 'flex', flexDirection: 'column',
+      }}
+    >
+      {/* Photo keeps its original fixed 3:2 sizing. The caption below sizes
+          to its own content (title + a 2-line-clamped description) instead
+          of stretching — so the black portion stays compact. */}
+      <div className="work-card-media" style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', overflow: 'hidden', background: 'transparent', flexShrink: 0 }}>
+        {w.type === 'video' ? (
+          <video src={w.media} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <img src={w.media} alt={w.title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        )}
+      </div>
+      <div className="work-card-content" style={{ background: '#1C1917', padding: '18px 24px 20px', flexShrink: 0 }}>
+        <h3 style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: 'clamp(18px,2.1vw,22px)', letterSpacing: '-0.01em', lineHeight: 1.15, color: '#FFFFFF', margin: '0 0 6px' }}>
+          {w.title}
+          {w.titleSuffix && (
+            <span style={{ fontWeight: 400, fontSize: '0.7em', color: 'rgba(255,255,255,0.75)' }}>
+              {' - '}{w.titleSuffix}
+            </span>
+          )}
+        </h3>
+        <p style={{
+          fontFamily: 'var(--font-work-sans)', fontSize: '13px', lineHeight: 1.45, color: 'rgba(255,255,255,0.85)', margin: 0,
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+        }}>
+          {w.tagline}
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <>
-      {/* TOP MASK */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '104px',
-        background: '#FCF7EB',
-        zIndex: 99,
-        opacity: scrolled ? 1 : 0,
-        transition: 'opacity 0.3s ease',
-        pointerEvents: 'none',
-      }} />
-
-      {/* NAVBAR */}
-      <div style={{
-        position: 'fixed', top: '20px', left: '50%',
-        transform: 'translateX(-50%)',
-        width: 'calc(100% - 40px)', maxWidth: '2000px', zIndex: 100,
-      }}>
-        <nav style={{
-          background: scrolled ? 'rgba(252,247,235,0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-          border: scrolled ? '0.3px solid rgba(28,25,23,0.12)' : '0.3px solid rgba(28,25,23,0.15)',
-          borderRadius: '14px',
-          padding: '14px clamp(10px, 0.7vw, 20px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          boxShadow: scrolled ? '0 2px 20px rgba(28,25,23,0.06)' : 'none',
-          transition: 'all 0.3s ease',
-        }}>
-          <a href="#" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
-            <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
-              <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 800, fontSize: '14px', color: '#1C1917', lineHeight: 1, letterSpacing: '0.01em' }}>GAMZE BOZKURT</div>
-              <div className="nav-subtitle" style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Design product, services and strategies</div>
-            </div>
-          </a>
-          <div className="nav-contact-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
-            <button
-              onClick={() => setContactOpen(true)}
-              className="nav-contact"
-              style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 600, color: '#1C1917', background: 'none', border: 'none', cursor: 'pointer', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}
-            >
-              Contact
-            </button>
-          </div>
-        </nav>
-      </div>
+      <SiteNav />
 
       {/* HERO */}
       <header style={{
@@ -158,111 +129,95 @@ export default function Home() {
         top: 0,
         zIndex: 0,
         minHeight: '100vh',
-        background: '#FCF7EB',
+        background: '#FFFFFF',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        padding: 'clamp(140px,20vh,200px) clamp(24px,5vw,72px) clamp(160px,24vh,320px)',
+        padding: 'clamp(140px,20vh,200px) clamp(24px,5vw,72px) clamp(40px,6vh,100px)',
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}>
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          onLoadedMetadata={(e) => { e.target.playbackRate = 0.25; }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <source src="/sunn.mp4" type="video/mp4" />
-        </video>
-
         <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(252,247,235,0.55)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }} />
-
-        <div className="scroll-cue" style={{
-          position: 'absolute',
+          position: 'relative',
           zIndex: 1,
-          left: 'clamp(24px,5vw,72px)',
-          bottom: 'clamp(48px,10vh,120px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
+          // Once the cards have risen over the hero, blur what's left of it
+          // so the red kicker doesn't read through the gaps beside the cards
+          filter: scrolled ? 'blur(28px)' : 'none',
+          opacity: scrolled ? 0.35 : 1,
+          transition: 'filter 0.6s ease, opacity 0.6s ease',
         }}>
-          <div className="scroll-arrow" style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '10px',
-            border: '0.5px solid rgba(28,25,23,0.2)',
-            display: 'grid',
-            placeItems: 'center',
-          }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span style={{
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontSize: '12px',
-            fontWeight: 800,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: '#1C1917',
-          }}>
-            Scroll Down
-          </span>
-        </div>
-
-        <div style={{ position: 'relative', zIndex: 1 }}>
           <p className="hero-kicker" style={{
-            margin: '0 0 32px',
-            marginLeft: '-2px',
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontWeight: 900,
-            fontSize: 'clamp(24px, 7vw, 90px)',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
+            margin: '0 0 24px',
+            marginLeft: '-3px',
+            fontFamily: 'var(--font-work-sans)',
+            fontOpticalSizing: 'auto',
+            // 700, not 900 — Work Sans Black gets very round/bulbous at this
+            // size and reads as "curly"; Bold keeps the letterforms straight.
+            fontWeight: 700,
+            fontSize: 'clamp(52px, 13.5vw, 180px)',
+            lineHeight: 1,
+            letterSpacing: '-0.03em',
             color: '#d04d03',
           }}>
-            Design & strategy
+            Design & Strategy
           </p>
           <h1 className="hero-headline" style={{
-            margin: -3,
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontWeight: 600,
-            fontSize: 'clamp(20px, 9vw, 60px)',
-            lineHeight: 0.99,
-            letterSpacing: '-0.045em',
-            color: '#1C1917',
+            margin: '68px -3px -3px',
+            fontFamily: 'var(--font-work-sans)',
+            fontWeight: 500,
+            fontSize: 'clamp(22px, 5vw, 44px)',
+            lineHeight: 1.15,
+            letterSpacing: '-0.02em',
+            color: '#3D3631',
           }}>
-            For complex workflows and data-rich products
+            For complex workflows, operational processes and data-rich products
           </h1>
+          <div className="scroll-cue" style={{
+            marginTop: '80px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            opacity: atTop ? 1 : 0,
+            pointerEvents: atTop ? 'auto' : 'none',
+            transition: 'opacity 0.3s ease',
+          }}>
+            <div className="scroll-arrow" style={{
+              width: '44px',
+              height: '44px',
+              borderRadius: '10px',
+              border: '0.5px solid rgba(28,25,23,0.2)',
+              display: 'grid',
+              placeItems: 'center',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <span style={{
+              fontFamily: 'var(--font-work-sans)',
+              fontSize: '12px',
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#1C1917',
+            }}>
+              Scroll Down
+            </span>
+          </div>
         </div>
       </header>
 
       {/* ABOUT */}
-      <section style={{
-        position: 'sticky',
-        top: 0,
+      <section className="reveal reveal-card" style={{
+        position: 'relative',
         zIndex: 1,
         marginTop: 0,
+        marginLeft: 'clamp(8px,1vw,20px)',
+        marginRight: 'clamp(8px,1vw,20px)',
         minHeight: '0vh',
         boxSizing: 'border-box',
-        background: '#FCF7EB',
-        borderRadius: '12px 12px 0 0',
+        background: '#FFFFFF',
+        borderRadius: '12px',
         border: '0.4px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
       }}>
@@ -270,11 +225,12 @@ export default function Home() {
           padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
         }}>
           <h2 className="reveal" style={{
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontWeight: 600,
+            fontFamily: 'var(--font-work-sans)',
+            fontOpticalSizing: 'auto',
+            fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',
             lineHeight: 0.99,
-            letterSpacing: '-0.045em',
+            letterSpacing: '-0.02em',
             color: '#1C1917',
             margin: '0 0 40px',
           }}>
@@ -287,137 +243,53 @@ export default function Home() {
             margin: '0 0 32px',
             maxWidth: '152ch',
           }}>
-            I find where products and workflows underperform. Then I fix them where it costs the business.
+            I find where products and workflows underperform. Then I fix them where it costs the business time and money.
           </p>
-        </div>
-
-        <div className="scroll-cue" style={{
-          position: 'absolute',
-          zIndex: 1,
-          left: 'clamp(24px,5vw,72px)',
-          bottom: 'clamp(48px,10vh,120px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-        }}>
-          <div className="scroll-arrow" style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '10px',
-            border: '0.5px solid rgba(28,25,23,0.2)',
-            display: 'grid',
-            placeItems: 'center',
-          }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <span style={{
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontSize: '12px',
-            fontWeight: 800,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: '#1C1917',
-          }}>
-            Scroll Down
-          </span>
         </div>
       </section>
 
       {/* SELECTED WORK — TABS VIEW */}
-      <section style={{
+      <section id="selected-work" style={{
         position: 'relative',
         zIndex: 2,
+        scrollMarginTop: '120px',
         marginTop: 'clamp(-60px,-8vh,-40px)',
-        background: '#FCF7EB',
-        borderRadius: '12px 12px 0 0',
-        borderTop: '0.7px solid rgba(28,25,23,0.1)',
+        marginLeft: 'clamp(24px,2.8vw,56px)',
+        marginRight: 'clamp(24px,2.8vw,56px)',
+        background: '#FFFFFF',
+        borderRadius: '12px',
+        border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
         padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
       }}>
-        <div style={{ maxWidth: '1400px', margin: '0' }}>
+        <div style={{ maxWidth: '2400px', margin: '0' }}>
           <h2 style={{
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontWeight: 600,
+            fontFamily: 'var(--font-work-sans)',
+            fontOpticalSizing: 'auto',
+            fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',
-            letterSpacing: '-0.045em',
+            letterSpacing: '-0.02em',
             lineHeight: 0.99,
             color: '#1C1917',
-            margin: '0 0 40px',
+            margin: '0 0 clamp(48px,7vh,80px)',
           }}>
             Selected Work
           </h2>
         </div>
-        <div style={{ maxWidth: '1200px', margin: '0' }}>
-          <div className="worktabs" style={{ display: 'grid', gridTemplateColumns: '270px 1fr', gap: 'clamp(40px,6vw,96px)', alignItems: 'center' }}>
-
-            {/* Left rail — numbered tab cards */}
-            <div className="worktabs-rail" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {works.map((w, i) => {
-                const on = activeWork === i;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setActiveWork(i)}
-                    style={{
-                      display: 'flex', flexDirection: 'column', gap: '7px', width: '100%', textAlign: 'left',
-                      cursor: 'pointer', padding: '16px 18px', borderRadius: '14px',
-                      border: on ? '1px solid rgba(28,25,23,0.10)' : '1px solid transparent',
-                      background: on ? '#FCF7EB' : 'transparent',
-                      boxShadow: on ? '0 8px 24px rgba(28,25,23,0.08)' : 'none',
-                      transition: 'all 0.25s ease',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
-                      <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '12px', fontWeight: 800, letterSpacing: '0.06em', color: on ? '#d04d03' : '#BEB29A' }}>0{i + 1}</span>
-                      <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '15px', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.2, color: on ? '#1C1917' : '#7C756E' }}>{w.title}</span>
-                    </div>
-                    <span style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: on ? '#A79B85' : '#BEB29A', paddingLeft: '27px' }}>{w.domain}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Right panel — framed visual + text block, centered in the remaining space */}
-            <div key={activeWork} className="animate-pop-forward" style={{ width: '100%', maxWidth: '760px', justifySelf: 'center' }}>
-              <div style={{
-                position: 'relative', width: '100%', height: 'clamp(340px,50vh,540px)',
-                borderRadius: '18px', overflow: 'hidden',
-                border: '1px solid rgba(28,25,23,0.1)',
-                boxShadow: '0 24px 56px rgba(28,25,23,0.14)',
-                background: 'rgba(28,25,23,0.04)', marginBottom: '26px',
-              }}>
-                {works[activeWork].type === 'video' ? (
-                  <video key={works[activeWork].media} src={works[activeWork].media} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <img src={works[activeWork].media} alt={works[activeWork].title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                )}
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#d04d03' }}>
-                  {works[activeWork].role} · {works[activeWork].year}
-                </div>
-              </div>
-
-              <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: 'clamp(20px,2.6vw,28px)', letterSpacing: '-0.035em', lineHeight: 1.05, color: '#1C1917', margin: '0 0 14px' }}>
-                {works[activeWork].title}
-              </h3>
-
-              <p style={{ fontSize: 'clamp(14px,1.4vw,15px)', lineHeight: 1.6, color: '#3D3631', margin: '0 0 20px', maxWidth: '58ch' }}>
-                {works[activeWork].desc}
-              </p>
-
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {works[activeWork].tags.map((tag) => (
-                  <span key={tag} style={{
-                    fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600,
-                    letterSpacing: '0.06em', textTransform: 'uppercase', color: '#6B635A',
-                    border: '1px solid rgba(28,25,23,0.18)', borderRadius: '8px', padding: '7px 12px',
-                  }}>{tag}</span>
-                ))}
-              </div>
+        <div style={{ maxWidth: '2400px', margin: '0' }}>
+          {/* Pyramid layout: the first case study sits alone, centered, on
+              the top row; the next two sit on the row below, offset left
+              and right of it with extra breathing room between them.
+              CARD_WIDTH is computed the same way a 3-across grid would
+              (equal thirds minus two of the "normal" gaps) so all three
+              cards stay identical in size — independent of BOTTOM_GAP,
+              which only controls the space between the bottom two. Stacks
+              to one column on mobile via .work-grid in globals.css. */}
+          <div className="work-grid" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'clamp(24px,3vw,40px)', width: '100%' }}>
+            {renderWorkCard(works[0])}
+            <div className="work-grid-row" style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 'clamp(56px,7vw,88px)', width: '100%' }}>
+              {renderWorkCard(works[1])}
+              {renderWorkCard(works[2])}
             </div>
           </div>
         </div>
@@ -426,42 +298,15 @@ export default function Home() {
       {/* ABOUT ME + FOOTER — shared video background */}
       <section style={{
         position: 'relative',
-        zIndex: 2,
-        background: '#FCF7EB',
-        borderRadius: '8px 8px 0 0',
-        borderTop: '0.7px solid rgba(28,25,23,0.1)',
+        zIndex: 3,
+        marginTop: 'clamp(-60px,-8vh,-40px)',
+        marginLeft: 'clamp(44px,5vw,96px)',
+        marginRight: 'clamp(44px,5vw,96px)',
+        background: '#FFFFFF',
+        borderRadius: '12px',
+        border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -18px 60px rgba(28,25,23,0.30)',
-        overflow: 'hidden',
       }}>
-        {/* Background video — spans About me AND footer */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          onLoadedMetadata={(e) => { e.target.playbackRate = 0.25; }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <source src="/sunn.mp4" type="video/mp4" />
-        </video>
-
-        {/* Readability wash */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(252,247,235,0.55)',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }} />
-
         {/* About me content */}
         <div style={{
           position: 'relative',
@@ -471,19 +316,34 @@ export default function Home() {
           padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(80px,14vh,160px)',
         }}>
           <h2 style={{
-            fontFamily: 'var(--font-plus-jakarta-sans)',
-            fontWeight: 600,
+            position: isMobile ? 'static' : 'sticky',
+            top: '104px',
+            zIndex: 2,
+            background: '#FFFFFF',
+            fontFamily: 'var(--font-work-sans)',
+            fontOpticalSizing: 'auto',
+            fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',
-            letterSpacing: '-0.045em',
+            letterSpacing: '-0.02em',
             lineHeight: 0.99,
             color: '#1C1917',
             margin: '0 0 40px',
+            padding: '8px 0',
           }}>
             About
           </h2>
-          <div style={{ minHeight: '5em', marginBottom: '40px' }}>
+          <div style={{
+            position: isMobile ? 'static' : 'sticky',
+            top: '219px',
+            zIndex: 2,
+            background: '#FFFFFF',
+            minHeight: '5em',
+            marginBottom: '40px',
+            paddingBottom: '8px',
+          }}>
             <div style={{
-              fontFamily: 'var(--font-plus-jakarta-sans)',
+              fontFamily: 'var(--font-work-sans)',
+              fontOpticalSizing: 'auto',
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '0.14em',
@@ -499,7 +359,7 @@ export default function Home() {
               lineHeight: 1.5,
               color: '#1C1917',
               margin: 0,
-              maxWidth: '640px',
+              maxWidth: 'none',
               whiteSpace: isMobile ? 'normal' : 'nowrap',
               transition: 'opacity 0.3s ease',
             }}>
@@ -508,7 +368,7 @@ export default function Home() {
           </div>
 
           {/* STORY DECK — pile fans both ways, centered like the Selected Work photo */}
-          <div style={{ width: 'fit-content', margin: '0 auto' }}>
+          <div style={{ width: 'fit-content', margin: '0 auto', marginTop: '80px', position: 'relative', zIndex: 1, isolation: 'isolate' }}>
           <div style={{
             position: 'relative',
             height: isMobile ? '190px' : '320px',
@@ -534,7 +394,7 @@ export default function Home() {
                     height: `${cardSize}px`,
                     borderRadius: '16px',
                     overflow: 'hidden',
-                    background: '#FCF7EB',
+                    background: '#FFFFFF',
                     border: '1px solid rgba(28,25,23,0.12)',
                     boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
                     transform: `translateX(${offset * offsetStep}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
@@ -560,6 +420,7 @@ export default function Home() {
             <button
               onClick={() => setActiveCard((v) => (v - 1 + stories.length) % stories.length)}
               aria-label="Previous story"
+              className="deck-arrow-btn"
               style={{
                 width: '30px', height: '30px', borderRadius: '8px',
                 border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
@@ -568,10 +429,11 @@ export default function Home() {
             >
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-           
+
             <button
               onClick={() => setActiveCard((v) => (v + 1) % stories.length)}
               aria-label="Next story"
+              className="deck-arrow-btn"
               style={{
                 width: '30px', height: '30px', borderRadius: '8px',
                 border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
@@ -584,174 +446,29 @@ export default function Home() {
           </div>
 
         </div>
+      </section>
 
-        {/* Footer — transparent so the video shows through */}
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          padding: 'clamp(40px,6vh,72px) clamp(20px,5vw,72px) 0',
-        }}>
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px' }}>
-            <div style={{ display: 'flex', gap: '24px' }}>
-              <button
-                onClick={() => setContactOpen(true)}
-                style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}
-              >
-                Email
-              </button>
-              <a href="https://www.linkedin.com/in/gamze-serviceandproductdesignstrategist/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>LinkedIn</a>
-            </div>
+      {/* FOOTER — sits on the plain page background, below the About card */}
+      <div style={{
+        position: 'relative',
+        zIndex: 2,
+        padding: 'clamp(40px,6vh,72px) clamp(20px,5vw,72px)',
+      }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <button
+              onClick={() => window.dispatchEvent(new Event('open-contact'))}
+              style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'inherit', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}
+            >
+              Contact
+            </button>
+            <a href="https://www.linkedin.com/in/gamze-serviceandproductdesignstrategist/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>LinkedIn</a>
           </div>
-          <div style={{ maxWidth: '1280px', margin: '32px auto 0', paddingTop: '24px', paddingBottom: '32px', borderTop: '0.5px solid rgba(28,25,23,0.15)', textAlign: 'center', fontSize: '12px', color: 'rgba(28,25,23,0.45)' }}>
+          <div style={{ width: '100%', paddingTop: '20px', borderTop: '0.5px solid rgba(28,25,23,0.15)', textAlign: 'center', fontSize: '12px', color: 'rgba(28,25,23,0.45)' }}>
             © 2026 Gamze Bozkurt — made with curiosity
           </div>
         </div>
-      </section>
-
-      {/* CONTACT MODAL */}
-      {contactOpen && (
-        <div
-          onClick={closeContact}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 200,
-            background: 'rgba(28,25,23,0.45)',
-            backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: '24px',
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'relative', width: '100%', maxWidth: '440px',
-              background: '#FCF7EB', borderRadius: '20px',
-              border: '1px solid rgba(28,25,23,0.1)',
-              boxShadow: '0 32px 80px rgba(28,25,23,0.28)',
-              padding: 'clamp(28px,5vw,40px)',
-            }}
-            className="animate-pop-forward"
-          >
-            <button
-              onClick={closeContact}
-              aria-label="Close"
-              style={{
-                position: 'absolute', top: '18px', right: '18px',
-                width: '32px', height: '32px', borderRadius: '8px',
-                border: '1px solid rgba(28,25,23,0.15)', background: 'transparent',
-                cursor: 'pointer', display: 'grid', placeItems: 'center',
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round"/></svg>
-            </button>
-
-            {contactStatus === 'success' ? (
-              <div style={{ padding: '20px 0' }}>
-                <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: '24px', letterSpacing: '-0.03em', color: '#1C1917', margin: '0 0 12px' }}>
-                  Message sent
-                </h3>
-                <p style={{ fontSize: '15px', lineHeight: 1.6, color: '#3D3631', margin: 0 }}>
-                  Thanks {contactForm.name || 'there'} — it landed straight in my inbox. I'll get back to you soon.
-                </p>
-              </div>
-            ) : (
-              <>
-                <h3 style={{ fontFamily: 'var(--font-plus-jakarta-sans)', fontWeight: 600, fontSize: '24px', letterSpacing: '-0.03em', color: '#1C1917', margin: '0 0 8px' }}>
-                  Let's talk
-                </h3>
-                <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#7C756E', margin: '0 0 10px' }}>
-                  Send a message — it goes straight to gamze@gamzee.nl.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={copyEmail}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    margin: '0 0 24px', padding: '6px 12px', borderRadius: '999px',
-                    border: '1px solid rgba(28,25,23,0.15)', background: emailCopied ? '#1C1917' : 'transparent',
-                    color: emailCopied ? '#FFF8EB' : '#1C1917',
-                    fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '11px', fontWeight: 600,
-                    letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {emailCopied ? (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="#FFF8EB" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      Copied
-                    </>
-                  ) : (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="#1C1917" strokeWidth="1.3"/><path d="M2.5 10.5V3.5C2.5 2.94772 2.94772 2.5 3.5 2.5H10.5" stroke="#1C1917" strokeWidth="1.3" strokeLinecap="round"/></svg>
-                      Copy email instead
-                    </>
-                  )}
-                </button>
-
-                <form onSubmit={submitContact} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Your name"
-                    value={contactForm.name}
-                    onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))}
-                    style={{
-                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
-                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
-                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none',
-                    }}
-                  />
-                  <input
-                    required
-                    type="email"
-                    placeholder="Your email"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
-                    style={{
-                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
-                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
-                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none',
-                    }}
-                  />
-                  <textarea
-                    required
-                    placeholder="What's on your mind?"
-                    rows={4}
-                    value={contactForm.message}
-                    onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
-                    style={{
-                      width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px',
-                      border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF',
-                      fontSize: '14px', fontFamily: 'inherit', color: '#1C1917', outline: 'none', resize: 'vertical',
-                    }}
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={contactStatus === 'sending'}
-                    style={{
-                      marginTop: '6px', padding: '13px 20px', borderRadius: '10px',
-                      border: 'none', background: '#1C1917', color: '#FFF8EB',
-                      fontFamily: 'var(--font-plus-jakarta-sans)', fontSize: '13px', fontWeight: 700,
-                      letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer',
-                      opacity: contactStatus === 'sending' ? 0.6 : 1,
-                    }}
-                  >
-                    {contactStatus === 'sending' ? 'Sending…' : 'Send message'}
-                  </button>
-
-                  {contactStatus === 'error' && (
-                    <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
-                      Something went wrong. You can also email me directly at{' '}
-                      <a href="mailto:gamze@gamzee.nl" style={{ color: '#B4470E', textDecoration: 'underline' }}>gamze@gamzee.nl</a>.
-                    </p>
-                  )}
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* <ChatWidget /> */}
     </>

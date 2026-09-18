@@ -1,21 +1,9 @@
-import { Montserrat, Inter, Carrois_Gothic } from "next/font/google";
+import { Work_Sans } from "next/font/google";
 import "./globals.css";
 
-const carroisGothic = Carrois_Gothic({
-  variable: "--font-carrois-gothic",
-  subsets: ["latin"],
-  weight: ["400"],
-  display: "swap",
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
+// Work Sans is the only typeface on the site — no serif anywhere.
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
   subsets: ["latin"],
   display: "swap",
 });
@@ -27,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${inter.variable} ${carroisGothic.variable} h-full antialiased`}>
+    <html lang="en" className={`${workSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
