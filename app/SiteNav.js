@@ -42,7 +42,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
 
   const copyEmail = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText('gamze@gamzee.nl').catch(() => {});
+      navigator.clipboard.writeText('gamzeebozkurt@gmail.com').catch(() => {});
     }
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
@@ -58,7 +58,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
     e.preventDefault();
     setContactStatus('sending');
     try {
-      const res = await fetch('https://formsubmit.co/ajax/gamze@gamzee.nl', {
+      const res = await fetch('https://formsubmit.co/ajax/gamzeebozkurt@gmail.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
@@ -213,7 +213,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
                   Let's talk
                 </h3>
                 <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#7C756E', margin: '0 0 10px' }}>
-                  Send a message — it goes straight to gamze@gamzee.nl.
+                  Send a message — it goes straight to gamzeebozkurt@gmail.com.
                 </p>
 
                 <button
@@ -297,7 +297,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
                   {contactStatus === 'error' && (
                     <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
                       Something went wrong. You can also email me directly at{' '}
-                      <a href="mailto:gamze@gamzee.nl" style={{ color: '#B4470E', textDecoration: 'underline' }}>gamze@gamzee.nl</a>.
+                      <a href="mailto:gamzeebozkurt@gmail.com" style={{ color: '#B4470E', textDecoration: 'underline' }}>gamzeebozkurt@gmail.com</a>.
                     </p>
                   )}
                 </form>
