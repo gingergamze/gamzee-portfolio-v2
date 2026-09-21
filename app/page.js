@@ -260,7 +260,9 @@ export default function Home() {
         borderRadius: '12px',
         border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
-        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px)',
+        // Extra bottom padding (vs. top) so the case study cards get real
+        // breathing room before the About card overlaps up beneath them.
+        padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(140px,18vh,220px)',
       }}>
         <div style={{ maxWidth: '2400px', margin: '0' }}>
           <h2 style={{

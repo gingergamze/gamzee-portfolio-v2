@@ -5,7 +5,7 @@ export const works = [
     slug: 'asml-risk-assessment',
     title: 'ASML',
    
-    tagline: 'REDESIGNED A WORKFLOW TOOL THAT REDUCES PRODUCTION MISTAKES',
+    tagline: 'Redesigned a workflow tool that reduces production mistakes',
     role: 'Product Designer & UX Researcher',
     year: '2024',
     domain: 'Internal workflow management tool',
@@ -108,7 +108,7 @@ export const works = [
     slug: 'sintek-procurement-platform',
     title: 'Sintek BV',
    
-    tagline: 'Building an tailor made Internal workflow tool for procurement and HR.',
+    tagline: 'Building an tailor made internal workflow tool for procurement and HR',
     role: 'Lead Product Designer',
     year: '2024- Ongoing',
     domain: 'Enterprise',
