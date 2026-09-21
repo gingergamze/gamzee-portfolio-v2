@@ -243,7 +243,7 @@ export default function Home() {
             margin: '0 0 32px',
             maxWidth: '152ch',
           }}>
-            I find where products and workflows underperform. Then I fix them where it costs the business time and money.
+            I find where products and workflows underperform. Then I fix them where it costs time and money for the business.
           </p>
         </div>
       </section>
@@ -317,11 +317,11 @@ export default function Home() {
           margin: '0',
           padding: 'clamp(60px,10vh,120px) clamp(24px,5vw,72px) clamp(80px,14vh,160px)',
         }}>
+          {/* Not sticky: the deck below only advances via the prev/next
+              buttons (no scroll-linked story), so pinning these while the
+              deck scrolled underneath just meant its top edge kept getting
+              covered by these opaque panels — a real bug, not a style choice. */}
           <h2 style={{
-            position: isMobile ? 'static' : 'sticky',
-            top: '104px',
-            zIndex: 2,
-            background: '#FFFFFF',
             fontFamily: 'var(--font-work-sans)',
             fontOpticalSizing: 'auto',
             fontWeight: 700,
@@ -335,10 +335,6 @@ export default function Home() {
             About
           </h2>
           <div style={{
-            position: isMobile ? 'static' : 'sticky',
-            top: '219px',
-            zIndex: 2,
-            background: '#FFFFFF',
             minHeight: '5em',
             marginBottom: '40px',
             paddingBottom: '8px',

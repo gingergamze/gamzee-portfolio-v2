@@ -54,7 +54,7 @@ export const works = [
     slug: 'Commonality',
     title: 'ASML',
     
-    tagline: 'Building a tool that finds efficient ways to make chip machines',
+    tagline: 'Building a tool that shows data to make better chip machines quicker',
     role: 'Role',
     year: '2022-2024',
     domain: 'internal tool',
