@@ -54,11 +54,11 @@ export default function Home() {
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
-  
+
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes by tailor made digital solutions, managing product teams and product roadmaps' },
+    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes and tools by tailor made digital solutions, managing product teams and product roadmaps' },
     { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with poor cross-functional collaboration, inefficient workflows and complex processes because of their domain' },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
@@ -144,7 +144,7 @@ export default function Home() {
           // so the red kicker doesn't read through the gaps beside the cards
           filter: scrolled ? 'blur(28px)' : 'none',
           opacity: scrolled ? 0.35 : 1,
-          transition: 'filter 0.6s ease, opacity 0.6s ease',
+          transition: 'filter 0.8s ease, opacity 0.8s ease',
         }}>
           <p className="hero-kicker" style={{
             margin: '0 0 24px',
@@ -208,9 +208,14 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ABOUT */}
+      {/* WHAT I DO — sticky like the hero above it, so "Selected Work"
+          (which rises from below with its own negative margin) has
+          something pinned in place to fully slide over, instead of both
+          sections just scrolling away at the same rate with only a small
+          overlap between them. */}
       <section className="reveal reveal-card" style={{
-        position: 'relative',
+        position: 'sticky',
+        top: 0,
         zIndex: 1,
         marginTop: 0,
         marginLeft: 'clamp(8px,1vw,20px)',
@@ -299,7 +304,7 @@ export default function Home() {
       </section>
 
       {/* ABOUT ME + FOOTER — shared video background */}
-      <section style={{
+      <section className="reveal reveal-card" style={{
         position: 'relative',
         zIndex: 3,
         marginTop: 'clamp(-60px,-8vh,-40px)',
