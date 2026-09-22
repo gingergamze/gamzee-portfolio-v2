@@ -31,7 +31,7 @@ export default async function CaseStudyPage({ params }) {
         textAlign: 'center',
       }}>
         <h1 style={{
-          fontFamily: 'var(--font-work-sans)', fontOpticalSizing: 'auto', fontWeight: 700,
+          fontFamily: 'var(--font-display)', fontOpticalSizing: 'auto', fontWeight: 700,
           fontSize: 'clamp(36px,6vw,64px)', lineHeight: 1.05, letterSpacing: '-0.02em',
           color: '#FFFFFF', margin: '0 0 20px',
         }}>
@@ -249,8 +249,8 @@ export default async function CaseStudyPage({ params }) {
           {work.stats.map((s, i) => (
             <div key={i}>
               <div style={{
-                fontFamily: 'var(--font-work-sans)', fontWeight: 500,
-                fontSize: 'clamp(40px,5.5vw,76px)', lineHeight: 1.05, letterSpacing: '-0.03em',
+                fontFamily: 'var(--font-display)', fontWeight: 700,
+                fontSize: 'clamp(40px,5.5vw,76px)', lineHeight: 1.05, letterSpacing: '-0.01em',
                 color: '#1C1917', marginBottom: '16px',
               }}>
                 {s.value}
@@ -309,7 +309,7 @@ export default async function CaseStudyPage({ params }) {
           padding: 'clamp(48px,7vh,88px) clamp(24px,5vw,72px)',
         }}>
           <h2 style={{
-            fontFamily: 'var(--font-work-sans)', fontWeight: 700,
+            fontFamily: 'var(--font-display)', fontWeight: 700,
             fontSize: 'clamp(32px,6vw,64px)', letterSpacing: '-0.01em', lineHeight: 1.05,
             color: '#1C1917', margin: '0 0 40px',
           }}>

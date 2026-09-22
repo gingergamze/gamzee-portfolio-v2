@@ -149,17 +149,15 @@ export default function Home() {
           <p className="hero-kicker" style={{
             margin: '0 0 24px',
             marginLeft: '-3px',
-            fontFamily: 'var(--font-work-sans)',
-            fontOpticalSizing: 'auto',
-            // 700, not 900 — Work Sans Black gets very round/bulbous at this
-            // size and reads as "curly"; Bold keeps the letterforms straight.
-            fontWeight: 700,
+            // Plus Jakarta Sans, not Work Sans, for the big display headline
+            // — distinctive design-portfolio-leaning geometric sans with
+            // clean kerning at large sizes (no g/y collision), 800 weight
+            // for real presence.
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
             fontSize: 'clamp(46px, 12vw, 160px)',
             lineHeight: 1,
-            // Eased up from -0.03em — that was crowding the "gy" at the end
-            // of "Strategy" (the g's bowl and the y's descender were nearly
-            // touching).
-            letterSpacing: '-0.015em',
+            letterSpacing: '-0.03em',
             color: '#d04d03',
           }}>
             Design & Strategy
@@ -228,7 +226,7 @@ export default function Home() {
           padding: 'clamp(80px,14vh,160px) clamp(24px,5vw,72px) clamp(120px,24vh,280px)',
         }}>
           <h2 className="reveal" style={{
-            fontFamily: 'var(--font-work-sans)',
+            fontFamily: 'var(--font-display)',
             fontOpticalSizing: 'auto',
             fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',
@@ -269,7 +267,7 @@ export default function Home() {
       }}>
         <div style={{ maxWidth: '2400px', margin: '0' }}>
           <h2 style={{
-            fontFamily: 'var(--font-work-sans)',
+            fontFamily: 'var(--font-display)',
             fontOpticalSizing: 'auto',
             fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',
@@ -325,7 +323,7 @@ export default function Home() {
               deck scrolled underneath just meant its top edge kept getting
               covered by these opaque panels — a real bug, not a style choice. */}
           <h2 style={{
-            fontFamily: 'var(--font-work-sans)',
+            fontFamily: 'var(--font-display)',
             fontOpticalSizing: 'auto',
             fontWeight: 700,
             fontSize: 'clamp(20px, 9vw, 60px)',

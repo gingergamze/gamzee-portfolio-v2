@@ -5,6 +5,9 @@
   /* No serif on the site — `font-serif` resolves to Work Sans too */
   --font-serif: var(--font-work-sans), system-ui, sans-serif;
 }
+/* Space Grotesk (--font-display, set via app/layout.js's next/font class on
+   <html>) is used directly as `fontFamily: 'var(--font-display)'` inline on
+   the site's big headline elements — no Tailwind theme token needed. */
 html {
   overflow-x: hidden;
 }
