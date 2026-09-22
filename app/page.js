@@ -154,9 +154,12 @@ export default function Home() {
             // 700, not 900 — Work Sans Black gets very round/bulbous at this
             // size and reads as "curly"; Bold keeps the letterforms straight.
             fontWeight: 700,
-            fontSize: 'clamp(52px, 13.5vw, 180px)',
+            fontSize: 'clamp(46px, 12vw, 160px)',
             lineHeight: 1,
-            letterSpacing: '-0.03em',
+            // Eased up from -0.03em — that was crowding the "gy" at the end
+            // of "Strategy" (the g's bowl and the y's descender were nearly
+            // touching).
+            letterSpacing: '-0.015em',
             color: '#d04d03',
           }}>
             Design & Strategy
