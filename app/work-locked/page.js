@@ -63,7 +63,7 @@ export default function WorkLockedPage() {
           This case study is private
         </h1>
         <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', lineHeight: 1.6, color: '#7C756E', margin: '0 0 32px' }}>
-          Enter the password to view it. Don't have one? <a href="mailto:gamze@gamzee.nl" style={{ color: '#1C1917', textDecoration: 'underline' }}>Ask Gamze for access</a>.
+          Enter the password to view it. Don't have one? <a href="mailto:gamzeebozkurt@gmail.com?subject=Case%20study%20access%20request&body=Hi%20Gamze%2C%20could%20I%20get%20the%20password%20for%20your%20case%20studies%3F" style={{ color: '#1C1917', textDecoration: 'underline' }}>Ask Gamze for access</a>.
         </p>
 
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
