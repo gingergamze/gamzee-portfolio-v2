@@ -235,7 +235,7 @@ export const works = [
     year: '2024- Ongoing',
     domain: 'Enterprise',
     desc: 'An enterprise-grade internal procurement and supply-chain platform. Consolidated fragmented vendor data into one operational source of truth.',
-    tags: ['Enterprise', 'Supply chain', 'Internal tooling'],
+    tags: ['Enterprise UX', 'Procurement tool', 'Internal tool', 'Tailor-made software'],
     type: 'image',
     media: '/project-three-robotics.jpg',
     client: 'Sintek',
