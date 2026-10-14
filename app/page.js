@@ -347,7 +347,7 @@ export default function Home() {
             lineHeight: 0.99,
             letterSpacing: '-0.02em',
             color: '#1C1917',
-            margin: '0 0 40px -0.011em',
+            margin: '0 0 76px -0.011em',
           }}>
             What I do
           </h2>
@@ -358,7 +358,9 @@ export default function Home() {
             margin: '0 0 32px -0.108em',
             maxWidth: '152ch',
           }}>
-            I find where products and workflows underperform. Then I fix them where it costs time and money for the business.
+            <span style={{ display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>internal tools/software</strong> and <strong style={{ fontWeight: 700 }}>business-to-employee (B2E)</strong> products.</span>
+            <span style={{ display: 'block', marginBottom: '28px' }}>I like finding where products and workflows underperform.</span>
+            <span style={{ display: 'block' }}>Then I fix them where it costs time and money for the business.</span>
           </p>
         </div>
       </section>
@@ -388,7 +390,7 @@ export default function Home() {
             letterSpacing: '-0.02em',
             lineHeight: 0.99,
             color: '#1C1917',
-            margin: '0 0 clamp(32px,5vh,56px) -0.0385em',
+            margin: '0 0 clamp(68px,9.5vh,104px) -0.0385em',
           }}>
             Selected Work
           </h2>
@@ -434,7 +436,7 @@ export default function Home() {
             letterSpacing: '-0.02em',
             lineHeight: 0.99,
             color: '#1C1917',
-            margin: '0 0 40px -0.011em',
+            margin: '0 0 64px -0.011em',
             padding: '8px 0',
           }}>
             About
@@ -551,11 +553,41 @@ export default function Home() {
         </div>
       </section>
 
+      {/* TOOLS — a first, quieter footer band above the real footer. Logos are
+          all the same size (28px square) and colour. */}
+      <div id="tools" style={{
+        position: 'relative',
+        zIndex: 2,
+        padding: 'clamp(48px,7vh,88px) var(--page-x) 0',
+        background: '#F4F1EA',
+      }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px' }}>
+          <div style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>
+            Tools I use
+          </div>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px clamp(28px,5vw,64px)' }}>
+            {[
+              { name: 'Figma', src: '/tools/figma.svg' },
+              { name: 'Claude', src: '/tools/claude.svg' },
+              { name: 'Vercel', src: '/tools/vercel.svg' },
+              { name: 'Cursor', src: '/tools/cursor.svg' },
+              { name: 'Notion', src: '/tools/notion.svg' },
+            ].map((t) => (
+              <li key={t.name} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <img src={t.src} alt="" width="28" height="28" style={{ width: '28px', height: '28px', display: 'block' }} />
+                <span style={{ fontSize: '16px', fontWeight: 600, color: '#1C1917' }}>{t.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
       {/* FOOTER — sits on the plain page background, below the About card */}
       <div style={{
         position: 'relative',
         zIndex: 2,
         padding: 'clamp(40px,6vh,72px) var(--page-x)',
+        background: '#F4F1EA',
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', gap: '24px' }}>

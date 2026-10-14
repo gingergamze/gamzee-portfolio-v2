@@ -1,11 +1,10 @@
-// Confidentiality notice under the hero visual: a rounded box, centred text,
-// first sentence emphasised, the rest in a lighter colour.
+// Confidentiality notice under the hero visual and the prototype: plain centred
+// text (no box), first sentence emphasised, the rest in a lighter colour.
 export default function HeroNote({ text, maxWidth = 900 }) {
   const [first, ...rest] = text.split(/(?<=\.)\s+/).filter(Boolean);
   return (
     <div style={{
-      maxWidth, margin: 'clamp(20px,3vh,28px) auto 0', padding: '16px 24px', borderRadius: 16,
-      border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.06)',
+      maxWidth, margin: 'clamp(20px,3vh,28px) auto 0',
       color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-work-sans)', fontSize: 14, lineHeight: 1.6,
       textAlign: 'center',
     }}>

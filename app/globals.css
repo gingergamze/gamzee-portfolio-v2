@@ -290,6 +290,7 @@ body {
     grid-template-columns: 1fr !important;
     gap: 40px !important;
   }
+  .case-stats .impact-side { display: none; }
 }
 /* Problem / arrow / Solution — a real 3-column grid (see [slug]/page.js),
    so the arrow has its own dedicated column and can never overlap either
@@ -433,4 +434,12 @@ body {
   .cs-main { max-width: 90%; }
   .cs-main .cs-photo { max-width: 100% !important; }
   .cs-main .cs-copy { max-width: none !important; }
+}
+
+.impact-mlabel { display: none; }
+@media (max-width: 700px) {
+  .impact-cols { grid-template-columns: 1fr !important; }
+  .impact-cols .is-cell { grid-column: 1 !important; grid-row: auto !important; order: calc(var(--k, 0) * 3 + var(--r, 1)); }
+  .impact-cols .impact-side, .impact-cols .is-back { display: none; }
+  .impact-cols .impact-mlabel { display: block; }
 }

@@ -41,6 +41,11 @@ export const works = [
       { value: '35s → 15s', trend: 'up', label: ' Faster access to start operations' },
       { value: '50% ', trend: 'down', label: 'Reduced steps to complete a task ' },
     ],
+    // Before / after story under the metrics. Add `image` to show a visual.
+    impactStory: [
+      { stage: 'Before', caption: 'How the work looked before the redesign.', image: '' },
+      { stage: 'After', caption: 'How it works now.', image: '' },
+    ],
     // Prototype shown on the case study page. Fill in `src` to make the
     // section appear (leave it '' to hide it).
     //   type: 'embed' (a page in /public/prototypes, or any embeddable URL),
@@ -167,6 +172,11 @@ export const works = [
       { value: '25%', trend: 'up', label: 'Improved information hiyearchy' },
       { value: '1 week', trend: 'down', label: 'Reduced cognitive complexity' },
     ],
+    // Before / after story under the metrics. Add `image` to show a visual.
+    impactStory: [
+      { stage: 'Before', caption: 'How the work looked before the redesign.', image: '' },
+      { stage: 'After', caption: 'How it works now.', image: '' },
+    ],
     // Prototype shown on the case study page. Fill in `src` to make the
     // section appear (leave it '' to hide it).
     //   type: 'embed' (a page in /public/prototypes, or any embeddable URL),
@@ -227,6 +237,7 @@ export const works = [
     slug: 'sintek-procurement-platform',
     navLabel: 'Sintek',
     title: 'Sintek BV',
+    confidential: true,
     logo: '/sinteklogo.png',
     logoHeight: '15px',
     bgColor: '#D96B2C',
@@ -255,6 +266,11 @@ export const works = [
       { value: '25%', trend: 'down', label: 'Improved workflow consistency' },
       { value: '1 week', trend: 'up', label: 'Increased visibility during procurement process' },
       { value: '>95%', trend: 'up', label: ' Fixed old fashioned manuel processes ' },
+    ],
+    // Before / after story under the metrics. Add `image` to show a visual.
+    impactStory: [
+      { stage: 'Before', caption: 'How the work looked before the redesign.', image: '' },
+      { stage: 'After', caption: 'How it works now.', image: '' },
     ],
     // Prototype shown on the case study page. Fill in `src` to make the
     // section appear (leave it '' to hide it).

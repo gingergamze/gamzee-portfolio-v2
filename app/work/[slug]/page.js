@@ -8,6 +8,7 @@ import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
 import CaseStudyFooter from './CaseStudyFooter';
+import ImpactStory from './ImpactStory';
 
 // Shared type system for the case study text — one label style, one body
 // style, one meta style, so every section reads the same.
@@ -306,24 +307,7 @@ export default async function CaseStudyPage({ params }) {
       {/* RESULTS — three big numbers with a short line under each, framed
           by a thin rule above and below. Right after Design Challenge. */}
       <div id="results" style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 var(--cs-x)' }}>
-        <div className="case-stats" style={{
-          display: 'grid', gridTemplateColumns: `repeat(${work.stats.length}, 1fr)`, gap: 'clamp(24px,4vw,56px)',
-          padding: 'clamp(48px,7vh,88px) 0',
-          borderTop: '1px solid rgba(28,25,23,0.12)', borderBottom: '1px solid rgba(28,25,23,0.12)',
-          textAlign: 'center',
-        }}>
-          {work.stats.map((s, i) => (
-            <div key={i}>
-              <div style={{ width: '32px', height: '3px', borderRadius: '2px', background: '#d04d03', margin: '0 auto 20px' }} />
-              <div style={{
-                fontFamily: 'var(--font-work-sans)', fontWeight: 500, fontSize: 'clamp(15px,1.4vw,20px)',
-                lineHeight: 1.5, letterSpacing: '-0.005em', color: '#3D3631', maxWidth: '30ch', margin: '0 auto',
-              }}>
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
+        {work.impactStory?.length > 0 && <ImpactStory steps={work.impactStory} stats={work.stats} />}
       </div>
 
       {/* PROCESS TIMELINE — interactive block timeline of the
@@ -383,7 +367,6 @@ export default async function CaseStudyPage({ params }) {
                   hotspots={work.prototype.hotspots}
                 />
               )}
-              {work.prototype.note && <HeroNote text={work.prototype.note} maxWidth="none" />}
             </div>
           </div>
         </section>
