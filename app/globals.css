@@ -290,62 +290,31 @@ body {
     grid-template-columns: 1fr !important;
     gap: 40px !important;
   }
-  .case-stats .impact-side { display: none; }
+  .ib-split { grid-template-columns: 1fr !important; }
+  .ib-spacer { display: none; }
 }
-/* Problem / arrow / Solution — a real 3-column grid (see [slug]/page.js),
-   so the arrow has its own dedicated column and can never overlap either
-   label, at any viewport width. */
-.ps-problem-label { grid-column: 1; grid-row: 1; }
-/* align-self: start (not center) + a small fixed offset — the two labels
-   often wrap to a different number of lines ("Business problem" vs the
-   much longer solution label), so centering on the whole row's height
-   would level the arrow with whichever label is taller, not with the
-   shared first line both labels actually start on. A fixed width (not
-   vw-scaled) keeps that offset correct at every desktop width; the arrow
-   is hidden on mobile anyway. */
-.ps-arrow { grid-column: 2; grid-row: 1; align-self: start; margin-top: -2px; width: 64px; height: auto; }
-.ps-solution-label { grid-column: 3; grid-row: 1; }
-.ps-problem-text { grid-column: 1; grid-row: 2; }
-.ps-solution-text { grid-column: 3; grid-row: 2; }
-/* Connector: sits under the "Then, what happened" column (right side),
-   rotated to point down-left toward the Design Challenge pair below. */
-.ps-arrow-down {
-  /* Starts in the middle column (just left of "Then, what happened") and
-     is pulled left/down so its head lands right above "Design Challenge". */
-  grid-column: 2 / 4; grid-row: 3;
-  justify-self: start; align-self: start;
-  width: 112px;
-  margin: 8px 0 0 -72px;
-  transform: rotate(155deg);
-}
-/* Second pair — Design Challenge | arrow | Solution — same rows/columns
-   pattern as the first pair, two rows further down. */
-.ps-challenge-label { grid-column: 1; grid-row: 4; margin-top: 8px; }
-.ps-arrow-2 { grid-column: 2; grid-row: 4; margin-top: 6px; }
-.ps-dsolution-label { grid-column: 3; grid-row: 4; margin-top: 8px; }
-.ps-challenge-text { grid-column: 1; grid-row: 5; }
-.ps-dsolution-text { grid-column: 3; grid-row: 5; }
-/* On mobile it stacks to one column, in reading order, and the arrows are
-   dropped since there's no meaningful "gap" left to point across. */
+/* Problem | Solution and Reason | Design Solution — four rows, three columns
+   (the middle column stays free). Titles sit on the bottom edge of their row. */
+.ps-al, .ps-bl, .ps-cl, .ps-dl { align-self: end; }
+.ps-al { grid-column: 1; grid-row: 1; }
+.ps-bl { grid-column: 3; grid-row: 1; }
+.ps-at { grid-column: 1; grid-row: 2; margin-bottom: clamp(40px,6vh,56px) !important; }
+.ps-bt { grid-column: 3; grid-row: 2; margin-bottom: clamp(40px,6vh,56px) !important; }
+.ps-cl { grid-column: 1; grid-row: 3; }
+.ps-dl { grid-column: 3; grid-row: 3; }
+.ps-ct { grid-column: 1; grid-row: 4; }
+.ps-dt { grid-column: 3; grid-row: 4; }
 @media (max-width: 700px) {
-  .ps-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .ps-problem-label, .ps-solution-label, .ps-problem-text, .ps-solution-text,
-  .ps-challenge-label, .ps-dsolution-label, .ps-challenge-text, .ps-dsolution-text {
-    grid-column: 1 !important;
-  }
-  .ps-problem-label { grid-row: 1 !important; }
-  .ps-problem-text { grid-row: 2 !important; }
-  .ps-solution-label { grid-row: 3 !important; }
-  .ps-solution-text { grid-row: 4 !important; }
-  .ps-challenge-label { grid-row: 5 !important; margin-top: 12px; }
-  .ps-challenge-text { grid-row: 6 !important; }
-  .ps-dsolution-label { grid-row: 7 !important; }
-  .ps-dsolution-text { grid-row: 8 !important; }
-  .ps-arrow {
-    display: none;
-  }
+  .ps-grid { grid-template-columns: 1fr !important; }
+  .ps-al, .ps-bl, .ps-at, .ps-bt, .ps-cl, .ps-dl, .ps-ct, .ps-dt { grid-column: 1 !important; }
+  .ps-al { grid-row: 1 !important; }
+  .ps-at { grid-row: 2 !important; margin-bottom: 40px !important; }
+  .ps-bl { grid-row: 3 !important; }
+  .ps-bt { grid-row: 4 !important; margin-bottom: 40px !important; }
+  .ps-cl { grid-row: 5 !important; }
+  .ps-ct { grid-row: 6 !important; margin-bottom: 40px; }
+  .ps-dl { grid-row: 7 !important; }
+  .ps-dt { grid-row: 8 !important; }
 }
 /* Deck prev/next arrows — same "lift to front" feel as the Selected
    Work rail's active card, on hover/press since there's no persistent
@@ -436,10 +405,17 @@ body {
   .cs-main .cs-copy { max-width: none !important; }
 }
 
-.impact-mlabel { display: none; }
 @media (max-width: 700px) {
-  .impact-cols { grid-template-columns: 1fr !important; }
-  .impact-cols .is-cell { grid-column: 1 !important; grid-row: auto !important; order: calc(var(--k, 0) * 3 + var(--r, 1)); }
-  .impact-cols .impact-side, .impact-cols .is-back { display: none; }
-  .impact-cols .impact-mlabel { display: block; }
+  .impact-tabs { grid-template-columns: 1fr !important; }
+  .impact-pair { grid-template-columns: 1fr !important; }
+}
+
+/* Impact band on a dark / ASML-blue background */
+.impact-band[data-dark="true"] h2 { color: #fff !important; }
+.impact-band[data-dark="true"] .ib-label { color: #fff !important; }
+.impact-band[data-dark="true"] .ib-text { color: rgba(255,255,255,0.78) !important; }
+.impact-band[data-dark="true"] .case-stats strong { color: #FFA066 !important; }
+
+@media (max-width: 700px) {
+  .case-stats > .ib-cell { grid-column: 1 !important; grid-row: auto !important; order: var(--o); }
 }

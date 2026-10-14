@@ -1,0 +1,45 @@
+<!doctype html><meta charset=utf-8><style>
+*{box-sizing:border-box}body{margin:0;width:1280px;height:800px;font-family:"Manrope","Helvetica Neue",Arial,sans-serif;background:#eef1fb;color:#141a36;position:relative;overflow:hidden}
+.hd{height:64px;background:#2538d6;display:flex;align-items:center;padding:0 28px;color:#fff;font-weight:800;font-size:22px;letter-spacing:-.3px}
+.hd small{font-weight:600;font-size:12px;opacity:.8;margin-left:14px;border-left:1px solid rgba(255,255,255,.35);padding-left:14px}
+.hd .u{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600}.av{width:32px;height:32px;border-radius:50%;background:#f08a3c;display:grid;place-items:center;font-size:12px;font-weight:800}
+.card{position:absolute;left:190px;top:108px;width:900px;background:#fff;border-radius:20px;padding:40px 44px;box-shadow:0 20px 60px rgba(37,56,214,.12)}
+h1{margin:0 0 6px;font-size:30px;letter-spacing:-.6px;font-weight:800}.sub{color:#8c94b3;font-size:15px;margin-bottom:26px}
+.sr{display:flex;align-items:center;gap:12px;height:62px;border:2px solid #2538d6;border-radius:14px;padding:0 20px;font-size:18px;font-weight:600;box-shadow:0 0 0 5px #dde3ff}
+.sr span{color:#8c94b3;font-weight:500;margin-left:auto;font-size:13px;border:1px solid #dde3ff;border-radius:7px;padding:3px 8px}
+.lbl{margin:30px 0 12px;font-size:12px;font-weight:800;letter-spacing:.12em;color:#8c94b3;text-transform:uppercase}
+.row{display:flex;align-items:center;height:68px;border:1px solid #e6e9f5;border-radius:14px;padding:0 20px;margin-bottom:10px;background:#fafbff}
+.row.top{background:#eef1ff;border-color:#c9d2ff}
+.nm{font-weight:800;font-size:16px}.mt{font-size:13px;color:#8c94b3;margin-top:3px}
+.tag{margin-left:auto;font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;background:#fdf2e0;color:#e0911a;margin-right:16px}
+.tag.g{background:#e6f6ee;color:#1f9d5b}
+.go{background:#2538d6;color:#fff;font-weight:800;font-size:15px;border-radius:11px;padding:13px 22px;white-space:nowrap}
+.go.l{background:#fff;color:#2538d6;border:1.5px solid #c9d2ff}
+.time{position:absolute;left:850px;top:150px;background:#e6f6ee;color:#1f9d5b;border-radius:14px;padding:10px 18px;font-weight:800;font-size:15px;display:flex;align-items:center;gap:10px}
+.time b{font-size:24px;letter-spacing:-.5px}.time i{font-style:normal;color:#8c94b3;font-weight:600;font-size:14px}
+
+@keyframes type{0%,6%{width:0}30%,94%{width:17ch}100%{width:0}}
+@keyframes rows{0%,31%{opacity:0;transform:translateY(10px)}38%,94%{opacity:1;transform:none}100%{opacity:0;transform:translateY(10px)}}
+@keyframes cur{0%,30%{transform:translate(620px,640px);opacity:0}34%{opacity:1}56%,64%{transform:translate(960px,392px);opacity:1}72%,100%{transform:translate(1040px,470px);opacity:0}}
+@keyframes press{0%,58%{transform:none;background:#2538d6}60%,63%{transform:scale(.95);background:#1a2bb0}66%,100%{transform:none;background:#2538d6}}
+@keyframes pop{0%,60%{opacity:0;transform:scale(.7)}66%{opacity:1;transform:scale(1.08)}70%,94%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes toast{0%,62%{opacity:0;transform:translateY(-10px)}68%,92%{opacity:1;transform:none}100%{opacity:0}}
+.typed{display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;width:0;border-right:2px solid #2538d6;animation:type 9s steps(17) infinite}
+.rowsw{animation:rows 9s ease infinite}
+.top .go{animation:press 9s ease infinite}
+.time{animation:pop 9s ease infinite}
+.cur{position:absolute;left:0;top:0;width:30px;height:30px;z-index:9;animation:cur 9s ease-in-out infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.toast{position:absolute;left:190px;top:56px;width:900px;background:#1f9d5b;color:#fff;font-weight:800;font-size:15px;padding:10px 44px;animation:toast 9s ease infinite;opacity:0;z-index:5}
+</style>
+<div class=hd>ASML<small>Assure · RISK &amp; QUALITY WORKSPACE</small><div class=u>Lena Vermeer<div class=av>LV</div></div></div>
+<div class=card>
+<h1>Start a quality check</h1><div class=sub>Find the item and start. No extra steps.</div>
+<div class=sr>🔍&nbsp; <span class=typed style="margin:0;font-size:18px;font-weight:600;color:#141a36;border:0;border-right:2px solid #2538d6;padding:0 2px;border-radius:0">AXD SR IR VACUUM</span><span>Enter ↵</span></div>
+<div class=rowsw><div class=lbl>Pick up where you left off</div>
+<div class="row top"><div><div class=nm>AXD SR IR VACUUM PUMP ASSY</div><div class=mt>Item 45TR-0412 · Phase 2 · Edited 2 hours ago</div></div><div class="tag">In progress</div><div class=go>Continue →</div></div>
+<div class=row><div><div class=nm>RETICLE STAGE MIRROR BLK</div><div class=mt>Item 45TR-0378 · Phase 1 · Last checked Monday</div></div><div class="tag g">Agreed</div><div class="go l">Start new check</div></div>
+<div class=row><div><div class=nm>WAFER TABLE CLAMP RING</div><div class=mt>Item 45TR-0291 · Phase 3 · Last checked 3 weeks ago</div></div><div class=tag>Overdue</div><div class="go l">Start new check</div></div>
+</div></div>
+<div class=toast>✓ Quality check started — AXD SR IR VACUUM PUMP ASSY</div>
+<svg class=cur viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10.5 19 5 3z" fill="#1C1917" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<div class=time>⏱ <b>15 s</b><i>to start</i></div>

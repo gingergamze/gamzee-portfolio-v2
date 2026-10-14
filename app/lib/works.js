@@ -37,14 +37,14 @@ export const works = [
       'First finding the real problems, then designing logical workflows and interactions that follow how workers really work and understand.',
     ],
     stats: [
-      { value: '100%', trend: 'down', label: 'Reduced language complexity ' },
-      { value: '35s → 15s', trend: 'up', label: ' Faster access to start operations' },
-      { value: '50% ', trend: 'down', label: 'Reduced steps to complete a task ' },
+      { value: '100%', trend: 'down', label: 'Reduced language complexity ', note: '90% of workers found the language simpler', big: '90%', text: 'of workers found the language simpler' },
+      { value: '35s → 15s', trend: 'up', label: ' Faster access to start operations', note: 'Starting takes 30 sec, down from 90 sec', big: '30 sec', text: 'down from 90 sec' },
+      { value: '50% ', trend: 'down', label: 'Reduced steps to complete a task ', note: 'Tasks now need 50% fewer steps', big: '50%', text: 'fewer steps per task' },
     ],
     // Before / after story under the metrics. Add `image` to show a visual.
     impactStory: [
-      { stage: 'Before', caption: 'How the work looked before the redesign.', image: '' },
-      { stage: 'After', caption: 'How it works now.', image: '' },
+      { stage: 'Before', caption: 'How the work looked before the redesign.', image: '', images: ['', '/masterdata-mock.png', ''] },
+      { stage: 'After', caption: 'How it works now.', image: '', images: ['', '/faster-access-after.png', ''], demos: ['', '/faster-access-demo.html', ''] },
     ],
     // Prototype shown on the case study page. Fill in `src` to make the
     // section appear (leave it '' to hide it).

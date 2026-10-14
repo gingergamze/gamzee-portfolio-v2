@@ -8,7 +8,8 @@ import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
 import CaseStudyFooter from './CaseStudyFooter';
-import ImpactStory from './ImpactStory';
+import ImpactBlock from './ImpactBlock';
+import ImpactBand from './ImpactBand';
 
 // Shared type system for the case study text — one label style, one body
 // style, one meta style, so every section reads the same.
@@ -31,6 +32,11 @@ const T = {
     fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.5, color: '#3D3631',
   },
 };
+
+// Space between a section title and its text — identical for every title.
+// calc() cancels the title's own half-leading (line-height 1.1) so the visible
+// gap matches the About block (line-height 1, 18px).
+const GAP = { lineHeight: 1.1, marginBottom: 'calc(18px - 0.05em)' };
 
 export function generateStaticParams() {
   return works.map((w) => ({ slug: w.slug }));
@@ -196,63 +202,28 @@ export default async function CaseStudyPage({ params }) {
               either label, however long the label text runs. */}
           <div className="ps-grid" style={{
             display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'start',
-            columnGap: 'clamp(28px,5vw,64px)', rowGap: '16px',
+            columnGap: 'clamp(28px,5vw,64px)', rowGap: 0,
           }}>
-            <div className="ps-problem-label">
-              <div style={T.label}>
-                Business problem
-              </div>
-            </div>
-            <div className="ps-solution-label">
-              <div style={T.label}>
-                And then, what happened?
-              </div>
-            </div>
+            {/* Titles share a row and sit on its bottom edge, so a title that
+                wraps to two lines never pushes its neighbour's text away: the
+                gap between every title and its text is the same (GAP) and the
+                two texts in a pair always start on the same line. */}
+            <div className="ps-al" style={{ ...T.label, ...GAP }}>Business problem</div>
+            <div className="ps-bl" style={{ ...T.label, ...GAP }}>Then, what happened?</div>
+            <p className="ps-at cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>{work.problem}</p>
+            <p className="ps-bt cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>{work.solution}</p>
 
-            <div className="ps-problem-text">
-              <p className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>
-                {work.problem}
-              </p>
+            <div className="ps-cl" style={{ ...T.label, ...GAP }}>Reason for a designer</div>
+            <div className="ps-dl" style={{ ...T.label, ...GAP }}>Design Solution</div>
+            <div className="ps-ct" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {work.designChallenge.map((para, i) => (
+                <p key={i} className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>{para}</p>
+              ))}
             </div>
-
-            <div className="ps-solution-text">
-              <p className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>
-                {work.solution}
-              </p>
-            </div>
-
-            {/* Second pair — Design Challenge | arrow | Solution — laid out
-                exactly like the Business problem / Then, what happened pair
-                above it (labels on one row, big text on the next). */}
-            <div className="ps-challenge-label">
-              <div style={T.label}>
-                Reason for a designer
-              </div>
-            </div>
-            <div className="ps-dsolution-label">
-              <div style={T.label}>
-                Design Solution
-              </div>
-            </div>
-
-            <div className="ps-challenge-text">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {work.designChallenge.map((para, i) => (
-                  <p key={i} className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>
-                    {para}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            <div className="ps-dsolution-text">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {work.designSolution.map((para, i) => (
-                  <p key={i} className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>
-                    {para}
-                  </p>
-                ))}
-              </div>
+            <div className="ps-dt" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {work.designSolution.map((para, i) => (
+                <p key={i} className="cs-copy" style={{ ...T.body, maxWidth: '38ch' }}>{para}</p>
+              ))}
             </div>
           </div>
         </div>
@@ -306,9 +277,11 @@ export default async function CaseStudyPage({ params }) {
 
       {/* RESULTS — three big numbers with a short line under each, framed
           by a thin rule above and below. Right after Design Challenge. */}
-      <div id="results" style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 var(--cs-x)' }}>
-        {work.impactStory?.length > 0 && <ImpactStory steps={work.impactStory} stats={work.stats} />}
-      </div>
+      <ImpactBand bg={work.client === 'ASML' ? '#0F238C' : '#1C1917'}>
+        <div id="results" style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 var(--cs-x)' }}>
+          <ImpactBlock stats={work.stats} />
+        </div>
+      </ImpactBand>
 
       {/* PROCESS TIMELINE — interactive block timeline of the
           design process, right under the metrics. */}
@@ -326,7 +299,7 @@ export default async function CaseStudyPage({ params }) {
         }}>
           <div>
             <h3 style={{
-              ...T.label, lineHeight: 1.15, margin: '0 0 24px',
+              ...T.label, zoom: 1, lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)',
             }}>
               {h.title}
             </h3>
@@ -353,7 +326,7 @@ export default async function CaseStudyPage({ params }) {
         <section id="prototype" style={{ background: work.client === 'ASML' ? '#0F238C' : '#1C1917', marginTop: 'clamp(56px,8vh,104px)' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,9vh,112px) var(--cs-x)' }}>
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-              <h3 style={{ ...T.label, color: '#FFFFFF', lineHeight: 1.15, margin: '0 0 16px' }}>{work.prototype.title}</h3>
+              <h3 style={{ ...T.label, zoom: 1, color: '#FFFFFF', lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)' }}>{work.prototype.title}</h3>
               {work.prototype.description && (
                 <p style={{ ...T.body, color: 'rgba(255,255,255,0.7)', maxWidth: '56ch', marginBottom: 'clamp(32px,5vh,56px)' }}>{work.prototype.description}</p>
               )}
