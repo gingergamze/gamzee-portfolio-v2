@@ -14,17 +14,17 @@ export default function WorkLockedPage() {
   const [status, setStatus] = useState('idle'); // idle | checking | error
   // "Ask for access" form — sends a message straight to the inbox.
   const [askOpen, setAskOpen] = useState(false);
-  const [ask, setAsk] = useState({ name: '', email: '', message: '' });
+  const [ask, setAsk] = useState({ email: '', message: '' });
   const [askStatus, setAskStatus] = useState('idle'); // idle | sending | sent | error
 
   const sendAsk = async (e) => {
     e.preventDefault();
     setAskStatus('sending');
     const ok = await sendToInbox({
-      name: ask.name,
+      name: ask.email,
       email: ask.email,
       message: ask.message || 'Could I get the password for your case studies?',
-      subject: `Case study access request from ${ask.name} via gamzee.nl`,
+      subject: `Case study access request from ${ask.email} via gamzee.nl`,
     });
     setAskStatus(ok ? 'sent' : 'error');
   };
@@ -79,55 +79,9 @@ export default function WorkLockedPage() {
         }}>
           This case study is private
         </h1>
-        <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', lineHeight: 1.6, color: '#7C756E', margin: '0 0 32px' }}>
-          Enter the password to view it. Don't have one?{' '}
-          <button type="button" onClick={() => setAskOpen((o) => !o)} style={{ background: 'none', border: 0, padding: 0, font: 'inherit', color: '#1C1917', textDecoration: 'underline', cursor: 'pointer' }}>Ask Gamze for access</button>.
+        <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', lineHeight: 1.6, color: '#7C756E', margin: '0 0 28px' }}>
+          Enter the password to view it.
         </p>
-
-        {askOpen && (
-          askStatus === 'sent' ? (
-            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', lineHeight: 1.6, color: '#1C1917', background: '#F1EEE8', borderRadius: '12px', padding: '16px', margin: '0 0 32px' }}>
-              Thanks {ask.name || 'there'} — your request is on its way. I'll send you the password soon.
-            </p>
-          ) : (
-            <form onSubmit={sendAsk} style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'left', background: '#F1EEE8', borderRadius: '16px', padding: '16px', margin: '0 0 32px' }}>
-              {[
-                { k: 'name', type: 'text', ph: 'Your name', req: true },
-                { k: 'email', type: 'email', ph: 'Your email', req: true },
-              ].map((f) => (
-                <input
-                  key={f.k}
-                  required={f.req}
-                  type={f.type}
-                  placeholder={f.ph}
-                  value={ask[f.k]}
-                  onChange={(e) => setAsk({ ...ask, [f.k]: e.target.value })}
-                  style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF', fontSize: '15px', fontFamily: 'inherit', color: '#1C1917', outline: 'none' }}
-                />
-              ))}
-              <textarea
-                placeholder="Optional message — e.g. who you are and why you'd like to see it"
-                rows={3}
-                value={ask.message}
-                onChange={(e) => setAsk({ ...ask, message: e.target.value })}
-                style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF', fontSize: '15px', fontFamily: 'inherit', color: '#1C1917', outline: 'none', resize: 'vertical' }}
-              />
-              <button
-                type="submit"
-                disabled={askStatus === 'sending'}
-                style={{ padding: '12px 18px', borderRadius: '10px', border: 'none', background: '#d04d03', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', opacity: askStatus === 'sending' ? 0.6 : 1 }}
-              >
-                {askStatus === 'sending' ? 'Sending…' : 'Request access'}
-              </button>
-              {askStatus === 'error' && (
-                <p style={{ fontSize: '13px', color: '#B4470E', margin: '2px 0 0' }}>
-                  Something went wrong. You can also email me at{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}?subject=Case%20study%20access%20request`} style={{ color: '#B4470E', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
-                </p>
-              )}
-            </form>
-          )
-        )}
 
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <input
@@ -162,6 +116,70 @@ export default function WorkLockedPage() {
             </p>
           )}
         </form>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '28px 0 16px', color: '#9A938B', fontFamily: 'var(--font-work-sans)', fontSize: '13px' }}>
+          <span style={{ flex: 1, height: '1px', background: 'rgba(28,25,23,0.12)' }} />
+          Don't have the password?
+          <span style={{ flex: 1, height: '1px', background: 'rgba(28,25,23,0.12)' }} />
+        </div>
+        <button
+          type="button"
+          onClick={() => setAskOpen((o) => !o)}
+          aria-expanded={askOpen}
+          style={{
+            width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+            padding: '14px 20px', borderRadius: '10px', background: '#d04d03', color: '#FFFFFF', border: 'none',
+            fontFamily: 'var(--font-work-sans)', fontSize: '14px', fontWeight: 700, letterSpacing: '0.04em',
+            textTransform: 'uppercase', cursor: 'pointer', marginBottom: '16px',
+            boxShadow: '0 6px 18px rgba(208,77,3,0.28)',
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          Ask Gamze for access
+        </button>
+        {askOpen && (
+          askStatus === 'sent' ? (
+            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', lineHeight: 1.6, color: '#1C1917', background: '#F1EEE8', borderRadius: '12px', padding: '16px', margin: '0 0 16px' }}>
+              Thanks — your request is on its way. I'll send you the password soon.
+            </p>
+          ) : (
+            <form onSubmit={sendAsk} style={{ display: 'flex', flexDirection: 'column', gap: '10px', textAlign: 'left', background: '#F1EEE8', borderRadius: '16px', padding: '16px', margin: '0 0 16px' }}>
+              {[
+                { k: 'email', type: 'email', ph: 'Your email', req: true },
+              ].map((f) => (
+                <input
+                  key={f.k}
+                  required={f.req}
+                  type={f.type}
+                  placeholder={f.ph}
+                  value={ask[f.k]}
+                  onChange={(e) => setAsk({ ...ask, [f.k]: e.target.value })}
+                  style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF', fontSize: '15px', fontFamily: 'inherit', color: '#1C1917', outline: 'none' }}
+                />
+              ))}
+              <textarea
+                placeholder="Optional message — e.g. your name and why you'd like to see it"
+                rows={3}
+                value={ask.message}
+                onChange={(e) => setAsk({ ...ask, message: e.target.value })}
+                style={{ width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: '10px', border: '1px solid rgba(28,25,23,0.15)', background: '#FFFFFF', fontSize: '15px', fontFamily: 'inherit', color: '#1C1917', outline: 'none', resize: 'vertical' }}
+              />
+              <button
+                type="submit"
+                disabled={askStatus === 'sending'}
+                style={{ padding: '12px 18px', borderRadius: '10px', border: 'none', background: '#d04d03', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', opacity: askStatus === 'sending' ? 0.6 : 1 }}
+              >
+                {askStatus === 'sending' ? 'Sending…' : 'Request access'}
+              </button>
+              {askStatus === 'error' && (
+                <p style={{ fontSize: '13px', color: '#B4470E', margin: '2px 0 0' }}>
+                  Something went wrong. You can also email me at{' '}
+                  <a href={`mailto:${CONTACT_EMAIL}?subject=Case%20study%20access%20request`} style={{ color: '#B4470E', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
+                </p>
+              )}
+            </form>
+          )
+        )}
 
         <Link href="/" style={{ display: 'inline-block', marginTop: '32px', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 600, color: '#7C756E', textDecoration: 'none' }}>
           ← Back to home
