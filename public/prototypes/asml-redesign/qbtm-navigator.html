@@ -639,6 +639,29 @@
       </section>
       </sc-if>
 
+      <!-- ============ DATABANK (restricted) ============ -->
+      <sc-if value="{{ isDatabank }}" hint-placeholder-val="">
+      <section data-screen-label="Databank" style="padding:26px 32px 60px;max-width:1480px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:8px"><span onClick="{{ goHome }}" style="cursor:pointer" style-hover="color:#2538d6">Home</span><span>/</span><span style="color:#3a4163;font-weight:600">Databank</span></div>
+        <h1 style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.4px;color:#141a36;margin-bottom:4px">Databank</h1>
+        <div style="font-size:12.5px;color:#8c94b3;margin-bottom:20px">Reference data behind the quality checks.</div>
+
+        <div style="max-width:620px;margin:56px auto 0;background:#fff;border:1px solid #f3d9a4;border-radius:16px;padding:34px 36px;text-align:center;box-shadow:0 8px 30px rgba(224,145,26,.10)">
+          <div style="width:52px;height:52px;border-radius:14px;background:#fdf2e0;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e0911a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          </div>
+          <div style="font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;color:#141a36;margin-bottom:8px">You don’t have access to the Databank</div>
+          <div style="font-size:13.5px;line-height:1.6;color:#586089;margin-bottom:24px">Only people with an admin-approved role can open this page. Ask your admin to give you access.</div>
+          <sc-if value="{{ dbRequested }}" hint-placeholder-val="">
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;background:#e6f6ee;color:#1f9d5b;font-size:13px;font-weight:700"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f9d5b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Request sent to your admin</div>
+          </sc-if>
+          <sc-if value="{{ dbNotRequested }}" hint-placeholder-val="">
+            <button onClick="{{ askAdmin }}" style="padding:11px 22px;border:none;border-radius:11px;background:#2538d6;color:#fff;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;outline:none" style-hover="background:#1a2bb0">Ask admin for access</button>
+          </sc-if>
+        </div>
+      </section>
+      </sc-if>
+
       <!-- ============ SAVED PRODUCTS ============ -->
       <sc-if value="{{ isSaved }}" hint-placeholder-val="">
       <section data-screen-label="Saved Products" style="padding:26px 32px 60px;max-width:1480px;animation:qfade .3s ease">
@@ -951,7 +974,7 @@ class Component extends DCLogic {
       {name:'Measurement System Analysis',type:'Verification',owner:'amol',phase:'Phase 3',due:'05 Jul 2024',status:'In progress'},
       {name:'Capability Study (Cpk)',type:'Verification',owner:'sjanssen',phase:'Phase 4',due:'18 May 2024',status:'Overdue'},
       {name:'Qualification Report',type:'Sign-off',owner:'pvisser',phase:'Phase 4',due:'22 Jul 2024',status:'Not started'},
-      {name:'Lessons Learned',type:'Documentation',owner:sp.owner,phase:'Phase 5',due:'10 Aug 2024',status:'Not started'}
+      {name:'Insights',type:'Documentation',owner:sp.owner,phase:'Phase 5',due:'10 Aug 2024',status:'Not started'}
     ].map(d=>{const m=delStatusMap[d.status];return{...d,statusStyle:`font-size:11px;font-weight:700;color:${m.c};background:${m.bg};padding:4px 11px;border-radius:8px`};});
     const childPool=P.filter(p=>p.item!==sp.item).slice(0,6);
     const children=childPool.map(p=>{const b=self.band(p.qri);return{name:p.name,item:p.item,fn:p.fn,agg:p.agg,qri:p.qri,qriColor:b.color,onClick:()=>{self.setState({selId:p.item,detailTab:'details'});self.go('details');}};});
@@ -1002,7 +1025,7 @@ class Component extends DCLogic {
       {name:'Capability Study (Cpk)',cat:'Verification',v:[0,0,2,2,1]},
       {name:'Qualification Report',cat:'Sign-off',v:[0,0,1,2,2]},
       {name:'First Article Inspection',cat:'Inspection',v:[0,1,2,1,0]},
-      {name:'Lessons Learned',cat:'Documentation',v:[0,0,0,1,2]}
+      {name:'Insights',cat:'Documentation',v:[0,0,0,1,2]}
     ];
     const matrixRows=matrixData.map(m=>({name:m.name,cat:m.cat,cells:m.v.map(v=>({mark:v===2?'M':v===1?'R':'',style:cellStyle(v)}))}));
 
@@ -1012,7 +1035,7 @@ class Component extends DCLogic {
       navItems, search:S.search, onSearch:(e)=>self.setState({search:e.target.value}),
       goHome:()=>self.go('dashboard'), goOverview:()=>self.go('overview'),
       toggleNotif:()=>self.setState(s=>({notifOpen:!s.notifOpen})), closeNotif:()=>self.setState({notifOpen:false}), markAllRead:()=>self.setState({notifRead:['n1','n2','n3','n4']}), notifOpen:S.notifOpen, notifs, unreadCount,
-      isDashboard:S.route==='dashboard', isOverview:S.route==='overview', isDetails:S.route==='details', isAssess:S.route==='assess', isMatrix:S.route==='matrix', isSaved:S.route==='saved', saved, savedStats,
+      isDashboard:S.route==='dashboard', isOverview:S.route==='overview', isDetails:S.route==='details', isAssess:S.route==='assess', isMatrix:S.route==='matrix', isSaved:S.route==='saved', isDatabank:S.route==='matrix2', dbRequested:!!S.dbRequested, dbNotRequested:!S.dbRequested, askAdmin:()=>self.setState({dbRequested:true}), saved, savedStats,
       // dashboard
       kpis, donut, phases, attention, activity, startNewAssessment:()=>{self.setState({step:1,drawerOpen:false});self.go('assess');},
       // overview
