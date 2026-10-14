@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:#eef1f8;color:#161a31;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#c6cde0;border-radius:8px;border:2px solid #eef1f8}
+  ::-webkit-scrollbar-track{background:transparent}
+  @keyframes qspin{to{transform:rotate(360deg)}}
+  @keyframes qfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes qshimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+  @keyframes qtoast{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+  @keyframes qbar{from{width:0}}
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;height:100vh;overflow:hidden;font-feature-settings:'tnum'">
+
+  <!-- ===== TOP BAR ===== -->
+  <header style="flex:none;height:60px;display:flex;align-items:center;gap:0;background:#2538D6;color:#fff;padding:0 20px 0 0;box-shadow:0 1px 0 rgba(0,0,0,.15),0 6px 18px rgba(10,21,115,.18);z-index:40">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:14px;height:100%;padding:0 22px 0 20px;cursor:pointer">
+      <div style="width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 11.5 12 4l9 7.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h13V10" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div style="font-family:'Archivo',sans-serif;font-weight:900;font-size:25px;letter-spacing:.5px;line-height:1">ASML</div>
+      <div style="width:1px;height:26px;background:rgba(255,255,255,.22);margin:0 4px"></div>
+      <div style="display:flex;flex-direction:column;line-height:1.1">
+        <span style="font-size:14px;font-weight:600;letter-spacing:.2px">Assure</span>
+        <span style="font-size:10.5px;font-weight:500;color:#aebbff;letter-spacing:.4px">RISK &amp; QUALITY WORKSPACE</span>
+      </div>
+    </div>
+
+    <!-- global search -->
+    <div style="flex:1;display:flex;justify-content:center;padding:0 24px">
+      <div style="position:relative;width:100%;max-width:440px">
+        <svg style="position:absolute;left:13px;top:50%;transform:translateY(-50%)" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9fb0ff" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="#9fb0ff" stroke-width="2" stroke-linecap="round"/></svg>
+        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Search item, product code, context…" style="width:100%;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.12);color:#fff;padding:0 14px 0 38px;font-size:13px;font-family:inherit;outline:none" />
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:6px">
+      <div style="position:relative">
+      <button onClick="{{ toggleNotif }}" style="position:relative;width:40px;height:40px;border:none;background:transparent;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:rgba(255,255,255,.12)">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9Z" stroke="#dfe6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" stroke="#dfe6ff" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <sc-if value="{{ unreadCount }}" hint-placeholder-val="">
+          <span style="position:absolute;top:7px;right:8px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#ff8a3d;color:#3a1800;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #2538D6">{{ unreadCount }}</span>
+        </sc-if>
+      </button>
+        <sc-if value="{{ notifOpen }}" hint-placeholder-val="">
+          <div onClick="{{ closeNotif }}" style="position:fixed;inset:0;z-index:60"></div>
+          <div style="position:absolute;top:50px;right:-8px;width:380px;background:#fff;color:#161a31;border:1px solid #e3e7f2;border-radius:16px;box-shadow:0 18px 50px rgba(15,25,90,.28);z-index:61;overflow:hidden;animation:qfade .18s ease">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #eef1f8">
+              <div style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:800">Notifications</div>
+              <span onClick="{{ markAllRead }}" style="font-size:11.5px;font-weight:600;color:#2538d6;cursor:pointer">Mark all as read</span>
+            </div>
+            <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="4">
+              <div onClick="{{ n.onClick }}" style="{{ n.rowStyle }}" style-hover="background:#f7f9ff">
+                <div style="{{ n.iconWrap }}">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="{{ n.iconPath }}" stroke="{{ n.iconColor }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:13px;font-weight:700;color:#222a4d">{{ n.title }}</div>
+                  <div style="font-size:12.5px;color:#586089;margin-top:2px;line-height:1.4"><b style="color:#222a4d;font-weight:600">{{ n.product }}</b> {{ n.text }}</div>
+                  <div style="font-size:11px;color:#9aa3c0;margin-top:4px">{{ n.when }}</div>
+                </div>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val=""><span style="width:8px;height:8px;border-radius:50%;background:#2538d6;flex:none;margin-top:5px"></span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;padding:5px 6px 5px 12px;border-radius:11px;cursor:pointer" style-hover="background:rgba(255,255,255,.12)">
+        <div style="text-align:right;line-height:1.15">
+          <div style="font-size:12.5px;font-weight:600">Lena Vermeer</div>
+          <div style="font-size:10.5px;color:#aebbff">Function Architect</div>
+        </div>
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#ff9a52,#ff6f3d);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.25)">LV</div>
+      </div>
+    </div>
+  </header>
+
+  <div style="flex:1;display:flex;overflow:hidden">
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav style="flex:none;width:248px;background:#fff;border-right:1px solid #e3e7f2;display:flex;flex-direction:column;padding:16px 14px;gap:3px;overflow-y:auto">
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:1px;color:#9aa3c0;padding:6px 12px 8px">WORKSPACE</div>
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+        <button onClick="{{ n.onClick }}" style="{{ n.style }}">
+          <span style="display:flex;align-items:center;justify-content:center;width:20px;height:20px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="{{ n.iconPath }}" stroke="{{ n.iconColor }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span style="flex:1;text-align:left">{{ n.label }}</span>
+          <sc-if value="{{ n.badge }}" hint-placeholder-val="">
+            <span style="{{ n.badgeStyle }}">{{ n.badge }}</span>
+          </sc-if>
+        </button>
+      </sc-for>
+
+      <div style="margin-top:auto;padding:14px 12px 6px;border-top:1px solid #eef1f8">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#f4f6fd;border-radius:12px">
+          <div style="width:30px;height:30px;border-radius:8px;background:#e2e8ff;display:flex;align-items:center;justify-content:center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2538d6" stroke-width="1.8"/><path d="M12 8v4l2.5 2" stroke="#2538d6" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div style="line-height:1.2">
+            <div style="font-size:11px;color:#8c94b3;font-weight:500">Last data sync</div>
+            <div style="font-size:12px;font-weight:600;color:#2a3050">Today · 06:42 CET</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <main style="flex:1;overflow-y:auto;position:relative">
+
+      <!-- ============ DASHBOARD ============ -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Dashboard" style="padding:26px 32px 60px;max-width:1480px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:22px">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#7681a6;letter-spacing:.3px;margin-bottom:4px">Good morning, Lena</div>
+            <h1 style="font-family:'Manrope',sans-serif;font-size:27px;font-weight:800;letter-spacing:-.5px;color:#141a36">Quality Cockpit</h1>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button onClick="{{ goOverview }}" style="height:40px;padding:0 16px;border-radius:10px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="border-color:#9fadea;background:#f7f9ff">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="#2538d6" stroke-width="1.9" stroke-linecap="round"/></svg>Browse products</button>
+            <button onClick="{{ startNewAssessment }}" style="height:40px;padding:0 18px;border-radius:10px;border:none;background:linear-gradient(135deg,#2538d6,#1a2bb0);color:#fff;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(37,56,214,.32)" style-hover="filter:brightness(1.08)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>New quality check</button>
+          </div>
+        </div>
+
+        <!-- KPI row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:18px 18px 16px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <span style="font-size:12.5px;font-weight:600;color:#7681a6">{{ k.label }}</span>
+                <span style="{{ k.iconWrap }}">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="{{ k.iconPath }}" stroke="{{ k.iconColor }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </div>
+              <div style="font-family:'Manrope',sans-serif;font-size:30px;font-weight:800;letter-spacing:-1px;color:#141a36;line-height:1">{{ k.value }}</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:9px">
+                <span style="{{ k.deltaStyle }}">{{ k.delta }}</span>
+                <span style="font-size:11.5px;color:#9099b8">{{ k.deltaNote }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- charts row -->
+        <div style="display:grid;grid-template-columns:1.1fr 1.4fr;gap:16px;margin-bottom:18px">
+          <!-- QRI donut -->
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:20px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <h3 style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#1c2244">Score risk distribution</h3>
+              <span style="font-size:11px;font-weight:600;color:#8c94b3;background:#f1f4fc;padding:4px 9px;border-radius:7px">278,952 items</span>
+            </div>
+            <div style="margin-top:6px">
+              <div style="display:flex;align-items:baseline;gap:12px;padding:10px 0 16px;border-bottom:1px solid #f1f4fc;margin-bottom:8px">
+                <span style="font-family:'Manrope',sans-serif;font-size:40px;font-weight:800;color:#141a36;line-height:1">38.4</span>
+                <span style="font-size:11.5px;font-weight:600;color:#8c94b3;letter-spacing:.3px;line-height:1.3">AVERAGE SCORE<br>ACROSS PORTFOLIO</span>
+              </div>
+              <sc-for list="{{ donut }}" as="d" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f6f8fd">
+                  <span style="font-size:13px;font-weight:700;color:{{ d.color }}">{{ d.label }}</span>
+                  <div style="display:flex;align-items:baseline;gap:12px">
+                    <span style="font-size:12px;color:#9aa3c0">{{ d.count }} items</span>
+                    <span style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;color:#141a36;min-width:42px;text-align:right">{{ d.pct }}</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- assessment progress by production phase -->
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:20px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <div style="margin-bottom:16px">
+              <h3 style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#1c2244">Quality check completion by production phase</h3>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+              <sc-for list="{{ phases }}" as="p" hint-placeholder-count="5">
+                <div style="border:1px solid #eef1f8;border-radius:13px;padding:16px 10px 14px;text-align:center">
+                  <div style="font-family:'Manrope',sans-serif;font-size:27px;font-weight:800;color:#141a36;line-height:1">{{ p.pct }}</div>
+                  <div style="font-size:12.5px;font-weight:700;color:#2538d6;margin-top:9px">{{ p.label }}</div>
+                  <div style="font-size:10.5px;color:#9099b8;margin-top:2px">{{ p.sub }}</div>
+                  <div style="font-size:10.5px;color:#9aa3c0;margin-top:8px;padding-top:8px;border-top:1px solid #f6f8fd">{{ p.frac }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <!-- bottom row: attention list + activity -->
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px">
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:20px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <h3 style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#1c2244">Needs your attention</h3>
+              <button onClick="{{ goOverview }}" style="border:none;background:transparent;color:#2538d6;font-weight:600;font-size:12.5px;cursor:pointer">View all →</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ attention }}" as="a" hint-placeholder-count="4">
+                <div onClick="{{ a.onClick }}" style="display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid #eef1f8;border-radius:12px;cursor:pointer" style-hover="border-color:#c8d2f4;background:#fafbff">
+                  <span style="{{ a.dotStyle }}"></span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:13px;font-weight:600;color:#222a4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</div>
+                    <div style="font-size:11.5px;color:#8c94b3;margin-top:2px">{{ a.meta }}</div>
+                  </div>
+                  <span style="{{ a.tagStyle }}">{{ a.tag }}</span>
+                  <span style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:800;color:{{ a.qriColor }};min-width:38px;text-align:right">{{ a.qri }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:20px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <h3 style="font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#1c2244;margin-bottom:16px">Activity feed</h3>
+            <div style="display:flex;flex-direction:column;gap:2px;position:relative">
+              <sc-for list="{{ activity }}" as="ev" hint-placeholder-count="5">
+                <div style="display:flex;gap:13px;padding-bottom:16px;position:relative">
+                  <div style="display:flex;flex-direction:column;align-items:center;flex:none">
+                    <span style="{{ ev.dotStyle }}"></span>
+                    <span style="width:2px;flex:1;background:#eef1f8;margin-top:2px"></span>
+                  </div>
+                  <div style="padding-top:0;line-height:1.4">
+                    <div style="font-size:12.5px;color:#2a3050"><b style="font-weight:700">{{ ev.who }}</b> {{ ev.what }}</div>
+                    <div style="font-size:11px;color:#9aa3c0;margin-top:2px">{{ ev.when }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- ============ PRODUCT OVERVIEW ============ -->
+      <sc-if value="{{ isOverview }}" hint-placeholder-val="">
+      <section data-screen-label="Product Overview" style="padding:24px 30px 50px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:8px">
+          <span onClick="{{ goHome }}" style="cursor:pointer;font-weight:500" style-hover="color:#2538d6">Home</span><span>/</span><span style="color:#3a4163;font-weight:600">Product Overview</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px">
+          <div>
+            <h1 style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.4px;color:#141a36">Product Overview</h1>
+            <div style="font-size:12.5px;color:#8c94b3;margin-top:3px">Showing <b style="color:#3a4163">{{ visCount }}</b> of 278,952 product-level items · last sync 03 Jul 2024 14:45</div>
+          </div>
+          <div style="display:flex;gap:9px;align-items:center">
+            <button onClick="{{ saveView }}" style="height:38px;padding:0 14px;border-radius:9px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:7px" style-hover="border-color:#9fadea">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 5v14l7-4 7 4V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2Z" stroke="#2538d6" stroke-width="1.8" stroke-linejoin="round"/></svg>Save view</button>
+            <button style="height:38px;padding:0 14px;border-radius:9px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:7px" style-hover="border-color:#9fadea">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="#2538d6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Export</button>
+          </div>
+        </div>
+
+        <!-- saved views chips -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.5px;color:#9aa3c0">VIEWS</span>
+          <sc-for list="{{ views }}" as="v" hint-placeholder-count="3">
+            <button onClick="{{ v.onClick }}" style="{{ v.style }}">{{ v.label }}</button>
+          </sc-for>
+        </div>
+
+        <!-- facet bar -->
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:14px 16px;margin-bottom:16px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="position:relative;flex:1;min-width:220px">
+              <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%)" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9aa3c0" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="#9aa3c0" stroke-width="2" stroke-linecap="round"/></svg>
+              <input value="{{ tableSearch }}" onInput="{{ onTableSearch }}" placeholder="Filter by item, name or context…" style="width:100%;height:38px;border-radius:9px;border:1px solid #dde3f2;background:#f8faff;padding:0 12px 0 36px;font-size:13px;font-family:inherit;outline:none;color:#222a4d" style-focus="border-color:#2538d6;background:#fff" />
+            </div>
+            <sc-for list="{{ facetGroups }}" as="g" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.5px;color:#9aa3c0;padding-left:2px">{{ g.label }}</span>
+                <div style="display:flex;gap:5px">
+                  <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="3">
+                    <button onClick="{{ o.onClick }}" style="{{ o.style }}">{{ o.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <button onClick="{{ resetFilters }}" style="height:32px;align-self:flex-end;padding:0 12px;border-radius:8px;border:none;background:transparent;color:#9aa3c0;font-weight:600;font-size:12px;cursor:pointer" style-hover="color:#d63a3a">Reset</button>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(20,30,70,.05)">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:1080px">
+              <thead>
+                <tr style="background:#f6f8fd;border-bottom:1px solid #e6eaf5">
+                  <sc-for list="{{ columns }}" as="c" hint-placeholder-count="8">
+                    <th onClick="{{ c.onSort }}" style="{{ c.thStyle }}">
+                      <span style="display:inline-flex;align-items:center;gap:5px">{{ c.label }}<span style="{{ c.arrowStyle }}">{{ c.arrow }}</span></span>
+                    </th>
+                  </sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r" hint-placeholder-count="10">
+                  <tr onClick="{{ r.onClick }}" style="{{ r.trStyle }}" style-hover="background:#f7f9ff">
+                    <td style="{{ r.cellPad }}"><div style="font-weight:700;color:#1c2244">{{ r.item }}</div><div style="font-size:11px;color:#9aa3c0;font-weight:500">{{ r.wbs }}</div></td>
+                    <td style="{{ r.cellPad }}"><div style="font-weight:600;color:#2a3050">{{ r.name }}</div><div style="font-size:11px;color:#9aa3c0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px">{{ r.ctx }}</div></td>
+                    <td style="{{ r.cellPad }}"><span style="font-size:11.5px;font-weight:600;color:#3a4163;background:#eef1f8;padding:3px 8px;border-radius:6px">{{ r.sys }}</span></td>
+                    <td style="{{ r.cellPad }}"><span style="font-weight:600;color:#3a4163">{{ r.fn }}</span></td>
+                    <td style="{{ r.cellPad }}"><span style="{{ r.bandStyle }}">{{ r.band }}</span></td>
+                    <td style="{{ r.cellPad }}"><span style="font-family:'Manrope',sans-serif;font-size:17px;font-weight:800;color:{{ r.qriColor }}">{{ r.qri }}</span></td>
+                    <td style="{{ r.cellPad }}"><span style="font-size:13px;font-weight:600;color:#3a4163">{{ r.assessLabel }}</span> <span style="font-size:11.5px;color:#9aa3c0">done</span></td>
+                    <td style="{{ r.cellPad }}"><span style="{{ r.statusStyle }}">{{ r.status }}</span></td>
+                    <td style="{{ r.cellPad }}"><button onClick="{{ r.onOpen }}" style="width:30px;height:30px;border-radius:8px;border:1px solid #e3e7f2;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="border-color:#2538d6;background:#f4f6ff"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="#2538d6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <!-- empty state -->
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="">
+            <div style="padding:54px 20px;text-align:center">
+              <div style="width:54px;height:54px;border-radius:14px;background:#f1f4fc;display:flex;align-items:center;justify-content:center;margin:0 auto 14px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9aa3c0" stroke-width="2"/><path d="m20 20-3.2-3.2" stroke="#9aa3c0" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div style="font-size:15px;font-weight:700;color:#3a4163">No items match your filters</div>
+              <div style="font-size:13px;color:#9aa3c0;margin-top:4px">Try removing a facet or clearing the search.</div>
+              <button onClick="{{ resetFilters }}" style="margin-top:16px;height:36px;padding:0 18px;border-radius:9px;border:none;background:#2538d6;color:#fff;font-weight:600;font-size:13px;cursor:pointer">Reset filters</button>
+            </div>
+          </sc-if>
+          <!-- pagination -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-top:1px solid #eef1f8;background:#fafbff">
+            <span style="font-size:12px;color:#8c94b3">Page 1 of 13,948</span>
+            <div style="display:flex;align-items:center;gap:4px">
+              <button style="width:32px;height:32px;border-radius:8px;border:1px solid #e3e7f2;background:#fff;color:#9aa3c0;cursor:not-allowed">‹</button>
+              <button style="width:32px;height:32px;border-radius:8px;border:none;background:#2538d6;color:#fff;font-weight:600;cursor:pointer">1</button>
+              <button style="width:32px;height:32px;border-radius:8px;border:1px solid #e3e7f2;background:#fff;color:#3a4163;cursor:pointer" style-hover="border-color:#9fadea">2</button>
+              <button style="width:32px;height:32px;border-radius:8px;border:1px solid #e3e7f2;background:#fff;color:#3a4163;cursor:pointer" style-hover="border-color:#9fadea">3</button>
+              <span style="color:#9aa3c0;padding:0 4px">…</span>
+              <button style="width:32px;height:32px;border-radius:8px;border:1px solid #e3e7f2;background:#fff;color:#3a4163;cursor:pointer" style-hover="border-color:#9fadea">›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- ============ PRODUCT DETAILS ============ -->
+      <sc-if value="{{ isDetails }}" hint-placeholder-val="">
+      <section data-screen-label="Product Details" style="padding:24px 30px 56px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:10px">
+          <span onClick="{{ goHome }}" style="cursor:pointer" style-hover="color:#2538d6">Home</span><span>/</span>
+          <span onClick="{{ goOverview }}" style="cursor:pointer" style-hover="color:#2538d6">Product Overview</span><span>/</span>
+          <span style="color:#3a4163;font-weight:600">{{ sel.item }}</span>
+        </div>
+
+        <!-- detail header card -->
+        <div style="background:linear-gradient(120deg,#0d1788 0%,#1c2bbf 100%);border-radius:18px;padding:22px 26px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(13,23,136,.25)">
+          <div style="position:absolute;right:-30px;top:-30px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;position:relative">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.5px;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:7px">{{ sel.agg }}</span>
+                <span style="{{ sel.headStatusStyle }}">{{ sel.status }}</span>
+              </div>
+              <h1 style="font-family:'Manrope',sans-serif;font-size:25px;font-weight:800;letter-spacing:-.4px;line-height:1.1">{{ sel.name }}</h1>
+              <div style="display:flex;gap:22px;margin-top:13px;flex-wrap:wrap">
+                <div><div style="font-size:10.5px;color:#aebbff;font-weight:600;letter-spacing:.3px">ITEM</div><div style="font-size:14px;font-weight:600">{{ sel.item }}</div></div>
+                <div><div style="font-size:10.5px;color:#aebbff;font-weight:600;letter-spacing:.3px">DIVISION</div><div style="font-size:14px;font-weight:600">{{ sel.fn }}</div></div>
+                <div><div style="font-size:10.5px;color:#aebbff;font-weight:600;letter-spacing:.3px">MACHINE FAMILY</div><div style="font-size:14px;font-weight:600">{{ sel.sys }}</div></div>
+                <div><div style="font-size:10.5px;color:#aebbff;font-weight:600;letter-spacing:.3px">OWNER</div><div style="font-size:14px;font-weight:600">{{ sel.owner }}</div></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none;text-align:right">
+              <span style="font-size:10.5px;font-weight:700;color:#aebbff;letter-spacing:.6px">SCORE</span>
+              <span style="font-family:'Manrope',sans-serif;font-size:46px;font-weight:800;line-height:.9">{{ sel.qri }}</span>
+              <span style="font-size:11.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.18);padding:4px 13px;border-radius:8px">{{ sel.band }} risk</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:18px;position:relative">
+            <button onClick="{{ startNewAssessment }}" style="height:38px;padding:0 16px;border-radius:9px;border:none;background:#fff;color:#1a2bb0;font-weight:700;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:7px" style-hover="background:#eef1ff">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#1a2bb0" stroke-width="2" stroke-linecap="round"/></svg>New quality check</button>
+            <button style="height:38px;padding:0 16px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="background:rgba(255,255,255,.12)">Compare predecessor</button>
+            <button style="height:38px;padding:0 16px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="background:rgba(255,255,255,.12)">Watch item</button>
+          </div>
+        </div>
+
+        <!-- tabs -->
+        <div style="display:flex;gap:4px;border-bottom:1px solid #e6eaf5;margin-bottom:20px">
+          <sc-for list="{{ detailTabs }}" as="t" hint-placeholder-count="5">
+            <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}<sc-if value="{{ t.count }}" hint-placeholder-val=""><span style="{{ t.countStyle }}">{{ t.count }}</span></sc-if></button>
+          </sc-for>
+        </div>
+
+        <!-- TAB: details -->
+        <sc-if value="{{ tabDetails }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:6px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <sc-for list="{{ detailLeft }}" as="f" hint-placeholder-count="9">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #f1f4fc;gap:16px">
+                <span style="font-size:12.5px;color:#8c94b3;font-weight:500">{{ f.k }}</span>
+                <span style="font-size:13px;color:#222a4d;font-weight:600;text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:6px 22px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+            <sc-for list="{{ detailRight }}" as="f" hint-placeholder-count="9">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #f1f4fc;gap:16px">
+                <span style="font-size:12.5px;color:#8c94b3;font-weight:500">{{ f.k }}</span>
+                <span style="font-size:13px;color:#222a4d;font-weight:600;text-align:right">{{ f.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- TAB: assessments -->
+        <sc-if value="{{ tabAssessments }}" hint-placeholder-val="">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ assessList }}" as="a" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,30,70,.04);display:flex;align-items:center;gap:18px">
+              <div style="{{ a.iconWrap }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="{{ a.iconPath }}" stroke="{{ a.iconColor }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div style="flex:1">
+                <div style="font-size:14px;font-weight:700;color:#1c2244">{{ a.title }}</div>
+                <div style="font-size:12px;color:#8c94b3;margin-top:3px">{{ a.meta }}</div>
+              </div>
+              <div style="text-align:center;min-width:80px">
+                <div style="font-size:10.5px;color:#9aa3c0;font-weight:600;letter-spacing:.3px">Score</div>
+                <div style="font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;color:{{ a.qriColor }}">{{ a.qri }}</div>
+              </div>
+              <span style="{{ a.statusStyle }}">{{ a.status }}</span>
+            </div>
+          </sc-for>
+          <button onClick="{{ startNewAssessment }}" style="border:2px dashed #cdd5ee;background:#fafbff;border-radius:14px;padding:18px;color:#2538d6;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="border-color:#2538d6;background:#f4f6ff">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#2538d6" stroke-width="2" stroke-linecap="round"/></svg>Start a new quality check</button>
+        </div>
+        </sc-if>
+
+        <!-- TAB: deliverables -->
+        <sc-if value="{{ tabDeliverables }}" hint-placeholder-val="">
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+          <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:760px">
+            <thead><tr style="background:#f6f8fd;border-bottom:1px solid #e6eaf5"><th style="text-align:left;padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3">DOCUMENT</th><th style="text-align:left;padding:13px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3">OWNER</th><th style="text-align:left;padding:13px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3">PRODUCTION PHASE</th><th style="text-align:left;padding:13px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3">DUE</th><th style="text-align:left;padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3">STATUS</th></tr></thead>
+            <tbody>
+              <sc-for list="{{ deliverables }}" as="d" hint-placeholder-count="6">
+                <tr style="border-bottom:1px solid #f1f4fc" style-hover="background:#f7f9ff">
+                  <td style="padding:13px 18px"><div style="font-weight:600;color:#222a4d">{{ d.name }}</div><div style="font-size:11px;color:#9aa3c0">{{ d.type }}</div></td>
+                  <td style="padding:13px 14px;color:#3a4163;font-weight:500">{{ d.owner }}</td>
+                  <td style="padding:13px 14px"><span style="font-size:11.5px;font-weight:600;color:#3a4163;background:#eef1f8;padding:3px 9px;border-radius:6px">{{ d.phase }}</span></td>
+                  <td style="padding:13px 14px;color:#6b7596">{{ d.due }}</td>
+                  <td style="padding:13px 18px"><span style="{{ d.statusStyle }}">{{ d.status }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+        </div>
+        </sc-if>
+
+        <!-- TAB: children -->
+        <sc-if value="{{ tabChildren }}" hint-placeholder-val="">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+          <sc-for list="{{ children }}" as="c" hint-placeholder-count="6">
+            <div onClick="{{ c.onClick }}" style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,30,70,.04);cursor:pointer" style-hover="border-color:#9fadea;box-shadow:0 6px 18px rgba(20,30,70,.08)">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><span style="font-size:11.5px;font-weight:700;color:#3a4163;background:#eef1f8;padding:3px 8px;border-radius:6px">{{ c.agg }}</span><span style="font-family:'Manrope',sans-serif;font-size:17px;font-weight:800;color:{{ c.qriColor }}">{{ c.qri }}</span></div>
+              <div style="font-size:13.5px;font-weight:700;color:#1c2244;margin-bottom:3px">{{ c.name }}</div>
+              <div style="font-size:11.5px;color:#9aa3c0">{{ c.item }} · {{ c.fn }}</div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <!-- TAB: references -->
+        <sc-if value="{{ tabRefs }}" hint-placeholder-val="">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ refs }}" as="r" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #e6eaf5;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 2px rgba(20,30,70,.04)" style-hover="border-color:#c8d2f4">
+              <div style="width:38px;height:38px;border-radius:9px;background:#eef1ff;display:flex;align-items:center;justify-content:center;flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 3v5h5M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="#2538d6" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+              <div style="flex:1"><div style="font-size:13.5px;font-weight:600;color:#222a4d">{{ r.name }}</div><div style="font-size:11.5px;color:#9aa3c0">{{ r.meta }}</div></div>
+              <span style="font-size:11.5px;font-weight:600;color:#2538d6;cursor:pointer">Open ↗</span>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+      </section>
+      </sc-if>
+
+      <!-- ============ ASSESSMENT FLOW ============ -->
+      <sc-if value="{{ isAssess }}" hint-placeholder-val="">
+      <section data-screen-label="Quality Check" style="padding:24px 30px 60px;max-width:1100px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:10px">
+          <span onClick="{{ goOverview }}" style="cursor:pointer" style-hover="color:#2538d6">Product Overview</span><span>/</span>
+          <span onClick="{{ backToDetails }}" style="cursor:pointer" style-hover="color:#2538d6">{{ sel.item }}</span><span>/</span>
+          <span style="color:#3a4163;font-weight:600">New Quality Check</span>
+        </div>
+        <h1 style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.4px;color:#141a36;margin-bottom:4px">Quality Check</h1>
+        <div style="font-size:13px;color:#8c94b3;margin-bottom:22px">{{ sel.name }} · {{ sel.item }}</div>
+
+        <!-- stepper -->
+        <div style="display:flex;align-items:center;gap:0;margin-bottom:26px">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;flex:none">
+              <div style="display:flex;align-items:center;gap:11px">
+                <div style="{{ s.circleStyle }}">{{ s.num }}</div>
+                <div style="line-height:1.2"><div style="{{ s.titleStyle }}">{{ s.title }}</div><div style="font-size:11px;color:#9aa3c0">{{ s.sub }}</div></div>
+              </div>
+              <div style="{{ s.lineStyle }}"></div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- STEP 1: select criteria -->
+        <sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:22px 24px;box-shadow:0 1px 3px rgba(20,30,70,.05)">
+          <h3 style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#1c2244;margin-bottom:4px">Select criteria</h3>
+          <p style="font-size:13px;color:#8c94b3;margin-bottom:18px">Pick the criteria and sub-criteria in scope for this product code. {{ ctqSelectedCount }} selected.</p>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ ctqs }}" as="c" hint-placeholder-count="4">
+              <div style="{{ c.cardStyle }}">
+                <div onClick="{{ c.onToggle }}" style="display:flex;align-items:center;gap:13px;cursor:pointer;padding:4px 2px">
+                  <span style="{{ c.checkStyle }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-11" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#1c2244">{{ c.name }}</div><div style="font-size:11.5px;color:#9aa3c0">{{ c.code }} · {{ c.subCount }} sub-criteria</div></div>
+                  <span style="{{ c.sevStyle }}">{{ c.sevLabel }}</span>
+                </div>
+                <sc-if value="{{ c.open }}" hint-placeholder-val="">
+                  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-left:36px">
+                    <sc-for list="{{ c.subs }}" as="sub" hint-placeholder-count="3">
+                      <span style="{{ sub.style }}" onClick="{{ sub.onToggle }}">{{ sub.name }}</span>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px">
+            <button onClick="{{ backToDetails }}" style="height:40px;padding:0 18px;border-radius:10px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:13px;cursor:pointer">Cancel</button>
+            <button onClick="{{ gotoStep2 }}" style="{{ proceedStyle }}">Proceed to scoring →</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- STEP 2: scoring -->
+        <sc-if value="{{ step2 }}" hint-placeholder-val="">
+        <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start">
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:22px 24px;box-shadow:0 1px 3px rgba(20,30,70,.05)">
+            <h3 style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#1c2244;margin-bottom:4px">Score selected characteristics</h3>
+            <p style="font-size:13px;color:#8c94b3;margin-bottom:18px">Rate Severity, Occurrence and Detection (1–10). The score is computed automatically.</p>
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <sc-for list="{{ scoreRows }}" as="s" hint-placeholder-count="3">
+                <div style="border:1px solid #eef1f8;border-radius:13px;padding:15px 16px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+                    <div style="font-size:14px;font-weight:700;color:#1c2244">{{ s.name }}</div>
+                    <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;font-weight:600;color:#9aa3c0">Score</span><span style="{{ s.pillStyle }}">{{ s.qri }}</span></div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+                    <sc-for list="{{ s.dims }}" as="dim" hint-placeholder-count="3">
+                      <div>
+                        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:11.5px;font-weight:600;color:#6b7596">{{ dim.label }}</span><span style="font-size:12.5px;font-weight:800;color:#2538d6">{{ dim.value }}</span></div>
+                        <input type="range" min="1" max="10" value="{{ dim.value }}" onInput="{{ dim.onInput }}" style="width:100%;accent-color:#2538d6;cursor:pointer" />
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:10px;margin-top:22px">
+              <button onClick="{{ gotoStep1 }}" style="height:40px;padding:0 18px;border-radius:10px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:13px;cursor:pointer">← Back</button>
+              <button onClick="{{ gotoStep3 }}" style="height:40px;padding:0 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#2538d6,#1a2bb0);color:#fff;font-weight:600;font-size:13px;cursor:pointer;box-shadow:0 4px 14px rgba(37,56,214,.32)">Review &amp; agreement on risk →</button>
+            </div>
+          </div>
+          <!-- live QRI summary -->
+          <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:22px;box-shadow:0 1px 3px rgba(20,30,70,.05);position:sticky;top:0">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.4px;color:#9aa3c0;margin-bottom:10px">FINAL SCORE</div>
+            <div style="text-align:center;padding:8px 0 18px;border-bottom:1px solid #f1f4fc;margin-bottom:4px">
+              <div style="font-family:'Manrope',sans-serif;font-size:58px;font-weight:800;color:{{ aggQriColor }};line-height:.9;margin-bottom:8px">{{ aggQri }}</div>
+              <span style="{{ aggBandStyle }}">{{ aggBand }}</span>
+            </div>
+            <div style="border-top:1px solid #f1f4fc;padding-top:14px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#8c94b3">Characteristics</span><span style="font-weight:700;color:#3a4163">{{ ctqSelectedCount }}</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#8c94b3">Highest score</span><span style="font-weight:700;color:#d63a3a">{{ maxQri }}</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#8c94b3">Required documents</span><span style="font-weight:700;color:#3a4163">{{ reqDeliv }}</span></div>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- STEP 3: agreement on risk -->
+        <sc-if value="{{ step3 }}" hint-placeholder-val="">
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;padding:26px;box-shadow:0 1px 3px rgba(20,30,70,.05)">
+          <h3 style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#1c2244;margin-bottom:4px">Review &amp; agreement on risk</h3>
+          <p style="font-size:13px;color:#8c94b3;margin-bottom:20px">Confirm the quality check and request agreement on risk from the Function Architect.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+            <div style="background:#f7f9ff;border:1px solid #e6eaf5;border-radius:13px;padding:18px"><div style="font-size:11px;font-weight:700;color:#9aa3c0;letter-spacing:.4px;margin-bottom:10px">RESULT</div><div style="display:flex;align-items:center;gap:14px"><span style="font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;color:{{ aggQriColor }}">{{ aggQri }}</span><span style="{{ aggBandStyle }}">{{ aggBand }} risk</span></div></div>
+            <div style="background:#f7f9ff;border:1px solid #e6eaf5;border-radius:13px;padding:18px"><div style="font-size:11px;font-weight:700;color:#9aa3c0;letter-spacing:.4px;margin-bottom:10px">AGREEMENT ON RISK WITH</div><div style="display:flex;align-items:center;gap:11px"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2538d6,#5a6cff);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">MR</div><div><div style="font-size:13.5px;font-weight:700;color:#1c2244">Marc Rensen</div><div style="font-size:11.5px;color:#9aa3c0">Function Architect · FC-021</div></div></div></div>
+          </div>
+          <div style="border:1px solid #eef1f8;border-radius:13px;padding:4px 18px;margin-bottom:20px">
+            <sc-for list="{{ scoreRows }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f1f4fc"><span style="font-size:13px;font-weight:600;color:#2a3050">{{ s.name }}</span><div style="display:flex;align-items:center;gap:10px"><span style="font-size:11.5px;color:#9aa3c0">{{ s.dimSummary }}</span><span style="{{ s.pillStyle }}">{{ s.qri }}</span></div></div>
+            </sc-for>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:11px;font-size:12.5px;color:#3a4163;cursor:pointer;margin-bottom:20px"><input type="checkbox" style="margin-top:2px;width:16px;height:16px;accent-color:#2538d6" />I confirm the scores reflect the agreed quality risk for this product code and authorise the required documents.</label>
+          <div style="display:flex;justify-content:space-between;gap:10px">
+            <button onClick="{{ gotoStep2 }}" style="height:42px;padding:0 18px;border-radius:10px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:13px;cursor:pointer">← Back to scoring</button>
+            <button onClick="{{ submitAssessment }}" style="height:42px;padding:0 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#1f9d5b,#178a4e);color:#fff;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(31,157,91,.3)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Submit &amp; request agreement on risk</button>
+          </div>
+        </div>
+        </sc-if>
+      </section>
+      </sc-if>
+
+      <!-- ============ PRODUCTION PHASE MATRIX ============ -->
+      <sc-if value="{{ isMatrix }}" hint-placeholder-val="">
+      <section data-screen-label="Production Phase Matrix" style="padding:24px 30px 56px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:8px"><span onClick="{{ goHome }}" style="cursor:pointer" style-hover="color:#2538d6">Home</span><span>/</span><span style="color:#3a4163;font-weight:600">Production Phase Matrix</span></div>
+        <h1 style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.4px;color:#141a36;margin-bottom:4px">Document @ Production Phase Matrix</h1>
+        <div style="font-size:12.5px;color:#8c94b3;margin-bottom:20px">Which documents are required at each stage, by score band.</div>
+        <div style="display:flex;gap:16px;margin-bottom:18px;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#3a4163"><span style="width:18px;height:18px;border-radius:5px;background:#2538d6"></span>Mandatory</span>
+          <span style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#3a4163"><span style="width:18px;height:18px;border-radius:5px;background:#a9b6f5"></span>Recommended</span>
+          <span style="display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#3a4163"><span style="width:18px;height:18px;border-radius:5px;background:#eef1f8;border:1px solid #dde3f2"></span>Not required</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(20,30,70,.05);overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;min-width:760px">
+            <thead><tr style="background:#f6f8fd;border-bottom:1px solid #e6eaf5">
+              <th style="text-align:left;padding:14px 18px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#8c94b3;min-width:230px">DOCUMENT</th>
+              <sc-for list="{{ f2uCols }}" as="col" hint-placeholder-count="5"><th style="padding:14px 10px;font-size:11px;font-weight:700;color:#3a4163;text-align:center"><div>{{ col.code }}</div><div style="font-size:10px;font-weight:500;color:#9aa3c0;margin-top:2px">{{ col.label }}</div></th></sc-for>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{ matrixRows }}" as="m" hint-placeholder-count="7">
+                <tr style="border-bottom:1px solid #f1f4fc">
+                  <td style="padding:13px 18px"><div style="font-size:13px;font-weight:600;color:#222a4d">{{ m.name }}</div><div style="font-size:11px;color:#9aa3c0">{{ m.cat }}</div></td>
+                  <sc-for list="{{ m.cells }}" as="cell" hint-placeholder-count="5"><td style="padding:8px;text-align:center"><span style="{{ cell.style }}">{{ cell.mark }}</span></td></sc-for>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      </sc-if>
+
+      <!-- ============ SAVED PRODUCTS ============ -->
+      <sc-if value="{{ isSaved }}" hint-placeholder-val="">
+      <section data-screen-label="Saved Products" style="padding:26px 32px 60px;max-width:1480px;animation:qfade .3s ease">
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8c94b3;margin-bottom:8px"><span onClick="{{ goHome }}" style="cursor:pointer" style-hover="color:#2538d6">Home</span><span>/</span><span style="color:#3a4163;font-weight:600">Saved Products</span></div>
+        <h1 style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.4px;color:#141a36;margin-bottom:4px">Saved Products</h1>
+        <div style="font-size:12.5px;color:#8c94b3;margin-bottom:20px">Products you are following, with the status of their quality check.</div>
+
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px">
+          <sc-for list="{{ savedStats }}" as="t" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #e6eaf5;border-radius:14px;padding:14px 18px;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+              <div style="font-size:11.5px;color:#8c94b3;font-weight:600">{{ t.label }}</div>
+              <div style="font-family:'Manrope',sans-serif;font-size:26px;font-weight:800;margin-top:4px;color:{{ t.color }}">{{ t.value }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e6eaf5;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(20,30,70,.04)">
+          <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.5fr) minmax(0,1.5fr) minmax(0,1.3fr) 64px;gap:16px;align-items:center;padding:12px 22px;background:#f7f9ff;border-bottom:1px solid #eef1f8;font-size:10.5px;font-weight:700;letter-spacing:.8px;color:#9aa3c0">
+            <span>PRODUCT</span><span>QUALITY CHECK</span><span>PROGRESS</span><span>CHECKER</span><span style="text-align:right">SCORE</span>
+          </div>
+          <sc-for list="{{ saved }}" as="a" hint-placeholder-count="7">
+            <div onClick="{{ a.onClick }}" style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.5fr) minmax(0,1.5fr) minmax(0,1.3fr) 64px;gap:16px;align-items:center;padding:14px 22px;border-bottom:1px solid #f1f4fc;cursor:pointer" style-hover="background:#fafbff">
+              <div style="min-width:0">
+                <div style="font-size:13px;font-weight:600;color:#222a4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</div>
+                <div style="font-size:11.5px;color:#8c94b3;margin-top:2px">{{ a.code }}</div>
+              </div>
+              <div><span style="{{ a.raStyle }}"><span style="{{ a.raDot }}"></span>{{ a.raLabel }}</span></div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="flex:1;height:6px;background:#eef1f8;border-radius:4px;overflow:hidden"><div style="{{ a.barStyle }}"></div></div>
+                <span style="font-size:11.5px;font-weight:600;color:#586089;min-width:34px;text-align:right">{{ a.pct }}</span>
+              </div>
+              <div style="min-width:0">
+                <div style="font-size:12.5px;font-weight:600;color:#222a4d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.who }}</div>
+                <div style="font-size:11.5px;color:#8c94b3;margin-top:2px">{{ a.when }}</div>
+              </div>
+              <div style="text-align:right;font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;color:{{ a.qriColor }}">{{ a.qri }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      </sc-if>
+
+    </main>
+
+    <!-- ===== QUICK-LOOK DRAWER ===== -->
+    <sc-if value="{{ drawerOpen }}" hint-placeholder-val="">
+      <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(15,22,60,.34);z-index:60;animation:qfade .2s ease"></div>
+      <aside style="position:fixed;top:0;right:0;bottom:0;width:430px;background:#fff;z-index:61;box-shadow:-12px 0 40px rgba(15,22,60,.2);display:flex;flex-direction:column;animation:qtoast .26s cubic-bezier(.2,.8,.2,1)">
+        <div style="padding:22px 24px;background:linear-gradient(120deg,#0d1788,#1c2bbf);color:#fff">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.5px;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:7px">{{ sel.agg }}</span>
+            <button onClick="{{ closeDrawer }}" style="width:30px;height:30px;border-radius:8px;border:none;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:16px">✕</button>
+          </div>
+          <h3 style="font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;margin-top:12px;line-height:1.2">{{ sel.name }}</h3>
+          <div style="font-size:12.5px;color:#cdd6ff;margin-top:4px">{{ sel.item }} · {{ sel.fn }} · {{ sel.sys }}</div>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:20px 24px">
+          <div style="display:flex;gap:12px;margin-bottom:20px">
+            <div style="flex:1;background:#f7f9ff;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;color:{{ sel.qriColor }}">{{ sel.qri }}</div><div style="font-size:11px;color:#8c94b3;font-weight:600;margin-top:2px">Score · {{ sel.band }}</div></div>
+            <div style="flex:1;background:#f7f9ff;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;color:#2538d6">{{ sel.assessLabel }}</div><div style="font-size:11px;color:#8c94b3;font-weight:600;margin-top:2px">Quality checks</div></div>
+          </div>
+          <sc-for list="{{ drawerFields }}" as="f" hint-placeholder-count="6">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #f1f4fc;gap:16px"><span style="font-size:12.5px;color:#8c94b3">{{ f.k }}</span><span style="font-size:13px;color:#222a4d;font-weight:600;text-align:right">{{ f.v }}</span></div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid #eef1f8;display:flex;gap:10px">
+          <button onClick="{{ openSelectedDetails }}" style="flex:1;height:42px;border-radius:10px;border:none;background:linear-gradient(135deg,#2538d6,#1a2bb0);color:#fff;font-weight:700;font-size:13px;cursor:pointer">Open full details</button>
+          <button onClick="{{ startNewAssessment }}" style="height:42px;padding:0 16px;border-radius:10px;border:1px solid #d4dbef;background:#fff;color:#2c3358;font-weight:600;font-size:13px;cursor:pointer">Check</button>
+        </div>
+      </aside>
+    </sc-if>
+
+    <!-- ===== TOAST ===== -->
+    <sc-if value="{{ toastVisible }}" hint-placeholder-val="">
+      <div style="position:fixed;bottom:26px;right:26px;z-index:80;display:flex;align-items:center;gap:13px;background:#11183a;color:#fff;padding:15px 20px 15px 16px;border-radius:13px;box-shadow:0 12px 36px rgba(15,22,60,.3);animation:qtoast .3s cubic-bezier(.2,.8,.2,1);max-width:380px">
+        <span style="width:34px;height:34px;border-radius:9px;background:rgba(31,157,91,.22);display:flex;align-items:center;justify-content:center;flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m5 12 5 5 9-11" stroke="#46e08a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><div style="font-size:13.5px;font-weight:700">{{ toastTitle }}</div><div style="font-size:12px;color:#aeb6da;margin-top:1px">{{ toastMsg }}</div></div>
+      </div>
+    </sc-if>
+
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    const C = this.C = {
+      Low:{label:'Low',color:'#1f9d5b',bg:'#e6f6ee'},
+      Medium:{label:'Medium',color:'#e0911a',bg:'#fdf2e0'},
+      High:{label:'High',color:'#ee6f2d',bg:'#fdebe0'},
+      Critical:{label:'Critical',color:'#d63a3a',bg:'#fde7e7'}
+    };
+    this.STATUS = {
+      Released:{color:'#1f9d5b',bg:'#e6f6ee'},
+      'In Review':{color:'#e0911a',bg:'#fdf2e0'},
+      Draft:{color:'#6b7596',bg:'#eef1f8'},
+      Blocked:{color:'#d63a3a',bg:'#fde7e7'}
+    };
+    this.PRODUCTS = [
+      {wbs:'2425-0004',item:'672920.03',name:'AXD SR IR VACUUM PUMP ASSY',sys:'AXD:3800E',fn:'FC-021',ctx:'AXD:3800E-4022.452.95201-4022.700.21541',agg:'45TR',proc:'F',svc:'NO',owner:'thmortel',dept:'ENGI MC SRC E Vessel Condi',f2u:'Phase 3',f2uName:'Ready to verify',qri:82,status:'In Review',ao:2,at:5,dd:6,dt:11,mod:'13 Jun 2024',bb:'PT-087-0051A',mat:'ASSY',bom:7},
+      {wbs:'2425-0015',item:'669229.01',name:'AXD BUSH CLAMP 3X2',sys:'AXD:3600D',fn:'FC-012',ctx:'AXD:3600D-4022.452.93801-4022.622.33413',agg:'63XP',proc:'F',svc:'NO',owner:'mwalters',dept:'ENGI MD PMD E WaferPos',f2u:'Phase 1',f2uName:'Ready to define',qri:21,status:'Released',ao:0,at:3,dd:3,dt:3,mod:'23 Dec 2023',bb:'—',mat:'MONO',bom:9},
+      {wbs:'2209-0010',item:'472462.10',name:'AIR DISTR UNIT 126TE 8F',sys:'AXD:3800E',fn:'FC-021',ctx:'AXD:3800E-4022.452.95201-4022.694.62xxx',agg:'27KD',proc:'E',svc:'NO',owner:'rdijkstra',dept:'ENGI MC Gas & Vacuum',f2u:'Phase 2',f2uName:'Ready to assemble',qri:54,status:'In Review',ao:3,at:6,dd:4,dt:9,mod:'02 Apr 2024',bb:'PT-021-0112C',mat:'ASSY',bom:6},
+      {wbs:'2212-0057',item:'472731.18',name:'PC MK3.2 LSPR6 REMA ASSY',sys:'AXD:3800E',fn:'FC-011',ctx:'AXD:3800E-4022.452.95201-4022.671.13xxx',agg:'45TR',proc:'F',svc:'NO',owner:'jbakker',dept:'ENGI MC Positioning',f2u:'Phase 4',f2uName:'Ready to scale',qri:38,status:'Released',ao:1,at:4,dd:8,dt:8,mod:'19 May 2024',bb:'PT-011-0307F',mat:'ASSY',bom:5},
+      {wbs:'2233-0016',item:'472892.24',name:'EI MDRC F&T CON BOX 021',sys:'AXB:870',fn:'FC-021',ctx:'AXB:870-4022.452.95601-4022.671.22692',agg:'45TR',proc:'F',svc:'YES',owner:'pvisser',dept:'ENGI MC Metrology',f2u:'Phase 3',f2uName:'Ready to verify',qri:67,status:'Blocked',ao:4,at:7,dd:2,dt:10,mod:'28 Feb 2024',bb:'PT-021-0455B',mat:'ASSY',bom:6},
+      {wbs:'',item:'480801.14',name:'LENS DEPENDENT SPACER SET',sys:'AXB:870',fn:'FC-012',ctx:'AXB:870-4022.452.95601-4022.690.23721',agg:'63XP',proc:'F',svc:'NO',owner:'akoning',dept:'ENGI MD Lens',f2u:'Phase 1',f2uName:'Ready to define',qri:16,status:'Draft',ao:0,at:2,dd:0,dt:4,mod:'11 Jan 2024',bb:'—',mat:'MONO',bom:10},
+      {wbs:'2212-0069',item:'481100.75',name:'ZOOM AXICON 875',sys:'AXD:3800E',fn:'FC-010',ctx:'AXD:3800E-4022.452.95201-4022.631.42423',agg:'45TR',proc:'E',svc:'NO',owner:'lhendriks',dept:'ENGI MD Illumination',f2u:'Phase 2',f2uName:'Ready to assemble',qri:49,status:'In Review',ao:2,at:5,dd:3,dt:7,mod:'07 Jun 2024',bb:'PT-010-0088D',mat:'ASSY',bom:7},
+      {wbs:'2240-0003',item:'485219.00',name:'NA ACTUATOR UNIT/1100',sys:'AXC:5000',fn:'FC-014',ctx:'AXC:5000-4022.452.97011-4022.640.55xxx',agg:'27KD',proc:'F',svc:'NO',owner:'sjanssen',dept:'ENGI MC Wafer Handling',f2u:'Phase 2',f2uName:'Ready to assemble',qri:73,status:'In Review',ao:3,at:6,dd:5,dt:12,mod:'14 Jun 2024',bb:'PT-014-0190A',mat:'ASSY',bom:5},
+      {wbs:'2212-0069',item:'481695.53',name:'BOTTOM MODULE INTERFACE',sys:'AXB:870',fn:'FC-033',ctx:'AXB:870-4022.452.95601-4022.452.95601',agg:'27KD',proc:'E',svc:'YES',owner:'tvos',dept:'ENGI MC Frames',f2u:'Phase 5',f2uName:'Ready to operate',qri:29,status:'Released',ao:0,at:5,dd:9,dt:9,mod:'30 Apr 2024',bb:'PT-033-0021E',mat:'ASSY',bom:4},
+      {wbs:'2425-0021',item:'470540.21',name:'CTLNSTEMPCM ASSY',sys:'AXB:870',fn:'FC-014',ctx:'AXB:870-4022.452.95601-4022.690.23721',agg:'45TR',proc:'F',svc:'NO',owner:'demaier',dept:'ENGI MC Thermal',f2u:'Phase 3',f2uName:'Ready to verify',qri:91,status:'Blocked',ao:5,at:8,dd:1,dt:13,mod:'16 Jun 2024',bb:'PT-014-0512G',mat:'ASSY',bom:6},
+      {wbs:'',item:'470803.32',name:'RS LNS COO SENS LSCA3',sys:'AXB:870',fn:'FC-004',ctx:'AXB:870-4022.452.95601-4022.690.23721',agg:'63XP',proc:'F',svc:'NO',owner:'wbrouwer',dept:'ENGI MD Sensors',f2u:'Phase 1',f2uName:'Ready to define',qri:34,status:'Released',ao:1,at:3,dd:3,dt:5,mod:'22 Mar 2024',bb:'—',mat:'MONO',bom:9},
+      {wbs:'2218-0044',item:'472268.40',name:'IF EZCAP SENSOR HEAD ASSY',sys:'AXD:3800E',fn:'FC-031',ctx:'AXD:3800E-4022.452.95201-4022.690.23721',agg:'45TR',proc:'F',svc:'NO',owner:'kpeters',dept:'ENGI MD Metrology IF',f2u:'Phase 4',f2uName:'Ready to scale',qri:58,status:'In Review',ao:2,at:6,dd:6,dt:9,mod:'05 May 2024',bb:'PT-031-0076C',mat:'ASSY',bom:6},
+      {wbs:'2240-0009',item:'486312.00',name:'WAFER TABLE CLAMP RING',sys:'AXC:5000',fn:'FC-021',ctx:'AXC:5000-4022.452.97011-4022.701.88xxx',agg:'63XP',proc:'F',svc:'NO',owner:'amol',dept:'ENGI MC WaferPos',f2u:'Phase 2',f2uName:'Ready to assemble',qri:45,status:'Draft',ao:1,at:4,dd:2,dt:6,mod:'09 Jun 2024',bb:'—',mat:'MONO',bom:8},
+      {wbs:'2233-0028',item:'473150.08',name:'RETICLE STAGE MIRROR BLK',sys:'AXD:3800E',fn:'FC-011',ctx:'AXD:3800E-4022.452.95201-4022.671.55xxx',agg:'45TR',proc:'F',svc:'NO',owner:'fkuiper',dept:'ENGI MC Reticle',f2u:'Phase 3',f2uName:'Ready to verify',qri:78,status:'In Review',ao:3,at:7,dd:4,dt:11,mod:'12 Jun 2024',bb:'PT-011-0640A',mat:'ASSY',bom:5}
+    ];
+    this.CTQS = [
+      {code:'CR-OVL',name:'Overlay accuracy',sev:'Critical',subs:['On-product overlay','Matched machine overlay','Single machine overlay']},
+      {code:'CR-IMG',name:'Imaging / CD uniformity',sev:'High',subs:['CDU across slit','CDU across field','Focus drift']},
+      {code:'CR-CON',name:'Contamination control',sev:'Medium',subs:['Particle adders','Molecular contamination']},
+      {code:'CR-THM',name:'Thermal stability',sev:'High',subs:['Steady-state drift','Transient response']},
+      {code:'CR-MEC',name:'Mechanical alignment',sev:'Medium',subs:['Datum repeatability','Clamp force']}
+    ];
+    this.state = {
+      route:'dashboard',
+      search:'', tableSearch:'',
+      density:'comfortable',
+      sortKey:'qri', sortDir:'desc',
+      filters:{sys:'', agg:'', band:'', status:''},
+      views:[{name:'All items',f:{sys:'',agg:'',band:'',status:''}},{name:'Critical risk',f:{sys:'',agg:'',band:'Critical',status:''}},{name:'In review',f:{sys:'',agg:'',band:'',status:'In Review'}}],
+      activeView:0,
+      selId:this.PRODUCTS[0].item,
+      detailTab:'details',
+      drawerOpen:false,
+      toast:null, notifOpen:false, notifRead:[],
+      step:1,
+      ctqOpen:{}, ctqSel:{'CR-OVL':true,'CR-IMG':true}, subSel:{},
+      scores:{}
+    };
+  }
+  band(q){ if(q>=75)return this.C.Critical; if(q>=50)return this.C.High; if(q>=25)return this.C.Medium; return this.C.Low; }
+  qcolor(q){ return this.band(q).color; }
+  toast(title,msg){ this.setState({toast:{title,msg}}); clearTimeout(this._tt); this._tt=setTimeout(()=>this.setState({toast:null}),3600); }
+  go(route){ this.setState({route}); document.querySelector('main')&&document.querySelector('main').scrollTo(0,0); }
+  sel(){ return this.PRODUCTS.find(p=>p.item===this.state.selId)||this.PRODUCTS[0]; }
+
+  // ----- assessment helpers -----
+  selectedCtqs(){ return this.CTQS.filter(c=>this.state.ctqSel[c.code]); }
+  getScore(code){ return this.state.scores[code]||{sev:6,occ:5,det:5}; }
+  ctqQri(code){ const s=this.getScore(code); return Math.round((s.sev*s.occ*s.det)/10); }
+  aggregateQri(){ const sel=this.selectedCtqs(); if(!sel.length)return 0; return Math.max(...sel.map(c=>this.ctqQri(c.code))); }
+
+  renderVals(){
+    const S=this.state, P=this.PRODUCTS, self=this;
+    const navStyle=(active)=>`display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:none;border-radius:11px;font-family:inherit;font-size:13.5px;font-weight:${active?700:600};cursor:pointer;outline:none;color:${active?'#1a2bb0':'#586089'};background:${active?'#eef1ff':'transparent'};text-align:left;transition:background .15s`;
+    const nav=[
+      {key:'dashboard',label:'Dashboard',iconPath:'M4 13h7V4H4v9Zm9 7h7V4h-7v16ZM4 20h7v-5H4v5Z'},
+      {key:'saved',label:'Saved Products',iconPath:'M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1Z',badge:'7'},
+      {key:'overview',label:'Product Overview',iconPath:'M4 6h16M4 12h16M4 18h16',badge:'278k'},
+      {key:'matrix',label:'Production Phase Matrix',iconPath:'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z'},
+      {key:'assess',label:'Quality Checks',iconPath:'M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
+      {key:'matrix2',label:'Databank',iconPath:'M3 7l9-4 9 4-9 4-9-4Zm0 5l9 4 9-4M3 17l9 4 9-4'}
+    ];
+    const routeMap={dashboard:'dashboard',overview:'overview',matrix:'matrix',assess:'overview',matrix2:'overview',config:'dashboard'};
+    const navItems=nav.map(n=>{
+      const active=(S.route===n.key)||(n.key==='overview'&&S.route==='details');
+      return {label:n.label,iconPath:n.iconPath,iconColor:active?'#2538d6':'#8c94b3',style:navStyle(active),badge:n.badge||'',badgeStyle:`font-size:10px;font-weight:700;color:${active?'#2538d6':'#9aa3c0'};background:${active?'#dde3ff':'#f1f4fc'};padding:2px 7px;border-radius:6px`,onClick:()=>self.go(n.key)};
+    });
+
+    // ---------- DASHBOARD ----------
+    const total=P.length;
+    const kpiIcon=(bg,col)=>`width:32px;height:32px;border-radius:9px;background:${bg};display:flex;align-items:center;justify-content:center`;
+    const kpis=[
+      {label:'Items in scope',value:'278,952',delta:'▲ 1.4%',deltaNote:'vs last sync',deltaStyle:'font-size:11.5px;font-weight:700;color:#1f9d5b',iconWrap:kpiIcon('#eef1ff','#2538d6'),iconColor:'#2538d6',iconPath:'M4 6h16M4 12h16M4 18h16'},
+      {label:'Open quality checks',value:'1,284',delta:'▲ 86',deltaNote:'this week',deltaStyle:'font-size:11.5px;font-weight:700;color:#e0911a',iconWrap:kpiIcon('#fdf2e0','#e0911a'),iconColor:'#e0911a',iconPath:'M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'},
+      {label:'Overdue documents',value:'37',delta:'▼ 12',deltaNote:'since Monday',deltaStyle:'font-size:11.5px;font-weight:700;color:#1f9d5b',iconWrap:kpiIcon('#fde7e7','#d63a3a'),iconColor:'#d63a3a',iconPath:'M12 8v5m0 3h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z'},
+      {label:'Critical-risk items',value:'612',delta:'▲ 4',deltaNote:'new today',deltaStyle:'font-size:11.5px;font-weight:700;color:#d63a3a',iconWrap:kpiIcon('#fdebe0','#ee6f2d'),iconColor:'#ee6f2d',iconPath:'M12 2 3 7v6c0 5 3.8 8.4 9 9 5.2-.6 9-4 9-9V7l-9-5Z'}
+    ];
+    // donut: fixed believable distribution
+    const dist=[{label:'Low risk',color:'#1f9d5b',v:61,count:'170,161'},{label:'Medium risk',color:'#e0911a',v:22,count:'61,369'},{label:'High risk',color:'#ee6f2d',v:11,count:'30,685'},{label:'Critical risk',color:'#d63a3a',v:6,count:'16,737'}];
+    const donut=dist.map(d=>({label:d.label,color:d.color,pct:d.v+'%',count:d.count}));
+    const phaseData=[{label:'Phase 1',sub:'Define',pct:94,n:1280},{label:'Phase 2',sub:'Assemble',pct:71,n:1110},{label:'Phase 3',sub:'Verify',pct:48,n:905},{label:'Phase 4',sub:'Scale',pct:33,n:640},{label:'Phase 5',sub:'Operate',pct:12,n:410}];
+    const phases=phaseData.map(p=>({label:p.label,sub:p.sub,pct:p.pct+'%',frac:Math.round(p.n*p.pct/100).toLocaleString()+' / '+p.n.toLocaleString()+' done'}));
+    const attn=[...P].filter(p=>p.qri>=55).sort((a,b)=>b.qri-a.qri).slice(0,4);
+    const RA={
+      'Agreed':{color:'#1f9d5b',bg:'#e6f6ee',bar:'#1f9d5b'},
+      'Awaiting agreement':{color:'#2538d6',bg:'#eef1ff',bar:'#2538d6'},
+      'In progress':{color:'#e0911a',bg:'#fdf2e0',bar:'#e0911a'},
+      'Overdue':{color:'#d63a3a',bg:'#fde7e7',bar:'#d63a3a'},
+      'Not started':{color:'#6b7596',bg:'#eef1f8',bar:'#c6cde0'}
+    };
+    const raPlan=[
+      {st:'Overdue',pct:60,who:'Sanne Janssen',when:'Due 3 days ago'},
+      {st:'Awaiting agreement',pct:100,who:'Marc Rensen',when:'Submitted yesterday'},
+      {st:'In progress',pct:45,who:'Lena Vermeer',when:'Due in 6 days'},
+      {st:'Agreed',pct:100,who:'Marc Rensen',when:'Agreed 12 Mar'},
+      {st:'In progress',pct:20,who:'Tom de Wit',when:'Due in 2 weeks'},
+      {st:'Not started',pct:0,who:'Unassigned',when:'No due date'},
+      {st:'Agreed',pct:100,who:'Sanne Janssen',when:'Agreed 28 Feb'}
+    ];
+    const savedPick=[...P].sort((a,b)=>b.qri-a.qri).filter((p,i)=>i%2===0).slice(0,7);
+    const saved=savedPick.map((p,i)=>{const b=self.band(p.qri);const r=raPlan[i];const c=RA[r.st];return{
+      name:p.name,code:`${p.item} · ${p.fn}`,qri:p.qri,qriColor:b.color,band:b.label||'',
+      raLabel:r.st,raStyle:`display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:${c.color};background:${c.bg};padding:4px 10px;border-radius:999px;white-space:nowrap`,
+      raDot:`width:6px;height:6px;border-radius:50%;background:${c.color}`,
+      barStyle:`height:100%;width:${r.pct}%;background:${c.bar};border-radius:4px`,pct:r.pct+'%',who:r.who,when:r.when,
+      onClick:()=>{self.setState({selId:p.item,detailTab:'details'});self.go('details');}};});
+    const cnt=(st)=>raPlan.filter(r=>r.st===st).length;
+    const savedStats=[
+      {label:'Saved products',value:raPlan.length,color:'#141a36'},
+      {label:'Awaiting agreement',value:cnt('Awaiting agreement'),color:'#2538d6'},
+      {label:'Overdue',value:cnt('Overdue'),color:'#d63a3a'},
+      {label:'Agreed',value:cnt('Agreed'),color:'#1f9d5b'}
+    ];
+    const finIcon='M5 12.5l4.5 4.5L19 7.5', waitIcon='M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z';
+    const notifDefs=[
+      {id:'n1',kind:'wait',name:'RETICLE STAGE MIRROR BLK',text:'is waiting for your decision. Marc Rensen submitted the quality check for agreement.',when:'20 minutes ago'},
+      {id:'n2',kind:'done',name:'AIR DISTR UNIT 126TE 8F',text:'— the quality check is finished and agreed.',when:'2 hours ago'},
+      {id:'n3',kind:'wait',name:'EI MDRC F&T CON BOX 021',text:'is waiting for your decision. Approve the quality check or send it back.',when:'Yesterday'},
+      {id:'n4',kind:'done',name:'AXD BUSH CLAMP 3X2',text:'— the quality check is finished. No further action needed.',when:'2 days ago'}
+    ];
+    const notifs=notifDefs.map(n=>{const unread=!S.notifRead.includes(n.id);const wait=n.kind==='wait';const prod=P.find(p=>p.name===n.name);return{
+      title:wait?'Waiting for your decision':'Quality check finished',product:n.name,text:n.text,when:n.when,unread,
+      rowStyle:`display:flex;gap:12px;align-items:flex-start;padding:14px 18px;border-bottom:1px solid #f1f4fc;cursor:pointer;background:${unread?'#fbfcff':'#fff'}`,
+      iconWrap:`width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none;background:${wait?'#eef1ff':'#e6f6ee'}`,
+      iconPath:wait?waitIcon:finIcon,iconColor:wait?'#2538d6':'#1f9d5b',
+      onClick:()=>{self.setState(s=>({notifOpen:false,notifRead:s.notifRead.includes(n.id)?s.notifRead:[...s.notifRead,n.id]}));if(prod){self.setState({selId:prod.item,detailTab:'assessments'});self.go('details');}}};});
+    const unreadCount=notifs.filter(n=>n.unread).length;
+    const attention=attn.map(p=>{const b=self.band(p.qri);return{name:p.name,meta:`${p.item} · ${p.fn} · ${p.ao} open quality check${p.ao===1?'':'s'}`,qri:p.qri,qriColor:b.color,tag:p.status,tagStyle:`font-size:10.5px;font-weight:700;color:${self.STATUS[p.status].color};background:${self.STATUS[p.status].bg};padding:3px 9px;border-radius:7px;white-space:nowrap`,dotStyle:`width:9px;height:9px;border-radius:50%;background:${b.color};flex:none`,onClick:()=>{self.setState({selId:p.item,detailTab:'details'});self.go('details');}};});
+    const actColors=['#2538d6','#1f9d5b','#e0911a','#ee6f2d','#6b7596'];
+    const activity=[
+      {who:'Marc Rensen',what:'approved the agreement on risk for NA ACTUATOR UNIT/1100',when:'12 minutes ago'},
+      {who:'You',what:'scored CR-OVL on AXD SR IR VACUUM PUMP ASSY (score 82)',when:'1 hour ago'},
+      {who:'Sanne Janssen',what:'uploaded FMEA report to WAFER TABLE CLAMP RING',when:'3 hours ago'},
+      {who:'System',what:'flagged 4 new critical-risk items after product-level sync',when:'Today 06:42'},
+      {who:'Pieter Visser',what:'set EI MDRC F&T CON BOX 021 to Blocked',when:'Yesterday 17:20'}
+    ].map((e,i)=>({...e,dotStyle:`width:11px;height:11px;border-radius:50%;background:${actColors[i]};flex:none;border:2px solid ${actColors[i]}22;box-shadow:0 0 0 3px ${actColors[i]}1a`}));
+
+    // ---------- OVERVIEW TABLE ----------
+    let rows=P.filter(p=>{
+      const q=(S.tableSearch||'').toLowerCase();
+      if(q && !(p.item.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||p.ctx.toLowerCase().includes(q)))return false;
+      const f=S.filters;
+      if(f.sys&&p.sys!==f.sys)return false;
+      if(f.agg&&p.agg!==f.agg)return false;
+      if(f.status&&p.status!==f.status)return false;
+      if(f.band&&self.band(p.qri).label!==f.band)return false;
+      return true;
+    });
+    const sk=S.sortKey,dir=S.sortDir==='asc'?1:-1;
+    rows=[...rows].sort((a,b)=>{ let va=a[sk],vb=b[sk]; if(sk==='assess'){va=a.at?a.ao/a.at:0;vb=b.at?b.ao/b.at:0;} if(typeof va==='string')return va.localeCompare(vb)*dir; return (va-vb)*dir; });
+    const pad=S.density==='compact'?'9px 14px':'14px 16px';
+    const tableRows=rows.map(p=>{
+      const b=self.band(p.qri), st=self.STATUS[p.status];
+      const ap=p.at?Math.round(p.ao/p.at*100):0;
+      return {item:p.item,wbs:p.wbs||'no SSS code',name:p.name,ctx:p.ctx,sys:p.sys,fn:p.fn,band:b.label,qri:p.qri,qriColor:b.color,status:p.status,
+        cellPad:`padding:${pad};vertical-align:middle`,
+        trStyle:'border-bottom:1px solid #f1f4fc;cursor:pointer',
+        bandStyle:`font-size:11px;font-weight:700;color:${b.color};background:${b.bg};padding:3px 9px;border-radius:7px`,
+        qriBarStyle:`width:${p.qri}%;height:100%;background:${b.color};border-radius:4px`,
+        assessBarStyle:`width:${ap}%;height:100%;background:${ap===100?'#1f9d5b':'#2538d6'};border-radius:4px`,
+        assessLabel:`${p.ao}/${p.at}`,
+        statusStyle:`font-size:11px;font-weight:700;color:${st.color};background:${st.bg};padding:4px 10px;border-radius:8px;white-space:nowrap`,
+        onClick:()=>self.setState({selId:p.item,drawerOpen:true}),
+        onOpen:(e)=>{e.stopPropagation();self.setState({selId:p.item,detailTab:'details'});self.go('details');}};
+    });
+    const colDefs=[{k:'item',l:'Item / SSS'},{k:'name',l:'Name / Context'},{k:'sys',l:'Machine family'},{k:'fn',l:'Division'},{k:'band',l:'Risk band'},{k:'qri',l:'Score'},{k:'assess',l:'Quality checks'},{k:'status',l:'Status'},{k:'_',l:''}];
+    const columns=colDefs.map(c=>{
+      const sortable=c.k!=='_'&&c.k!=='assess';
+      const isS=S.sortKey===c.k;
+      return {label:c.l,thStyle:`text-align:left;padding:13px 16px;font-size:11px;font-weight:700;letter-spacing:.5px;color:${isS?'#2538d6':'#8c94b3'};white-space:nowrap;${sortable?'cursor:pointer':''}`,
+        arrow:isS?(S.sortDir==='asc'?'▲':'▼'):(sortable?'⇅':''),
+        arrowStyle:`font-size:9px;color:${isS?'#2538d6':'#c4cbe0'}`,
+        onSort:sortable?(()=>self.setState(st=>({sortKey:c.k,sortDir:st.sortKey===c.k&&st.sortDir==='desc'?'asc':'desc'}))):(()=>{})};
+    });
+    // facets
+    const facetDef=[
+      {key:'sys',label:'MACHINE FAMILY',opts:['AXD:3800E','AXB:870','AXC:5000']},
+      {key:'agg',label:'AGGREGATION',opts:['45TR','27KD','63XP']},
+      {key:'band',label:'RISK',opts:['Low','Medium','High','Critical']},
+      {key:'status',label:'STATUS',opts:['Released','In Review','Draft','Blocked']}
+    ];
+    const facetBtn=(active)=>`height:30px;padding:0 11px;border-radius:8px;border:1px solid ${active?'#2538d6':'#dde3f2'};background:${active?'#2538d6':'#fff'};color:${active?'#fff':'#586089'};font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit`;
+    const facetGroups=facetDef.map(g=>({label:g.label,options:g.opts.map(o=>{const active=S.filters[g.key]===o;return{label:o,style:facetBtn(active),onClick:()=>self.setState(st=>({filters:{...st.filters,[g.key]:active?'':o},activeView:-1}))};})}));
+    const viewBtn=(active)=>`height:30px;padding:0 13px;border-radius:8px;border:1px solid ${active?'#2538d6':'#dde3f2'};background:${active?'#eef1ff':'#fff'};color:${active?'#1a2bb0':'#586089'};font-size:12px;font-weight:${active?700:600};cursor:pointer;font-family:inherit`;
+    const views=S.views.map((v,i)=>({label:v.name,style:viewBtn(S.activeView===i),onClick:()=>self.setState({filters:{...v.f},activeView:i})}));
+
+    // ---------- DETAILS ----------
+    const sp=self.sel(); const sb=self.band(sp.qri);
+    const Cring=2*Math.PI*40; const Cring2=2*Math.PI*54;
+    const sel={item:sp.item,name:sp.name,fn:sp.fn,sys:sp.sys,owner:sp.owner,agg:sp.agg,status:sp.status,qri:sp.qri,band:sb.label,qriColor:sb.color,
+      assessLabel:`${sp.ao}/${sp.at}`,
+      headStatusStyle:`font-size:11px;font-weight:700;color:#fff;background:${self.STATUS[sp.status].color};padding:4px 11px;border-radius:7px`,
+      qriRingColor:sb.color,qriRingDash:`${Cring*sp.qri/100} ${Cring}`};
+    const detailLeft=[{k:'SSS CODE',v:sp.wbs||'—'},{k:'Product code',v:sp.ctx},{k:'Item',v:sp.item},{k:'Item name',v:sp.name},{k:'Item type',v:sp.agg},{k:'Material type',v:sp.mat},{k:'Product aggregation',v:sp.agg},{k:'Part ID',v:sp.bb},{k:'Product level',v:sp.bom},{k:'Production phase',v:`${sp.f2u} · ${sp.f2uName}`}];
+    const detailRight=[{k:'Department ID',v:'25'+(100000+P.indexOf(sp)*131)},{k:'Department name',v:sp.dept},{k:'Product type',v:'Machine Product Level'},{k:'Owner group',v:'axd-'+(sp.fn.includes('21')?'so':'ws')},{k:'Owner',v:sp.owner},{k:'X Plantstatus IS',v:'R'+((P.indexOf(sp)%4)+2)},{k:'SAP procurement type',v:sp.proc},{k:'Service material',v:sp.svc},{k:'Creation date',v:'01 Dec 2021'},{k:'Last modification',v:sp.mod}];
+    const tabDef=[{k:'details',l:'Details'},{k:'assessments',l:'Quality checks',c:sp.at},{k:'deliverables',l:'Required Documents',c:sp.dt},{k:'children',l:'Family products',c:sp.bom},{k:'refs',l:'Reference Documents',c:4}];
+    const tabStyle=(a)=>`position:relative;padding:11px 16px;border:none;background:transparent;font-family:inherit;font-size:13.5px;font-weight:${a?700:600};color:${a?'#1a2bb0':'#7681a6'};cursor:pointer;border-bottom:2.5px solid ${a?'#2538d6':'transparent'};margin-bottom:-1px;display:flex;align-items:center;gap:7px`;
+    const detailTabs=tabDef.map(t=>{const a=S.detailTab===t.k;return{label:t.l,count:t.c||'',style:tabStyle(a),countStyle:`font-size:10.5px;font-weight:700;color:${a?'#2538d6':'#9aa3c0'};background:${a?'#dde3ff':'#f1f4fc'};padding:1px 7px;border-radius:6px`,onClick:()=>self.setState({detailTab:t.k})};});
+    const assStatuses=['Completed','In Review','Open'];
+    const assessList=[
+      {title:'Quality Check · Overlay',meta:`Created 12 Jun 2024 · ${sp.owner} · CR-OVL, CR-IMG`,qri:sp.qri,status:'Completed'},
+      {title:'Quality Check · Thermal',meta:'Created 02 May 2024 · rdijkstra · CR-THM',qri:Math.max(20,sp.qri-19),status:'In Review'},
+      {title:'Predecessor delta quality check',meta:'Created 28 Mar 2024 · system · auto-generated',qri:Math.max(12,sp.qri-31),status:'Open'}
+    ].map(a=>{const b=self.band(a.qri);const map={Completed:{c:'#1f9d5b',bg:'#e6f6ee',ic:'M9 11l3 3L22 4',iw:'#1f9d5b',iwb:'#e6f6ee'},'In Review':{c:'#e0911a',bg:'#fdf2e0',ic:'M12 8v4l2.5 2',iw:'#e0911a',iwb:'#fdf2e0'},Open:{c:'#6b7596',bg:'#eef1f8',ic:'M12 8v4l2.5 2',iw:'#6b7596',iwb:'#eef1f8'}}[a.status];return{title:a.title,meta:a.meta,qri:a.qri,qriColor:b.color,status:a.status,statusStyle:`font-size:11px;font-weight:700;color:${map.c};background:${map.bg};padding:5px 12px;border-radius:8px`,iconWrap:`width:38px;height:38px;border-radius:10px;background:${map.iwb};display:flex;align-items:center;justify-content:center;flex:none`,iconPath:map.ic,iconColor:map.iw};});
+    const delStatusMap={Approved:{c:'#1f9d5b',bg:'#e6f6ee'},'In progress':{c:'#e0911a',bg:'#fdf2e0'},'Not started':{c:'#6b7596',bg:'#eef1f8'},Overdue:{c:'#d63a3a',bg:'#fde7e7'}};
+    const delData=[
+      {name:'FMEA Report',type:'Risk analysis',owner:sp.owner,phase:'Phase 2',due:'14 Jun 2024',status:'Approved'},
+      {name:'Control Plan',type:'Quality plan',owner:'rdijkstra',phase:'Phase 3',due:'30 Jun 2024',status:'In progress'},
+      {name:'Measurement System Analysis',type:'Verification',owner:'amol',phase:'Phase 3',due:'05 Jul 2024',status:'In progress'},
+      {name:'Capability Study (Cpk)',type:'Verification',owner:'sjanssen',phase:'Phase 4',due:'18 May 2024',status:'Overdue'},
+      {name:'Qualification Report',type:'Sign-off',owner:'pvisser',phase:'Phase 4',due:'22 Jul 2024',status:'Not started'},
+      {name:'Lessons Learned',type:'Documentation',owner:sp.owner,phase:'Phase 5',due:'10 Aug 2024',status:'Not started'}
+    ].map(d=>{const m=delStatusMap[d.status];return{...d,statusStyle:`font-size:11px;font-weight:700;color:${m.c};background:${m.bg};padding:4px 11px;border-radius:8px`};});
+    const childPool=P.filter(p=>p.item!==sp.item).slice(0,6);
+    const children=childPool.map(p=>{const b=self.band(p.qri);return{name:p.name,item:p.item,fn:p.fn,agg:p.agg,qri:p.qri,qriColor:b.color,onClick:()=>{self.setState({selId:p.item,detailTab:'details'});self.go('details');}};});
+    const refs=[
+      {name:'Design Specification '+sp.bb,meta:'PDF · 2.4 MB · v3 · updated 19 May 2024'},
+      {name:'Interface Control Document',meta:'PDF · 1.1 MB · v7 · updated 02 Apr 2024'},
+      {name:'Predecessor '+ (sp.item.slice(0,-1)+'2'),meta:'QBTM link · machine product level'},
+      {name:'Supplier Qualification Record',meta:'XLSX · 480 KB · updated 11 Jan 2024'}
+    ];
+    const drawerFields=[{k:'Division',v:sp.fn},{k:'Context',v:sp.ctx},{k:'Owner',v:sp.owner},{k:'Department',v:sp.dept},{k:'Production phase',v:`${sp.f2u} · ${sp.f2uName}`},{k:'Status',v:sp.status},{k:'Last modification',v:sp.mod}];
+
+    // ---------- ASSESSMENT ----------
+    const stepTitles=[{t:'Select criteria',s:'Criteria in scope'},{t:'Score',s:'Severity · Occurrence · Detection'},{t:'Agreement on risk',s:'Confirm & request'}];
+    const steps=stepTitles.map((st,i)=>{const n=i+1;const done=S.step>n;const cur=S.step===n;return{num:done?'✓':String(n),title:st.t,sub:st.s,
+      circleStyle:`width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none;${cur?'background:#2538d6;color:#fff;box-shadow:0 0 0 4px #2538d622':done?'background:#1f9d5b;color:#fff':'background:#eef1f8;color:#9aa3c0'}`,
+      titleStyle:`font-size:13px;font-weight:700;color:${cur||done?'#1c2244':'#9aa3c0'}`,
+      lineStyle:i<2?`width:64px;height:2px;margin:0 16px;background:${done?'#1f9d5b':'#e3e7f2'}`:'width:0'};});
+    const ctqs=this.CTQS.map(c=>{
+      const checked=!!S.ctqSel[c.code], open=!!S.ctqOpen[c.code];
+      const sevMap={Critical:self.C.Critical,High:self.C.High,Medium:self.C.Medium};
+      const sm=sevMap[c.sev];
+      return {name:c.name,code:c.code,subCount:c.subs.length,open,
+        cardStyle:`border:1.5px solid ${checked?'#bcc7f7':'#eef1f8'};background:${checked?'#f7f9ff':'#fff'};border-radius:13px;padding:14px 16px;transition:all .15s`,
+        checkStyle:`width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;border:2px solid ${checked?'#2538d6':'#cdd5ee'};background:${checked?'#2538d6':'#fff'}`,
+        sevLabel:c.sev,sevStyle:`font-size:10.5px;font-weight:700;color:${sm.color};background:${sm.bg};padding:3px 10px;border-radius:7px`,
+        onToggle:()=>self.setState(s=>({ctqSel:{...s.ctqSel,[c.code]:!s.ctqSel[c.code]},ctqOpen:{...s.ctqOpen,[c.code]:!s.ctqSel[c.code]?true:s.ctqOpen[c.code]}})),
+        subs:c.subs.map(sub=>{const key=c.code+'::'+sub;const on=S.subSel[key]!==false&&checked;return{name:sub,style:`font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px;cursor:pointer;border:1px solid ${on?'#2538d6':'#dde3f2'};color:${on?'#fff':'#7681a6'};background:${on?'#2538d6':'#fff'}`,onToggle:(e)=>{e.stopPropagation();self.setState(s=>({subSel:{...s.subSel,[key]:s.subSel[key]===false}}));}};})};
+    });
+    const selCtqs=self.selectedCtqs();
+    const proceedDisabled=selCtqs.length===0;
+    const scoreRows=selCtqs.map(c=>{
+      const sc=self.getScore(c.code); const q=self.ctqQri(c.code); const b=self.band(q);
+      const mk=(label,dim)=>({label,value:sc[dim],onInput:(e)=>{const v=+e.target.value;self.setState(s=>({scores:{...s.scores,[c.code]:{...self.getScore(c.code),[dim]:v}}}));}});
+      return {name:c.name,qri:q,pillStyle:`font-family:'Manrope',sans-serif;font-size:15px;font-weight:800;color:#fff;background:${b.color};padding:2px 12px;border-radius:8px`,
+        dimSummary:`S${sc.sev} · O${sc.occ} · D${sc.det}`,
+        dims:[mk('Severity','sev'),mk('Occurrence','occ'),mk('Detection','det')]};
+    });
+    const aggQri=self.aggregateQri(); const aggB=self.band(aggQri);
+    const maxQri=selCtqs.length?Math.max(...selCtqs.map(c=>self.ctqQri(c.code))):0;
+
+    // ---------- PRODUCTION PHASE MATRIX ----------
+    const f2uCols=[{code:'Phase 1',label:'Define'},{code:'Phase 2',label:'Assemble'},{code:'Phase 3',label:'Verify'},{code:'Phase 4',label:'Scale'},{code:'Phase 5',label:'Operate'}];
+    const cellStyle=(v)=>{ if(v===2)return `display:inline-flex;width:30px;height:30px;border-radius:8px;background:#2538d6;color:#fff;font-weight:800;align-items:center;justify-content:center;font-size:13px`; if(v===1)return `display:inline-flex;width:30px;height:30px;border-radius:8px;background:#a9b6f5;color:#fff;font-weight:700;align-items:center;justify-content:center;font-size:13px`; return `display:inline-flex;width:30px;height:30px;border-radius:8px;background:#eef1f8;border:1px solid #dde3f2;align-items:center;justify-content:center;color:#c4cbe0`; };
+    const matrixData=[
+      {name:'FMEA Report',cat:'Risk analysis',v:[2,2,1,0,0]},
+      {name:'Control Plan',cat:'Quality plan',v:[1,2,2,1,0]},
+      {name:'Measurement System Analysis',cat:'Verification',v:[0,1,2,2,1]},
+      {name:'Capability Study (Cpk)',cat:'Verification',v:[0,0,2,2,1]},
+      {name:'Qualification Report',cat:'Sign-off',v:[0,0,1,2,2]},
+      {name:'First Article Inspection',cat:'Inspection',v:[0,1,2,1,0]},
+      {name:'Lessons Learned',cat:'Documentation',v:[0,0,0,1,2]}
+    ];
+    const matrixRows=matrixData.map(m=>({name:m.name,cat:m.cat,cells:m.v.map(v=>({mark:v===2?'M':v===1?'R':'',style:cellStyle(v)}))}));
+
+    const dens=(k)=>`height:30px;padding:0 13px;border-radius:7px;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;background:${S.density===k?'#fff':'transparent'};color:${S.density===k?'#1a2bb0':'#8c94b3'};box-shadow:${S.density===k?'0 1px 3px rgba(20,30,70,.12)':'none'}`;
+
+    return {
+      navItems, search:S.search, onSearch:(e)=>self.setState({search:e.target.value}),
+      goHome:()=>self.go('dashboard'), goOverview:()=>self.go('overview'),
+      toggleNotif:()=>self.setState(s=>({notifOpen:!s.notifOpen})), closeNotif:()=>self.setState({notifOpen:false}), markAllRead:()=>self.setState({notifRead:['n1','n2','n3','n4']}), notifOpen:S.notifOpen, notifs, unreadCount,
+      isDashboard:S.route==='dashboard', isOverview:S.route==='overview', isDetails:S.route==='details', isAssess:S.route==='assess', isMatrix:S.route==='matrix', isSaved:S.route==='saved', saved, savedStats,
+      // dashboard
+      kpis, donut, phases, attention, activity, startNewAssessment:()=>{self.setState({step:1,drawerOpen:false});self.go('assess');},
+      // overview
+      visCount:rows.length.toLocaleString(), rows:tableRows, columns, facetGroups, views, isEmpty:rows.length===0,
+      tableSearch:S.tableSearch, onTableSearch:(e)=>self.setState({tableSearch:e.target.value,activeView:-1}),
+      resetFilters:()=>self.setState({filters:{sys:'',agg:'',band:'',status:''},tableSearch:'',activeView:0}),
+      saveView:()=>{self.setState(s=>({views:[...s.views,{name:'My view '+(s.views.length-2),f:{...s.filters}}],activeView:s.views.length}));self.toast('View saved','Your current filters were saved as a view.');},
+      comfBtn:dens('comfortable'), compBtn:dens('compact'), setComfortable:()=>self.setState({density:'comfortable'}), setCompact:()=>self.setState({density:'compact'}),
+      // drawer
+      drawerOpen:S.drawerOpen, closeDrawer:()=>self.setState({drawerOpen:false}), drawerFields, openSelectedDetails:()=>{self.setState({drawerOpen:false,detailTab:'details'});self.go('details');},
+      // details
+      sel, detailLeft, detailRight, detailTabs,
+      tabDetails:S.detailTab==='details', tabAssessments:S.detailTab==='assessments', tabDeliverables:S.detailTab==='deliverables', tabChildren:S.detailTab==='children', tabRefs:S.detailTab==='refs',
+      assessList, deliverables:delData, children, refs,
+      // assessment
+      steps, step1:S.step===1, step2:S.step===2, step3:S.step===3,
+      ctqs, ctqSelectedCount:selCtqs.length, scoreRows,
+      gotoStep1:()=>self.setState({step:1}), gotoStep2:()=>{ if(proceedDisabled)return; self.setState({step:2}); }, gotoStep3:()=>self.setState({step:3}),
+      proceedStyle:`height:40px;padding:0 20px;border-radius:10px;border:none;background:${proceedDisabled?'#c4cbe0':'linear-gradient(135deg,#2538d6,#1a2bb0)'};color:#fff;font-weight:600;font-size:13px;cursor:${proceedDisabled?'not-allowed':'pointer'};box-shadow:${proceedDisabled?'none':'0 4px 14px rgba(37,56,214,.32)'}`,
+      backToDetails:()=>self.go('details'),
+      aggQri, aggBand:aggB.label, aggQriColor:aggB.color, maxQri, reqDeliv:Math.min(7,3+selCtqs.length),
+      aggQriDash:`${Cring2*aggQri/100} ${Cring2}`,
+      aggBandStyle:`font-size:11px;font-weight:700;color:${aggB.color};background:${aggB.bg};padding:2px 10px;border-radius:7px;margin-top:3px`,
+      submitAssessment:()=>{self.toast('Quality check submitted','Agreement on risk requested from Marc Rensen (FC-021).');self.setState({detailTab:'assessments'});self.go('details');},
+      // matrix
+      f2uCols, matrixRows,
+      // toast
+      toastVisible:!!S.toast, toastTitle:S.toast&&S.toast.title, toastMsg:S.toast&&S.toast.msg
+    };
+  }
+}
+</script>
+</body>
+</html>

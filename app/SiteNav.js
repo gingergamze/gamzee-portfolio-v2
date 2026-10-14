@@ -82,7 +82,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
       WebkitBackdropFilter: variant === 'floating' && scrolled ? 'blur(16px)' : 'none',
       border: 'none',
       borderRadius: 0,
-      padding: variant === 'floating' ? '14px clamp(10px, 0.7vw, 20px)' : '20px clamp(24px,5vw,72px)',
+      padding: variant === 'floating' ? '14px max(10px, calc(var(--page-x) - max(20px, (100vw - 2000px) / 2) - 47px)) 14px max(10px, calc(var(--page-x) - max(20px, (100vw - 2000px) / 2) - 32px))' : '20px clamp(24px,5vw,72px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -90,7 +90,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
       transition: 'all 0.3s ease',
     }}>
       <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
-        <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0 }} />
+        <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0, marginLeft: '-4.6px', marginRight: '4.6px' }} />
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
           <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: '#d04d03', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
           <div className="nav-subtitle" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: isDark ? 'rgba(255,255,255,0.6)' : '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Design products, services and strategies</div>

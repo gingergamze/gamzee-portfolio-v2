@@ -118,6 +118,18 @@ body {
 }
 .hero-kicker { animation: blurIn 0.9s ease both; }
 .hero-headline { animation: blurIn 0.9s ease 1s both; }
+/* Hero subheadline rotator — "For" stays static, this word/phrase blur-
+   crossfades on a loop (state-driven via .is-visible, see page.js). */
+.hero-rotator {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.55s ease, filter 0.55s ease;
+}
+.hero-rotator.is-visible {
+  opacity: 1;
+  filter: blur(0px);
+}
 @keyframes handwriteIn {
   0%   { opacity: 0; transform: translateY(8px) rotate(-6deg); }
   60%  { opacity: 1; transform: translateY(-1px) rotate(2deg); }
@@ -182,53 +194,91 @@ body {
   .nav-logo { padding-left: 32px !important; }
   .nav-contact-wrap { padding-right: 32px !important; }
 }
-/* Selected Work pyramid — stack to one column on mobile instead of the
-   centered-top + offset-pair layout */
+/* Selected Work showcase grid — all cards side by side in one row; two
+   across on narrow tablets, one column on phones. */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  column-gap: clamp(20px, 2.4vw, 40px);
+  row-gap: clamp(28px, 3vw, 48px);
+  width: 100%;
+  /* Room for the floating Impact panel, so hovering never changes the
+     page length. */
+  padding-bottom: max(190px, calc(300px - 8vw));
+}
+.work-card-title { min-height: 0; }
+@media (max-width: 900px) {
+  .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 0; }
+  /* Two rows here: the panel can't float over the row below, so it opens
+     in the card's flow instead. */
+  .work-card-impact { position: static; }
+}
 @media (max-width: 700px) {
-  .work-grid-row {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 28px !important;
-  }
-  .work-grid .work-card {
-    width: 100% !important;
-  }
+  .work-grid { grid-template-columns: 1fr; }
+  .work-card-title { min-height: 0; }
 }
-/* Selected Work cards — hover interaction, matched 1:1 to
-   edenspiekermann.com/work (their computed CSS: outer card radius 40px,
-   overflow hidden, no border, no shadow, no margins). At rest the photo
-   and caption sit flush as one seamless pill. On hover the card does NOT
-   change size — only the corners balloon: the photo's four corners go to
-   80px and the caption's to 40px, which opens lens-shaped gaps at the two
-   ends of the seam (showing the section background) while the middle stays
-   touching. The photo also settles from a 1.05 over-zoom to its true scale.
-   Driven by the .is-hovered class (React state) rather than :hover, since
-   :hover can stay stuck after a click-through-and-back navigation leaves
-   the cursor parked over the same spot. :focus-visible kept for keyboard. */
-.work-card-media {
-  transition: border-radius 0.2s ease-out;
+/* Impact panel — slides open under the card while its photo is hovered (or
+   the card has keyboard focus); always open where there is no hover. */
+.work-card { position: relative; }
+.work-card-impact {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 5;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.35s ease, opacity 0.3s ease;
 }
-.work-card-media > img,
-.work-card-media > video {
-  transform: scale(1.05);
-  transition: transform 0.2s ease-out;
+.work-card:has(.work-card-media:hover) .work-card-impact,
+.work-card:focus-visible .work-card-impact {
+  grid-template-rows: 1fr;
+  opacity: 1;
 }
-.work-card-content {
-  transition: border-radius 0.2s ease-out;
+@media (hover: none) {
+  .work-card-impact { grid-template-rows: 1fr; opacity: 1; }
 }
-.work-card.is-hovered .work-card-media,
-.work-card:focus-visible .work-card-media {
-  border-radius: 80px;
+@media (prefers-reduced-motion: reduce) {
+  .work-card-impact { transition: none; }
 }
-.work-card.is-hovered .work-card-media > img,
-.work-card.is-hovered .work-card-media > video,
-.work-card:focus-visible .work-card-media > img,
-.work-card:focus-visible .work-card-media > video {
+/* Selected Work cards — subtle lift + shadow on hover, image panel settles
+   from a slight over-zoom to true scale. Driven by the .is-hovered class
+   (React state) rather than :hover, since :hover can stay stuck after a
+   click-through-and-back navigation leaves the cursor parked over the same
+   spot. :focus-visible kept for keyboard. */
+.work-card {
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+.work-card-media img,
+.work-card-media video {
+  transform: scale(1.03);
+  transition: transform 0.3s ease-out;
+}
+.work-card.is-hovered,
+.work-card:focus-visible {
+  transform: translateY(-4px);
+  outline: none;
+}
+.work-card.is-hovered .work-card-media img,
+.work-card.is-hovered .work-card-media video,
+.work-card:focus-visible .work-card-media img,
+.work-card:focus-visible .work-card-media video {
   transform: scale(1);
 }
-.work-card.is-hovered .work-card-content,
-.work-card:focus-visible .work-card-content {
-  border-radius: 40px;
+/* Client "Info" pill on the case study intro — visibly interactive: darkens
+   and lifts slightly on hover, settles back on click. */
+.client-info-btn {
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+.client-info-btn:hover {
+  background: #EAE5DC;
+  border-color: rgba(28,25,23,0.32);
+  transform: translateY(-1px);
+}
+.client-info-btn:active {
+  transform: translateY(0);
 }
 /* Case study intro + "Background" section — stack to one column on mobile */
 @media (max-width: 700px) {
@@ -329,4 +379,58 @@ body {
 }
 .deck-hint {
   animation: hintPulse 1.8s ease-in-out infinite;
+}
+
+/* Shared page gutter — one value for the left AND right text edge, so the
+   page never gets lopsided or squeezed against the window edge at any zoom
+   level. Desktop: matches the navbar logo's left edge (nav inset + nav
+   padding + 32px logo padding). Each card section subtracts its own card
+   margin so the text still lands exactly on the shared line. */
+:root {
+  /* Extra space on the left and right of the whole site (nav, section
+     frames and their text move in together). */
+  --inset: min(40px, 4vw);
+  --page-x: calc(var(--card-m-about) + var(--card-pad-min) + 0.7px);
+  /* Card margins stay small so the cards' inner padding stays generous. */
+  --card-m-what: calc(clamp(6px, 0.6vw, 12px) + var(--inset));
+  --card-m-work: calc(clamp(10px, 1.2vw, 22px) + var(--inset));
+  --card-m-about: calc(clamp(14px, 1.8vw, 32px) + var(--inset));
+  /* Minimum inner padding between a card's edge and its text. */
+  --card-pad-min: min(96px, 9vw);
+  --pl-hero: var(--page-x);
+  --pl-what: max(var(--card-pad-min), calc(var(--page-x) - var(--card-m-what) - 0.4px));
+  --pl-work: max(var(--card-pad-min), calc(var(--page-x) - var(--card-m-work) - 0.7px));
+  --pl-about: max(var(--card-pad-min), calc(var(--page-x) - var(--card-m-about) - 0.7px));
+  /* Case study pages: content edge = navbar logo edge */
+  --cs-x: calc(clamp(24px, 5vw, 72px) + 32px + var(--inset));
+}
+@media (max-width: 600px) {
+  :root {
+    --inset: 0px;
+    /* Phones / very high zoom: nav logo sits at 20px inset + 10px padding */
+    --page-x: 30px;
+    --card-m-what: 6px;
+    --card-m-work: 6px;
+    --card-m-about: 6px;
+    --card-pad-min: 24px;
+    --cs-x: 24px;
+  }
+}
+
+/* Text size: headings and paragraphs are set at 90% of their base size. */
+:is(h1, h2, h3, h4, p) { zoom: 0.9; }
+
+/* Selected Work cards: slightly narrower than the full row, with their text
+   scaled to match. Desktop only. */
+@media (min-width: 901px) {
+  .work-grid { max-width: 94%; margin-left: auto; margin-right: auto; }
+  .work-card-content { zoom: 0.95; }
+}
+
+
+/* Case study main column: all text ends where the overview picture ends. */
+@media (min-width: 901px) {
+  .cs-main { max-width: 90%; }
+  .cs-main .cs-photo { max-width: 100% !important; }
+  .cs-main .cs-copy { max-width: none !important; }
 }
