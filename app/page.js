@@ -264,7 +264,7 @@ export default function Home() {
             // for real presence.
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
-            fontSize: 'clamp(46px, 12vw, 160px)',
+            fontSize: 'clamp(42px, 10.5vw, 140px)',
             lineHeight: 1,
             letterSpacing: '-0.03em',
             color: '#d04d03',
