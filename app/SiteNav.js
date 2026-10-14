@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { CONTACT_EMAIL, sendToInbox } from './lib/contact';
 
 // Shared site navigation + contact modal — the SAME component renders on
 // the homepage and on every case study page, so branding/links/behavior
@@ -42,7 +43,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
 
   const copyEmail = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText('gamzeebozkurt@gmail.com').catch(() => {});
+      navigator.clipboard.writeText(CONTACT_EMAIL).catch(() => {});
     }
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
@@ -57,22 +58,13 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
   const submitContact = async (e) => {
     e.preventDefault();
     setContactStatus('sending');
-    try {
-      const res = await fetch('https://formsubmit.co/ajax/gamzeebozkurt@gmail.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: contactForm.name,
-          email: contactForm.email,
-          message: contactForm.message,
-          _subject: `New message from ${contactForm.name} via gamzee.nl`,
-        }),
-      });
-      if (!res.ok) throw new Error('Request failed');
-      setContactStatus('success');
-    } catch {
-      setContactStatus('error');
-    }
+    const ok = await sendToInbox({
+      name: contactForm.name,
+      email: contactForm.email,
+      message: contactForm.message,
+      subject: `New message from ${contactForm.name} via gamzee.nl`,
+    });
+    setContactStatus(ok ? 'success' : 'error');
   };
 
   const navRow = (
@@ -213,7 +205,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
                   Let's talk
                 </h3>
                 <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#7C756E', margin: '0 0 10px' }}>
-                  Send a message — it goes straight to gamzeebozkurt@gmail.com.
+                  Send a message — it goes straight to {CONTACT_EMAIL}.
                 </p>
 
                 <button
@@ -297,7 +289,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
                   {contactStatus === 'error' && (
                     <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
                       Something went wrong. You can also email me directly at{' '}
-                      <a href="mailto:gamzeebozkurt@gmail.com" style={{ color: '#B4470E', textDecoration: 'underline' }}>gamzeebozkurt@gmail.com</a>.
+                      <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#B4470E', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
                     </p>
                   )}
                 </form>
