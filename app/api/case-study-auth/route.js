@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 // Single shared password for every case study. Change it here whenever
 // you like — no other file needs to change.
-const CASE_STUDY_PASSWORD = '1020';
+const CASE_STUDY_PASSWORD = '4321';
 
 const AUTH_COOKIE = 'case_study_access';
 const AUTH_VALUE = 'granted';
