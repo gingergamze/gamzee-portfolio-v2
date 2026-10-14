@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AUTH_COOKIE, accessToken } from './app/lib/caseStudyAuth';
 
-// Only the ASML case study is gated behind a password; the others are public. The actual
+// Only the two ASML case studies are gated behind a password; the others are public. The actual
 // check lives in app/api/case-study-auth/route.js and the password itself in
 // app/lib/caseStudyAuth.js
 // — this file only decides, on each request, whether the visitor already
@@ -22,5 +22,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: '/work/asml-risk-assessment',
+  matcher: ['/work/asml-risk-assessment', '/work/Commonality'],
 };
