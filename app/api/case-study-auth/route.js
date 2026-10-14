@@ -1,12 +1,7 @@
 import { NextResponse } from 'next/server';
+import { CASE_STUDY_PASSWORD, AUTH_COOKIE, accessToken } from '../../lib/caseStudyAuth';
 
-// Single shared password for every case study. Change it here whenever
-// you like — no other file needs to change.
-const CASE_STUDY_PASSWORD = '4321';
-
-const AUTH_COOKIE = 'case_study_access';
-const AUTH_VALUE = 'granted';
-
+// The password lives in app/lib/caseStudyAuth.js — change it there.
 export async function POST(request) {
   let password = '';
   try {
@@ -20,7 +15,7 @@ export async function POST(request) {
   }
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(AUTH_COOKIE, AUTH_VALUE, {
+  res.cookies.set(AUTH_COOKIE, await accessToken(), {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
