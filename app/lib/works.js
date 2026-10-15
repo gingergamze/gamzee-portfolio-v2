@@ -135,11 +135,21 @@ export const works = [
           { src: '/problem-discovery-laptops-2.jpg', alt: 'Working through the problems together on laptops' },
           { src: '/problem-discovery-2.jpg', alt: 'Team workshop clustering problems on sticky notes' },
         ], wentWell: 'The team wanted a UX designer to fill a clear gap.', challenging: 'The team had never worked with a designer, so the project was already too complex.', weight: 4 },
-        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing stakeholders', duration: '1 day', summary: 'It was the most enjoyable part: **a mix of presenting facts, storytelling, hypotheses and something that felt like idea selling.** They challenged me, and I challenged them. It was a cool process.', outputs: [], images: [
+        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing & guiding stakeholders', duration: '1 day', summary: 'It was the most enjoyable part: **a mix of presenting facts, storytelling, hypotheses and something that felt like idea selling.** They challenged me, and I challenged them. **The 5 x Why method worked very well.** It was a cool process.', outputs: [], story: {
+          heardLabel: 'Asking Clarifying Questions',
+          quotes: [
+            'How can we make sure that is the case?',
+            'How can we conclude it?',
+            'What exactly do we need now?',
+          ],
+        },
+        images: [
           { src: '/convincing-stakeholders-presenting.jpg', alt: 'Presenting the findings to stakeholders on the meeting room screen', pos: 'center 55%' },
         ], wentWell: 'A designer\u2019s arguments were new and interesting to the stakeholders.', challenging: 'There were many stakeholders, and they were long-term employees with strong opinions.', weight: 3 },
-        { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Ran interviews and task observations with operators to understand how they read the language and move through the tool.', outputs: ['Interview insights', 'Task analysis'], weight: 2 },
-        { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'Sketched simplified language and navigation options and tested them with the operators.', outputs: ['Flow sketches', 'Clickable prototype'], weight: 1.5 },
+        { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Finding the right users and interviewing them led to new insights and the names of more users. While I kept the goal in mind, the more insights I gained, the sharper the problem definition became. Once the definition was clear, I came up with better solutions.', outputs: [], images: [
+          { src: '/ux-research-1.jpg', alt: 'Sticky notes with insights from a research session', pos: 'center 45%' },
+        ], wentWell: 'ASML engineers are technical people, but they value UX.', challenging: 'I had to pay attention to the technical language they used and translate it into simpler terms for myself.', weight: 2 },
+        { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'The problem definition pointed to four problems: the navigation needed to be improved for the user, the language was **too complex** and not clear enough, **the right information was not shown at the right time**, and tasks took **too many steps** to complete.', outputs: [], weight: 1.5 },
         { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'Detailed the simplified flows in short design and test loops with the operators, and built the tested flows with engineering in weekly review cycles.', outputs: ['Component specs', 'Test findings', 'Weekly builds'], weight: 3 },
       ],
     },

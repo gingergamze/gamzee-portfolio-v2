@@ -28,10 +28,12 @@ export default function StoryBlock({ story }) {
             <blockquote key={q} style={{ ...quoteText, fontStyle: 'italic', paddingBottom: '20px', borderBottom: '1px solid rgba(28,25,23,.12)' }}>&ldquo;{q}&rdquo;</blockquote>
           ))}
         </div>
-        <div style={{ marginTop: 'clamp(28px,4vh,40px)' }}>
-          <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: 'clamp(16px,1.4vw,18px)', fontWeight: 700, color: '#7C756E', margin: 0 }}>{story.notReal}</p>
-          <p style={{ ...quoteText, fontSize: 'clamp(22px,2.2vw,30px)', lineHeight: 1.3, maxWidth: '46rem', margin: '12px 0 0', zoom: 1 }}>{story.real}</p>
-        </div>
+        {(story.notReal || story.real) && (
+          <div style={{ marginTop: 'clamp(28px,4vh,40px)' }}>
+            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: 'clamp(16px,1.4vw,18px)', fontWeight: 700, color: '#7C756E', margin: 0 }}>{story.notReal}</p>
+            <p style={{ ...quoteText, fontSize: 'clamp(22px,2.2vw,30px)', lineHeight: 1.3, maxWidth: '46rem', margin: '12px 0 0', zoom: 1 }}>{story.real}</p>
+          </div>
+        )}
       </div>
     </div>
   );
