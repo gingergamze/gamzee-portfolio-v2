@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./CaseStudyTimeline.module.css";
+import StoryBlock from "./StoryBlock";
+import PhotoRow from "./PhotoRow";
 
 // Horizontal process timeline: one linear row, each part as long as its
 // `weight` (default 1). Give a stage a bigger weight in works.js to make it a
@@ -83,6 +85,8 @@ export default function CaseStudyTimeline({
         </div>
         {renderAside ? <div className={styles.aside}>{renderAside(active)}</div> : null}
       </div>
+      {active.images?.length ? <PhotoRow images={active.images} /> : null}
+      {active.story ? <StoryBlock story={active.story} /> : null}
     </div>
   );
 }

@@ -121,7 +121,20 @@ export const works = [
     // others (default 1) — e.g. weight: 3 makes a stage three times longer.
     processTimeline: {
       stages: [
-        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took a little longer than expected because the project had already been running for 7 years. There were already too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was a real problem.** **I started to cluster the problems and validate them with other parties.** Once I had divided the problems into manageable sizes, I had the proper argument to manage the stakeholders and business owners.', outputs: [], wentWell: 'The team really wanted a UX designer, because it was a clear missing piece.', challenging: 'The team had never worked with a designer before, so the project was already unnecessarily complex.', weight: 4 },
+        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took a little longer than expected because the project had already been running for 7 years. There were already too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was a real problem.** **I started to cluster the problems and validate them with other parties.** Once I had divided the problems into manageable sizes, I had the proper argument to manage the stakeholders and business owners.', outputs: [], story: {
+          heardLabel: 'What I heard',
+          quotes: [
+            'The tool looks bad, we need to improve it.',
+            'We do not actually know who will use it.',
+            'The tool is too technical.',
+          ],
+          notReal: 'None of them were the real problem.',
+          real: 'The real problem was simple: the tool had no clear purpose before it was built.',
+        },
+        images: [
+          { src: '/problem-discovery-laptops-2.jpg', alt: 'Working through the problems together on laptops' },
+          { src: '/problem-discovery-2.jpg', alt: 'Team workshop clustering problems on sticky notes' },
+        ], wentWell: 'The team really wanted a UX designer, because it was a clear missing piece.', challenging: 'The team had never worked with a designer before, so the project was already unnecessarily complex.', weight: 4 },
         { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing stakeholders', duration: '1 day', summary: 'Narrowed the findings into one problem statement and used it to get the stakeholders behind the project.', outputs: ['Problem statement', 'Success metrics'], weight: 3 },
         { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Ran interviews and task observations with operators to understand how they read the language and move through the tool.', outputs: ['Interview insights', 'Task analysis'], weight: 2 },
         { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'Sketched simplified language and navigation options and tested them with the operators.', outputs: ['Flow sketches', 'Clickable prototype'], weight: 1.5 },

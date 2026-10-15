@@ -290,7 +290,7 @@ export default async function CaseStudyPage({ params }) {
 
       {/* Placeholder section — replace the title and text with the real content. */}
       <TextSection
-        title="Reflections"
+        title="Final Reflections"
         paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
       />
 
@@ -303,11 +303,11 @@ export default async function CaseStudyPage({ params }) {
           padding: 'clamp(48px,7vh,88px) var(--cs-x) 0',
         }}>
           <div>
-            <h3 style={{
+            <h2 style={{
               ...T.label, zoom: 1, lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)',
             }}>
               {h.title}
-            </h3>
+            </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {h.text.map((para, j) => (
                 <p key={j} style={T.body}>
@@ -331,7 +331,7 @@ export default async function CaseStudyPage({ params }) {
         <section id="prototype" style={{ background: work.client === 'ASML' ? '#0F238C' : '#1C1917', marginTop: 'clamp(56px,8vh,104px)' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,9vh,112px) var(--cs-x)' }}>
             <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-              <h3 style={{ ...T.label, zoom: 1, color: '#FFFFFF', lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)' }}>{work.prototype.title}</h3>
+              <h2 style={{ ...T.label, zoom: 1, color: '#FFFFFF', lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)' }}>{work.prototype.title}</h2>
               {work.prototype.description && (
                 <p style={{ ...T.body, color: 'rgba(255,255,255,0.7)', maxWidth: '56ch', marginBottom: 'clamp(32px,5vh,56px)' }}>{work.prototype.description}</p>
               )}

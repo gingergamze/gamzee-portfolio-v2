@@ -27,15 +27,15 @@ function Reflection({ stage }) {
       {rows.map((r, i) => (
         <div key={r.title} style={{ padding: '22px 24px', borderTop: i ? '1px solid rgba(28,25,23,.1)' : 'none' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-            <h4 style={{
+            <h3 style={{
               fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '18px', letterSpacing: '-0.01em',
               lineHeight: 1.2, margin: 0, color: r.color,
-            }}>{r.title}</h4>
+            }}>{r.title}</h3>
             <Mark emoji={r.emoji} />
           </div>
           <p style={{
-            fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.6, letterSpacing: '-0.005em',
-            margin: 0, color: '#3D3631',
+            fontFamily: 'var(--font-work-sans)', fontSize: 'clamp(16px,1.4vw,18px)', lineHeight: 1.7, letterSpacing: '-0.005em',
+            margin: 0, color: '#1C1917',
           }}>{r.body}</p>
         </div>
       ))}
