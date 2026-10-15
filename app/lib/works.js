@@ -55,7 +55,6 @@ export const works = [
     //   note: optional small text under the prototype (e.g. confidentiality)
     prototype: {
       title: 'Prototype',
-      description: 'Click through the prototype to see how it works.',
       type: 'embed',
       src: '/prototypes/asml-redesign/qbtm-navigator.html',
       // Numbered dots on the prototype. x / y are positions on the 1440 x 1120
@@ -121,7 +120,7 @@ export const works = [
     // others (default 1) — e.g. weight: 3 makes a stage three times longer.
     processTimeline: {
       stages: [
-        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took a little longer than expected because the project had already been running for 7 years. There were already too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was a real problem.** **I started to cluster the problems and validate them with other parties.** Once I had divided the problems into manageable sizes, I had the proper argument to manage the stakeholders and business owners.', outputs: [], story: {
+        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took longer than expected: the project had run for 7 years, with too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was real.** **I clustered the problems and validated them with other parties.** Once they were in manageable sizes, I had the argument I needed for stakeholders and business owners.', outputs: [], story: {
           heardLabel: 'What I heard',
           quotes: [
             'The tool looks bad, we need to improve it.',
@@ -129,13 +128,16 @@ export const works = [
             'The tool is too technical.',
           ],
           notReal: 'None of them were the real problem.',
-          real: 'The real problem was simple: the tool had no clear purpose before it was built.',
+          real: 'The real problem: the tool had no clear purpose before it was built.',
         },
+        imagesWide: true,
         images: [
           { src: '/problem-discovery-laptops-2.jpg', alt: 'Working through the problems together on laptops' },
           { src: '/problem-discovery-2.jpg', alt: 'Team workshop clustering problems on sticky notes' },
-        ], wentWell: 'The team really wanted a UX designer, because it was a clear missing piece.', challenging: 'The team had never worked with a designer before, so the project was already unnecessarily complex.', weight: 4 },
-        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing stakeholders', duration: '1 day', summary: 'Narrowed the findings into one problem statement and used it to get the stakeholders behind the project.', outputs: ['Problem statement', 'Success metrics'], weight: 3 },
+        ], wentWell: 'The team wanted a UX designer to fill a clear gap.', challenging: 'The team had never worked with a designer, so the project was already too complex.', weight: 4 },
+        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing stakeholders', duration: '1 day', summary: 'It was the most enjoyable part: **a mix of presenting facts, storytelling, hypotheses and something that felt like idea selling.** They challenged me, and I challenged them. It was a cool process.', outputs: [], images: [
+          { src: '/convincing-stakeholders-presenting.jpg', alt: 'Presenting the findings to stakeholders on the meeting room screen', pos: 'center 55%' },
+        ], wentWell: 'A designer\u2019s arguments were new and interesting to the stakeholders.', challenging: 'There were many stakeholders, and they were long-term employees with strong opinions.', weight: 3 },
         { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Ran interviews and task observations with operators to understand how they read the language and move through the tool.', outputs: ['Interview insights', 'Task analysis'], weight: 2 },
         { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'Sketched simplified language and navigation options and tested them with the operators.', outputs: ['Flow sketches', 'Clickable prototype'], weight: 1.5 },
         { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'Detailed the simplified flows in short design and test loops with the operators, and built the tested flows with engineering in weekly review cycles.', outputs: ['Component specs', 'Test findings', 'Weekly builds'], weight: 3 },
@@ -187,7 +189,6 @@ export const works = [
     //   note: optional small text under the prototype (e.g. confidentiality)
     prototype: {
       title: 'Prototype',
-      description: 'Click through the prototype to see how it works.',
       type: 'embed',
       src: '',
       note: '',
@@ -273,7 +274,6 @@ export const works = [
     //   note: optional small text under the prototype (e.g. confidentiality)
     prototype: {
       title: 'Prototype',
-      description: 'Click through the prototype to see how it works.',
       type: 'embed',
       src: '',
       note: '',

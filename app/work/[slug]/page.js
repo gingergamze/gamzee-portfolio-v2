@@ -8,7 +8,6 @@ import PrototypeFrame from './PrototypeFrame';
 import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
-import CaseStudyFooter from './CaseStudyFooter';
 import ImpactBlock from './ImpactBlock';
 import ImpactBand from './ImpactBand';
 
@@ -378,7 +377,6 @@ export default async function CaseStudyPage({ params }) {
       {/* Further case study content (Goals / Role & Process / Design Process)
           goes here once that layout is specified. */}
 
-      <CaseStudyFooter />
     </main>
   );
 }

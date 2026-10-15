@@ -82,10 +82,11 @@ export default function CaseStudyTimeline({
               ))}
             </ul>
           ) : null}
+          {active.images?.length && !active.imagesWide ? <PhotoRow images={active.images} /> : null}
         </div>
         {renderAside ? <div className={styles.aside}>{renderAside(active)}</div> : null}
       </div>
-      {active.images?.length ? <PhotoRow images={active.images} /> : null}
+      {active.images?.length && active.imagesWide ? <PhotoRow images={active.images} wide /> : null}
       {active.story ? <StoryBlock story={active.story} /> : null}
     </div>
   );
