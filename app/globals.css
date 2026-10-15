@@ -240,6 +240,11 @@ body {
 @media (hover: none) {
   .work-card-impact { grid-template-rows: 1fr; opacity: 1; }
 }
+/* Declared after the base rule so it wins: in the 1–2 column layouts the
+   panel opens in the card's flow and pushes the next card down. */
+@media (max-width: 900px) {
+  .work-card-impact { position: static; }
+}
 @media (prefers-reduced-motion: reduce) {
   .work-card-impact { transition: none; }
 }

@@ -10,6 +10,7 @@ export default function CaseStudyTimeline({
   stages,
   defaultStageId,
   ariaLabel = "Project timeline",
+  renderAside,
 }) {
   const rootRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -65,16 +66,22 @@ export default function CaseStudyTimeline({
         </div>
       </div>
 
-      <div className={styles.detail} aria-live="polite">
-        <h3 className={styles.detailTitle}>{active.label}</h3>
-        <p className={styles.detailSummary}>{active.summary}</p>
-        {active.outputs?.length ? (
-          <ul className={styles.outputs}>
-            {active.outputs.map((o) => (
-              <li key={o}>{o}</li>
-            ))}
-          </ul>
-        ) : null}
+      <div className={styles.detailWrap}>
+        <div className={styles.detail} aria-live="polite">
+          <p className={styles.detailSummary}>
+            {active.summary.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+              i % 2 ? <strong key={i}>{part}</strong> : part
+            )}
+          </p>
+          {active.outputs?.length ? (
+            <ul className={styles.outputs}>
+              {active.outputs.map((o) => (
+                <li key={o}>{o}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+        {renderAside ? <div className={styles.aside}>{renderAside(active)}</div> : null}
       </div>
     </div>
   );

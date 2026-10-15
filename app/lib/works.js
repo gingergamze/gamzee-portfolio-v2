@@ -27,7 +27,7 @@ export const works = [
     clientDescription: 'ASML is a Dutch company and the world\'s leading supplier of photolithography systems used to manufacture computer chips.',
     deliverables: ['Data design system', 'Interaction design', 'Prototype'],
     timeline: '2022-2024',
-    team: ['Business Analyst', 'Process Engineer ',  'Project Manager ','Change Manager ', 'Developer'],
+    team: ['UX Designer', 'Business Analyst', 'Process Engineer', 'Project Manager', 'Change Manager', 'Developer'],
     problem: 'Getting complaints from clients because of production mistakes.',
     solution: 'An internal tool was built to reduce production mistakes, but adoption remained low.',
     designChallenge: [
@@ -85,16 +85,7 @@ export const works = [
       ],
       note: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are made up for demonstration.',
     },
-    highlights: [
-      {
-        title: 'Title of this section',
-        text: [
-          'First paragraph explaining this part of the work.',
-          'Second paragraph, if needed.',
-        ],
-        image: '/asmltest.jpg',
-      },
-    ],
+    highlights: [],
     challenge: [
       'Platform engineers relied on a dense, hard-to-read TIBCO Spotfire tool to compare component similarity — slowing down every review cycle.',
       'ASML asked me to turn this into a modern decision app that surfaces the right comparison at the right time, without engineers having to dig for it.',
@@ -130,13 +121,11 @@ export const works = [
     // others (default 1) — e.g. weight: 3 makes a stage three times longer.
     processTimeline: {
       stages: [
-        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Shadowed the workers using the tool and mapped where production mistakes actually happened.', outputs: ['Contextual interviews', 'Current workflow map'] },
-        { id: 'problem-definition', phase: 'Discovery', label: 'Problem definition', duration: '1 day', summary: 'Narrowed the findings into one problem statement the team signed off on.', outputs: ['Problem statement', 'Success metrics'] },
-        { id: 'solution-discovery', phase: 'Discovery', label: 'Solution discovery', duration: '3 days', summary: 'Sketched simplified language and navigation options and tested them with the operators.', outputs: ['Flow sketches', 'Clickable prototype'] },
-        { id: 'concept-validation', phase: 'Discovery', label: 'Concept validation', duration: '2 days', summary: 'Ran the strongest concept against real tasks before committing engineering time.', outputs: ['Usability sessions', 'Decision log'] },
-        { id: 'design-development', phase: 'Construction', label: 'Design & development', duration: '6 weeks', summary: 'Detailed the simplified flows and built them with engineering in weekly review cycles.', outputs: ['Component specs', 'Weekly builds'], weight: 1.8 },
-        { id: 'labs', phase: 'Transition', label: 'Internal & customer labs', duration: '3 weeks', summary: 'Piloted the tool with one team and fixed what slowed them down.', outputs: ['Pilot feedback', 'Fix list'], weight: 1.5 },
-        { id: 'availability', phase: 'Adoption', label: 'Commercial availability', duration: 'Ongoing', summary: 'Rolled out to all users and tracked task time against the baseline.', outputs: ['Rollout plan', 'Adoption metrics'], weight: 1.2 },
+        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took a little longer than expected because the project had already been running for 7 years. There were already too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was a real problem.** **I started to cluster the problems and validate them with other parties.** Once I had divided the problems into manageable sizes, I had the proper argument to manage the stakeholders and business owners.', outputs: [], wentWell: 'The team really wanted a UX designer, because it was a clear missing piece.', challenging: 'The team had never worked with a designer before, so the project was already unnecessarily complex.', weight: 4 },
+        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing stakeholders', duration: '1 day', summary: 'Narrowed the findings into one problem statement and used it to get the stakeholders behind the project.', outputs: ['Problem statement', 'Success metrics'], weight: 3 },
+        { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Ran interviews and task observations with operators to understand how they read the language and move through the tool.', outputs: ['Interview insights', 'Task analysis'], weight: 2 },
+        { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'Sketched simplified language and navigation options and tested them with the operators.', outputs: ['Flow sketches', 'Clickable prototype'], weight: 1.5 },
+        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'Detailed the simplified flows in short design and test loops with the operators, and built the tested flows with engineering in weekly review cycles.', outputs: ['Component specs', 'Test findings', 'Weekly builds'], weight: 3 },
       ],
     },
   },
@@ -190,16 +179,7 @@ export const works = [
       src: '',
       note: '',
     },
-    highlights: [
-      {
-        title: 'Title of this section',
-        text: [
-          'First paragraph explaining this part of the work.',
-          'Second paragraph, if needed.',
-        ],
-        image: '/asmltest.jpg',
-      },
-    ],
+    highlights: [],
     challenge: [
       'A short paragraph describing the problem the client came to you with, and why it mattered.',
     ],
@@ -285,16 +265,7 @@ export const works = [
       src: '',
       note: '',
     },
-    highlights: [
-      {
-        title: 'Title of this section',
-        text: [
-          'First paragraph explaining this part of the work.',
-          'Second paragraph, if needed.',
-        ],
-        image: '/asmltest.jpg',
-      },
-    ],
+    highlights: [],
     challenge: [
       'Sintek’s procurement teams were working across a patchwork of spreadsheets and legacy tools, with no single source of truth for vendor data.',
       'They asked me to consolidate this into one platform — giving procurement, finance and supply-chain teams a shared, reliable operational view.',

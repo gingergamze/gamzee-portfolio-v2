@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import { works, getWorkBySlug } from '../../lib/works';
 import SiteNav from '../../SiteNav';
 import ClientInfoButton from './ClientInfoButton';
-import CaseStudyTimeline from './CaseStudyTimeline';
+import ProcessSection from './ProcessSection';
+import TextSection from './TextSection';
 import PrototypeFrame from './PrototypeFrame';
 import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
@@ -285,9 +286,13 @@ export default async function CaseStudyPage({ params }) {
 
       {/* PROCESS TIMELINE — interactive block timeline of the
           design process, right under the metrics. */}
-      <div id="process" style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(48px,7vh,88px) var(--cs-x) 0' }}>
-        <CaseStudyTimeline stages={work.processTimeline.stages} />
-      </div>
+      <ProcessSection stages={work.processTimeline.stages} />
+
+      {/* Placeholder section — replace the title and text with the real content. */}
+      <TextSection
+        title="Reflections"
+        paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
+      />
 
       {/* HIGHLIGHTS — title + copy on the left, a large image inside a
           rounded card on the right. One block per entry. */}

@@ -88,7 +88,7 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
-    { img: '/asml-cleanroom.jpg', label: 'Work Experience', fit: 'cover', pos: 'center center', text: 'Banking, Consulting Agency, Manufacturing Company, Small to Medium-Sized Construction Engineering Company' },
+    { img: '/work-experience-workshop.jpg', label: 'Work Experience', fit: 'cover', pos: 'center center', text: 'Banking, Consulting Agency, Manufacturing Company, Small to Medium-Sized Construction Engineering Company' },
     { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
     { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes and tools by tailor made digital solutions, managing product teams and product roadmaps' },
@@ -359,7 +359,7 @@ export default function Home() {
             margin: '0 0 32px -0.108em',
             maxWidth: '152ch',
           }}>
-            <span style={{ display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>internal tools/software</strong> and <strong style={{ fontWeight: 700 }}>business-to-employee (B2E)</strong> products.</span>
+            <span style={{ display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
             <span style={{ display: 'block', marginBottom: '28px' }}>I like finding where products and workflows underperform.</span>
             <span style={{ display: 'block' }}>Then I fix them where it costs time and money for the business.</span>
           </p>

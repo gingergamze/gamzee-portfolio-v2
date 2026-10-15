@@ -94,12 +94,35 @@
   overflow-wrap: break-word;
 }
 
-/* Detail panel */
+/* Detail panel — description on the left, optional aside on the right. */
+.detailWrap {
+  display: grid;
+  grid-template-columns: minmax(0, 38rem) minmax(0, 1fr);
+  column-gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+  margin-top: clamp(64px, 10vh, 104px);
+}
+
+.detailWrap:not(:has(.aside)) {
+  grid-template-columns: minmax(0, 38rem);
+}
+
 .detail {
   max-width: 38rem;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--tl-rule);
+  padding-top: 0;
+}
+
+.aside {
+  min-width: 0;
+  max-width: 560px;
+}
+
+@media (max-width: 900px) {
+  .detailWrap,
+  .detailWrap:not(:has(.aside)) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 28px;
+  }
 }
 
 .detailTitle {
@@ -116,7 +139,11 @@
   font-size: clamp(16px, 1.4vw, 18px);
   line-height: 1.7;
   letter-spacing: -0.005em;
-  color: #554e48;
+  color: #1c1917;
+}
+
+.detailSummary strong {
+  font-weight: 700;
 }
 
 .outputs {
