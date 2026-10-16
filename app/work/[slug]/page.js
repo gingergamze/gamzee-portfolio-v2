@@ -4,8 +4,10 @@ import SiteNav from '../../SiteNav';
 import ClientInfoButton from './ClientInfoButton';
 import ProcessSection from './ProcessSection';
 import TextSection from './TextSection';
+import CaseStudyFooter from './CaseStudyFooter';
 import PrototypeFrame from './PrototypeFrame';
 import ProtoHint from './ProtoHint';
+import BeforeAfter from './BeforeAfter';
 import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
@@ -353,7 +355,9 @@ export default async function CaseStudyPage({ params }) {
       {work.prototype?.src && (
         <section id="prototype" style={{ background: work.client === 'ASML' ? '#0F238C' : '#1C1917', marginTop: 'clamp(56px,8vh,104px)' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,9vh,112px) var(--cs-x)' }}>
-            {swapped ? (
+            {work.beforeAfter?.length ? (
+              <BeforeAfter items={work.beforeAfter} intro={work.beforeAfterIntro} />
+            ) : swapped ? (
               // The clickable prototype now opens the page; this band shows the
               // picture / tour that used to be there.
               heroVisual
@@ -402,9 +406,15 @@ export default async function CaseStudyPage({ params }) {
       {/* Placeholder section — replace the title and text with the real content. */}
       <TextSection
         title="Final reflections"
-        paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
-        image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience' }}
+        paragraphs={[
+          'In the ASML environment I learned how to navigate ambiguity and complexity in a technical project. It was a place where nothing was clear, but there was a lot of space to show the value of UX. My team appreciated the improvements because UX was a new and different discipline. I did not need to sell UX. People were already into it.',
+          { sub: 'What I would do differently?' },
+          'There was so much technical information that I felt overloaded. Next time I would manage it better.',
+        ]}
+        image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience: me on the left' }}
       />
+
+      <CaseStudyFooter />
     </main>
   );
 }

@@ -53,6 +53,15 @@ export const works = [
     //         'figma' (a Figma share link)
     //   hotspots: optional numbered dots that open a "design decision" popup
     //   note: optional small text under the prototype (e.g. confidentiality)
+    // Before and after — three rows, each with a before and an after visual.
+    // Put image paths (from /public) in `before` and `after`; an empty path
+    // shows a placeholder.
+    beforeAfterIntro: 'A few selected UI interaction improvement examples.',
+    beforeAfter: [
+      { title: 'The landing page said nothing', before: '', after: '' },
+      { title: 'Starting the process was hidden', before: '', after: '' },
+      { title: 'The data was not organized', before: '', after: '' },
+    ],
     prototype: {
       title: 'Prototype',
       type: 'embed',
@@ -156,7 +165,7 @@ export const works = [
           'Tasks took **too many steps** to complete.',
         ],
         outputs: [], weight: 1.5 },
-        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'I enjoyed implementing UI improvements and then testing them. ASML is a huge organization, so it was fun to find testers from many operational lines. For most ASML workers it was their first time. They appreciated it and the test results became a powerful way to convince the business owners of my design direction. Tests and development also made a remarkable difference to tool adoption.', outputs: [], images: [
+        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'I enjoyed implementing UI improvements and then testing them. ASML is a huge organization, so it was fun to find testers from many operational lines. For most ASML workers it was their first time. They appreciated it because I made the tool they work with better. The test results became a powerful way to convince the business owners of my design direction. Tests and development also made a remarkable difference to tool adoption.', outputs: [], images: [
           { src: '/design-test-slide.jpg', alt: 'Slide: no proper opportunity to test the tool, so let users do the activities without guidance and see what goes well and what does not', natural: true },
         ], wentWell: 'Every improvement was welcomed, because the tool had never had a UX designer\u2019s touch before.', challenging: 'The tool was built in Mendix and the platform had many UI limitations.', weight: 3 },
       ],

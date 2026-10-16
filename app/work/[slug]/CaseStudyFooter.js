@@ -12,7 +12,7 @@ const linkStyle = {
 
 export default function CaseStudyFooter() {
   return (
-    <footer style={{ marginTop: 'clamp(56px,8vh,104px)' }}>
+    <footer style={{ marginTop: 'clamp(24px,4vh,40px)' }}>
       <div style={{
         maxWidth: 1600, margin: '0 auto', padding: 'clamp(32px,5vh,56px) var(--cs-x)',
         borderTop: '0.5px solid rgba(28,25,23,0.15)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20,
