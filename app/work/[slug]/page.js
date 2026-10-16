@@ -401,7 +401,7 @@ export default async function CaseStudyPage({ params }) {
 
       {/* Placeholder section — replace the title and text with the real content. */}
       <TextSection
-        title="Final Reflections"
+        title="Final reflections"
         paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
         image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience' }}
       />
