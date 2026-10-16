@@ -17,8 +17,9 @@ export default function CaseStudyTimeline({
   const rootRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(defaultStageId ?? stages[0]?.id);
-  const [hoverId, setHoverId] = useState(null);
-  const activeId = hoverId ?? selectedId;
+  // Hovering (or focusing) a stage selects it and it stays selected when the
+  // pointer moves down to read, so no click is needed.
+  const activeId = selectedId;
 
   useEffect(() => {
     const el = rootRef.current;
@@ -55,10 +56,8 @@ export default function CaseStudyTimeline({
                 style={{ transitionDelay: visible ? `${i * 0.07}s` : "0s" }}
                 aria-pressed={st.id === selectedId}
                 onClick={() => setSelectedId(st.id)}
-                onMouseEnter={() => setHoverId(st.id)}
-                onMouseLeave={() => setHoverId(null)}
-                onFocus={() => setHoverId(st.id)}
-                onBlur={() => setHoverId(null)}
+                onMouseEnter={() => setSelectedId(st.id)}
+                onFocus={() => setSelectedId(st.id)}
               >
                 <span className={styles.segment} />
                 <span className={styles.blockLabel}>{st.label}</span>
@@ -75,6 +74,17 @@ export default function CaseStudyTimeline({
               i % 2 ? <strong key={i}>{part}</strong> : part
             )}
           </p>
+          {active.bullets?.length ? (
+            <ul className={styles.bullets}>
+              {active.bullets.map((b) => (
+                <li key={b}>
+                  {b.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                    i % 2 ? <strong key={i}>{part}</strong> : part
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : null}
           {active.outputs?.length ? (
             <ul className={styles.outputs}>
               {active.outputs.map((o) => (

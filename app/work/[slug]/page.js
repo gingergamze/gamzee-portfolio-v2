@@ -5,6 +5,7 @@ import ClientInfoButton from './ClientInfoButton';
 import ProcessSection from './ProcessSection';
 import TextSection from './TextSection';
 import PrototypeFrame from './PrototypeFrame';
+import ProtoHint from './ProtoHint';
 import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
@@ -53,6 +54,60 @@ export default async function CaseStudyPage({ params }) {
   const { slug } = await params;
   const work = getWorkBySlug(slug);
   if (!work) notFound();
+  const swapped = Boolean(work.prototype?.src) && work.prototype.type !== 'video';
+  const heroVisual = (
+        <div style={{
+          position: 'relative', maxWidth: '900px', margin: '0 auto',
+          borderRadius: '24px', overflow: 'hidden',
+          ...(work.heroImage && work.type !== 'video'
+            ? {
+                padding: '20px 0',
+                background: 'linear-gradient(#2539D6, #2539D6) top / 100% 30px no-repeat, linear-gradient(90deg, #FFFFFF 17.1%, #EEEFF8 17.1%) bottom / 100% 30px no-repeat, #EEEFF8',
+              }
+            : { aspectRatio: work.heroAspect || '16 / 10' }),
+          boxShadow: work.heroImage ? '0 0 0 1px rgba(255,255,255,0.28), 0 16px 40px rgba(4,8,60,0.45)' : 'none',
+        }}>
+          {work.heroImage ? (
+            work.type === 'video' ? (
+              <video src={work.heroImage} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              work.heroTour ? (
+                <HeroTour src={work.heroTour} poster={work.heroImage} alt={`${work.title} prototype tour`} />
+              ) : (
+                <img src={work.heroImage} alt={work.title} style={{ display: 'block', width: '100%', height: 'auto', margin: '-0.94% 0', clipPath: 'inset(1.2% 0 1.2% 0)' }} />
+              )
+            )
+          ) : (
+            <div style={{
+              position: 'absolute', inset: 0,
+              border: '1.5px dashed rgba(255,255,255,0.3)', borderRadius: '24px',
+              background: 'rgba(255,255,255,0.04)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <span style={{
+                fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 600,
+                letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+              }}>
+                Cover photo placeholder
+              </span>
+            </div>
+          )}
+        </div>
+  );
+
+  if (work.underConstruction) {
+    return (
+      <main style={{ minHeight: '100vh', background: '#FFFFFF' }}>
+        <SiteNav />
+        <div style={{ maxWidth: '520px', margin: '0 auto', padding: 'clamp(96px,18vh,200px) 24px', textAlign: 'center' }}>
+          <div aria-hidden="true" style={{ fontSize: '56px', lineHeight: 1, marginBottom: '20px' }}>🚧</div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(28px,4vw,40px)', letterSpacing: '-0.02em', lineHeight: 1.1, color: '#1C1917', margin: '0 0 14px', zoom: 1 }}>Under construction</h1>
+          <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '17px', lineHeight: 1.6, color: '#554E48', margin: '0 0 28px' }}>This case study is not ready yet. Please check back soon.</p>
+          <a href="/" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, color: '#d04d03', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase' }}>&larr; Back to home</a>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={{ background: '#FFFFFF', minHeight: '100vh' }}>
@@ -121,43 +176,17 @@ export default async function CaseStudyPage({ params }) {
         {/* A still hero picture gets a little extra header-coloured space above
             and sidebar/page-coloured space below, so its content keeps clear
             of the rounded corners instead of looking squeezed against them. */}
-        <div style={{
-          position: 'relative', maxWidth: '900px', margin: '0 auto',
-          borderRadius: '24px', overflow: 'hidden',
-          ...(work.heroImage && work.type !== 'video'
-            ? {
-                padding: '20px 0',
-                background: 'linear-gradient(#2539D6, #2539D6) top / 100% 30px no-repeat, linear-gradient(90deg, #FFFFFF 17.1%, #EEEFF8 17.1%) bottom / 100% 30px no-repeat, #EEEFF8',
-              }
-            : { aspectRatio: work.heroAspect || '16 / 10' }),
-          boxShadow: work.heroImage ? '0 0 0 1px rgba(255,255,255,0.28), 0 16px 40px rgba(4,8,60,0.45)' : 'none',
-        }}>
-          {work.heroImage ? (
-            work.type === 'video' ? (
-              <video src={work.heroImage} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              work.heroTour ? (
-                <HeroTour src={work.heroTour} poster={work.heroImage} alt={`${work.title} prototype tour`} />
-              ) : (
-                <img src={work.heroImage} alt={work.title} style={{ display: 'block', width: '100%', height: 'auto', margin: '-0.94% 0', clipPath: 'inset(1.2% 0 1.2% 0)' }} />
-              )
-            )
-          ) : (
-            <div style={{
-              position: 'absolute', inset: 0,
-              border: '1.5px dashed rgba(255,255,255,0.3)', borderRadius: '24px',
-              background: 'rgba(255,255,255,0.04)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <span style={{
-                fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 600,
-                letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
-              }}>
-                Cover photo placeholder
-              </span>
-            </div>
-          )}
-        </div>
+        {swapped ? (
+          <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <ProtoHint />
+            <PrototypeFrame
+              src={work.prototype.src}
+              type={work.prototype.type}
+              title={`${work.title} prototype`}
+              hotspots={[]}
+            />
+          </div>
+        ) : heroVisual}
         {work.heroNote && <HeroNote text={work.heroNote} />}
       </div>
 
@@ -287,11 +316,6 @@ export default async function CaseStudyPage({ params }) {
           design process, right under the metrics. */}
       <ProcessSection stages={work.processTimeline.stages} />
 
-      {/* Placeholder section — replace the title and text with the real content. */}
-      <TextSection
-        title="Final Reflections"
-        paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
-      />
 
       {/* HIGHLIGHTS — title + copy on the left, a large image inside a
           rounded card on the right. One block per entry. */}
@@ -329,22 +353,19 @@ export default async function CaseStudyPage({ params }) {
       {work.prototype?.src && (
         <section id="prototype" style={{ background: work.client === 'ASML' ? '#0F238C' : '#1C1917', marginTop: 'clamp(56px,8vh,104px)' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,9vh,112px) var(--cs-x)' }}>
-            <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-              <h2 style={{ ...T.label, zoom: 1, color: '#FFFFFF', lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)' }}>{work.prototype.title}</h2>
-              {work.prototype.description && (
-                <p style={{ ...T.body, color: 'rgba(255,255,255,0.7)', maxWidth: '56ch', marginBottom: 'clamp(32px,5vh,56px)' }}>{work.prototype.description}</p>
-              )}
-              {work.prototype.type === 'video' ? (
+            {swapped ? (
+              // The clickable prototype now opens the page; this band shows the
+              // picture / tour that used to be there.
+              heroVisual
+            ) : (
+              <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+                <h2 style={{ ...T.label, zoom: 1, color: '#FFFFFF', lineHeight: 1.1, margin: 0, marginBottom: 'calc(18px - 0.05em)' }}>{work.prototype.title}</h2>
+                {work.prototype.description && (
+                  <p style={{ ...T.body, color: 'rgba(255,255,255,0.7)', maxWidth: '56ch', marginBottom: 'clamp(32px,5vh,56px)' }}>{work.prototype.description}</p>
+                )}
                 <video src={work.prototype.src} controls playsInline style={{ width: '100%', borderRadius: '24px', background: '#000' }} />
-              ) : (
-                <PrototypeFrame
-                  src={work.prototype.src}
-                  type={work.prototype.type}
-                  title={`${work.title} prototype`}
-                  hotspots={work.prototype.hotspots}
-                />
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -377,6 +398,13 @@ export default async function CaseStudyPage({ params }) {
       {/* Further case study content (Goals / Role & Process / Design Process)
           goes here once that layout is specified. */}
 
+
+      {/* Placeholder section — replace the title and text with the real content. */}
+      <TextSection
+        title="Final Reflections"
+        paragraphs={['First paragraph explaining this part of the work.', 'Second paragraph, if needed.']}
+        image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience' }}
+      />
     </main>
   );
 }

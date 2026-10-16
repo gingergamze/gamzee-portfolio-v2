@@ -105,7 +105,7 @@ export const works = [
       },
       {
         title: "What's the simplest fix?",
-        text: 'Not a redesign of everything — just simplifying the tool\'s language, cutting steps out of the task flow, and making navigation obvious so people could find what they needed without training.',
+        text: 'Not a redesign of everything — just simplifying the tool\'s language, cutting steps out of the task flow and making navigation obvious so people could find what they needed without training.',
       },
       {
         title: 'How do we know it worked?',
@@ -135,7 +135,7 @@ export const works = [
           { src: '/problem-discovery-laptops-2.jpg', alt: 'Working through the problems together on laptops' },
           { src: '/problem-discovery-2.jpg', alt: 'Team workshop clustering problems on sticky notes' },
         ], wentWell: 'The team wanted a UX designer to fill a clear gap.', challenging: 'The team had never worked with a designer, so the project was already too complex.', weight: 4 },
-        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing & guiding stakeholders', duration: '1 day', summary: 'It was the most enjoyable part: **a mix of presenting facts, storytelling, hypotheses and something that felt like idea selling.** They challenged me, and I challenged them. **The 5 x Why method worked very well.** It was a cool process.', outputs: [], story: {
+        { id: 'convincing-stakeholders', phase: 'Discovery', label: 'Convincing & guiding stakeholders', duration: '1 day', summary: 'It was the most enjoyable part: **a mix of presenting facts, storytelling, hypotheses and something that felt like idea selling.** They challenged me and I challenged them. **The 5 x Why method worked very well.** It was a cool process.', outputs: [], story: {
           heardLabel: 'Asking Clarifying Questions',
           quotes: [
             'How can we make sure that is the case?',
@@ -145,17 +145,26 @@ export const works = [
         },
         images: [
           { src: '/convincing-stakeholders-presenting.jpg', alt: 'Presenting the findings to stakeholders on the meeting room screen', pos: 'center 55%' },
-        ], wentWell: 'A designer\u2019s arguments were new and interesting to the stakeholders.', challenging: 'There were many stakeholders, and they were long-term employees with strong opinions.', weight: 3 },
+        ], wentWell: 'A designer\u2019s arguments were new and interesting to the stakeholders.', challenging: 'There were many stakeholders and they were long-term employees with strong opinions.', weight: 3 },
         { id: 'ux-research', phase: 'Discovery', label: 'UX research', duration: '3 days', summary: 'Finding the right users and interviewing them led to new insights and the names of more users. While I kept the goal in mind, the more insights I gained, the sharper the problem definition became. Once the definition was clear, I came up with better solutions.', outputs: [], images: [
           { src: '/ux-research-1.jpg', alt: 'Sticky notes with insights from a research session', pos: 'center 45%' },
         ], wentWell: 'ASML engineers are technical people, but they value UX.', challenging: 'I had to pay attention to the technical language they used and translate it into simpler terms for myself.', weight: 2 },
-        { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'The problem definition pointed to four problems: the navigation needed to be improved for the user, the language was **too complex** and not clear enough, **the right information was not shown at the right time**, and tasks took **too many steps** to complete.', outputs: [], weight: 1.5 },
-        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'Detailed the simplified flows in short design and test loops with the operators, and built the tested flows with engineering in weekly review cycles.', outputs: ['Component specs', 'Test findings', 'Weekly builds'], weight: 3 },
+        { id: 'solution-ideas', phase: 'Discovery', label: 'Solution ideas', duration: '3 days', summary: 'The problem definition pointed to four problems:', bullets: [
+          '**The navigation** needed to be improved for the user.',
+          '**The language was too complex** and not clear enough.',
+          'The right information was **not shown at the right time.**',
+          'Tasks took **too many steps** to complete.',
+        ],
+        outputs: [], weight: 1.5 },
+        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'I enjoyed showing UI improvements and then testing them. For most ASML workers it was their first time. They appreciated it and the test results became a powerful way to convince the business owners of my design direction. Tests and development also made a remarkable difference to tool adoption.', outputs: [], images: [
+          { src: '/design-test-slide.jpg', alt: 'Slide: no proper opportunity to test the tool, so let users do the activities without guidance and see what goes well and what does not', natural: true },
+        ], wentWell: 'Every improvement was welcomed, because the tool had never had a UX designer\u2019s touch before.', challenging: 'The tool was built in Mendix and the platform had many UI limitations.', weight: 3 },
       ],
     },
   },
   {
     slug: 'Commonality',
+    underConstruction: true,
     navLabel: 'ASML Commonality',
     title: 'ASML',
     confidential: true,
@@ -165,7 +174,7 @@ export const works = [
     role: 'Role',
     year: '2022-2024',
     domain: 'internal analysis tool',
-    desc: 'A short description of the project — the problem, what you designed, and the outcome.',
+    desc: 'A short description of the project — the problem, what you designed and the outcome.',
     tags: ['Internal Analysis Tool', 'Decision Support Tool', 'Data Tool'],
     type: 'image',
     media: '/asmltest.jpg',
@@ -205,7 +214,7 @@ export const works = [
     },
     highlights: [],
     challenge: [
-      'A short paragraph describing the problem the client came to you with, and why it mattered.',
+      'A short paragraph describing the problem the client came to you with and why it mattered.',
     ],
     impact: [
       'A short paragraph on the measurable outcome — what changed for the business or the users after this shipped.',
@@ -239,6 +248,7 @@ export const works = [
   },
   {
     slug: 'sintek-procurement-platform',
+    underConstruction: true,
     navLabel: 'Sintek',
     title: 'Sintek BV',
     confidential: true,
@@ -295,7 +305,7 @@ export const works = [
     ],
     impact: [
       'The new platform gave procurement, finance and supply-chain teams one shared source of truth for the first time — cutting the back-and-forth that used to happen just to agree on which numbers were correct.',
-      'Vendor onboarding time dropped, and the design system it introduced is now the reference every new internal tool at Sintek is built against.',
+      'Vendor onboarding time dropped and the design system it introduced is now the reference every new internal tool at Sintek is built against.',
     ],
     backgroundImages: [
       { src: '/asmltest.jpg', caption: 'On-site with the procurement team, working through how the new platform needed to fit their daily process.' },

@@ -262,3 +262,32 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Bullet list under a stage description — same type as the description. */
+.bullets {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 24px;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.7;
+  letter-spacing: -0.005em;
+  color: #1c1917;
+}
+
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.75em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tl-accent);
+}

@@ -6,12 +6,12 @@ const skills = [
   { title: '0→1 Product Design', description: 'From a business problem to a product people actually use.' },
   { title: 'Product Vision, Scope & Prioritization', description: 'Making sure the right problem gets solved — not just the loudest one.' },
   { title: 'Tailored UX Research Strategy', description: 'Finding where users struggle and fixing it before it costs something.' },
-  { title: 'Project Management', description: 'Keeping design, development, and business moving in the same direction.' },
+  { title: 'Project Management', description: 'Keeping design, development and business moving in the same direction.' },
   { title: 'Information Architecture', description: 'Redesigning the parts of a process that slow people down or create errors.' },
   { title: 'Data Storytelling', description: 'Turning complex data into clear decisions.' },
-  { title: 'AI Interaction Design', description: 'Making AI outputs readable, trustworthy, and actionable for the people who act on them.' },
+  { title: 'AI Interaction Design', description: 'Making AI outputs readable, trustworthy and actionable for the people who act on them.' },
   { title: 'Concept Development', description: 'Turning a vague problem into a clear direction worth building toward.' },
-  { title: 'Service Design', description: 'Looking beyond the screen — at the process, the people, and the system behind it.' },
+  { title: 'Service Design', description: 'Looking beyond the screen — at the process, the people and the system behind it.' },
   { title: 'Workflow Design', description: 'Redesigning the parts of a process that slow people down or create errors.' },
 ];
 
