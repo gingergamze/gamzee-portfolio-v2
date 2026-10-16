@@ -58,9 +58,9 @@ export const works = [
     // shows a placeholder.
     beforeAfterIntro: 'A few selected UI interaction improvement examples.',
     beforeAfter: [
-      { title: 'The landing page said nothing', before: '', after: '' },
-      { title: 'Starting the process was hidden', before: '', after: '' },
-      { title: 'The data was not organized', before: '', after: '' },
+      { title: 'The landing page said nothing', before: '/before-after-1-before.png', beforeAlt: 'The old landing page: a welcome message and a grid of plain document tiles', after: '/after-1a.png', afterAlt: 'The new dashboard, Quality Cockpit, with key numbers and a clear place to start' },
+      { title: 'Process start was hidden', before: '/before-after-2-before.png', beforeAlt: 'The old item overview page: filters and a long table of items', after: '/after-2b.png', afterAlt: 'The new Quality Check start screen with three clear steps' },
+      { title: 'The data was not organized', before: '/before-after-3-before.png', beforeAlt: 'The old master data page: a menu on the left and a plain list of numbers', after: '/after-3a.png', afterAlt: 'The new Saved Products screen with summary cards and a table with status and progress' },
     ],
     prototype: {
       title: 'Prototype',

@@ -291,3 +291,25 @@
   border-radius: 50%;
   background: var(--tl-accent);
 }
+
+/* Phones: the stages wrap into a two-column grid so every stage is visible
+   and tappable, instead of a hidden sideways scroll. */
+@media (max-width: 700px) {
+  .scroller {
+    overflow: visible;
+  }
+
+  .canvas {
+    min-width: 0;
+  }
+
+  .track {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    row-gap: 22px;
+    column-gap: 12px;
+  }
+
+  .detailWrap {
+    margin-top: 32px;
+  }
+}

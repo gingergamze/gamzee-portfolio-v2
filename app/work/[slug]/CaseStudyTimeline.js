@@ -15,6 +15,7 @@ export default function CaseStudyTimeline({
   renderAside,
 }) {
   const rootRef = useRef(null);
+  const barRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState(defaultStageId ?? stages[0]?.id);
   // Hovering (or focusing) a stage selects it and it stays selected when the
@@ -22,7 +23,9 @@ export default function CaseStudyTimeline({
   const activeId = selectedId;
 
   useEffect(() => {
-    const el = rootRef.current;
+    // Watch the stage bar itself (not the whole section, which can be taller
+    // than a phone screen and would never reach the visibility threshold).
+    const el = barRef.current;
     if (!el || typeof IntersectionObserver === "undefined") {
       setVisible(true);
       return;
@@ -34,7 +37,7 @@ export default function CaseStudyTimeline({
           io.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -45,7 +48,7 @@ export default function CaseStudyTimeline({
 
   return (
     <div ref={rootRef} className={`${styles.root} ${visible ? styles.visible : ""}`}>
-      <div className={styles.scroller}>
+      <div ref={barRef} className={styles.scroller}>
         <div className={styles.canvas} role="group" aria-label={ariaLabel}>
           <div className={styles.track} style={{ gridTemplateColumns: blockCols }}>
             {stages.map((st, i) => (
