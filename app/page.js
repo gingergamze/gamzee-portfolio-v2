@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
 import SiteNav from './SiteNav';
+import HeroBackdrop from './HeroBackdrop';
 import { works } from './lib/works';
 
 const ACCENT = '#B4470E';
@@ -269,6 +270,7 @@ export default function Home() {
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}>
+        <HeroBackdrop />
         <div style={{
           position: 'relative',
           zIndex: 1,
@@ -581,7 +583,7 @@ export default function Home() {
         position: 'relative',
         zIndex: 2,
         padding: 'clamp(48px,7vh,88px) var(--page-x) 0',
-        background: '#F4F1EA',
+        background: '#FFFFFF',
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px' }}>
           <div style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>
@@ -609,7 +611,7 @@ export default function Home() {
         position: 'relative',
         zIndex: 2,
         padding: 'clamp(40px,6vh,72px) var(--page-x)',
-        background: '#F4F1EA',
+        background: '#FFFFFF',
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', gap: '24px' }}>
