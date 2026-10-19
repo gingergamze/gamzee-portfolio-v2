@@ -72,13 +72,22 @@ export default function CaseStudyTimeline({
 
       <div className={styles.detailWrap}>
         <div className={styles.detail} aria-live="polite">
-          {active.summary.split('\n\n').map((para, k) => (
-            <p key={k} className={styles.detailSummary} style={k ? { marginTop: '1.1em' } : undefined}>
-              {para.split(/\*\*(.+?)\*\*/g).map((part, i) =>
-                i % 2 ? <strong key={i}>{part}</strong> : part
-              )}
-            </p>
-          ))}
+          {(() => {
+            const paras = active.summary.split('\n\n');
+            // `imagesAfter: n` puts the stage's photos after the n-th paragraph
+            // (default: after the text and the bullets).
+            const at = active.images?.length && !active.imagesWide && active.imagesAfter ? active.imagesAfter : 0;
+            return paras.map((para, k) => (
+              <div key={k}>
+                <p className={styles.detailSummary} style={k ? { marginTop: at && k === at ? '56px' : '1.1em' } : undefined}>
+                  {para.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                    i % 2 ? <strong key={i}>{part}</strong> : part
+                  )}
+                </p>
+                {at && k === at - 1 ? <PhotoRow images={active.images} /> : null}
+              </div>
+            ));
+          })()}
           {active.bullets?.length ? (
             <ul className={styles.bullets}>
               {active.bullets.map((b) => (
@@ -97,7 +106,7 @@ export default function CaseStudyTimeline({
               ))}
             </ul>
           ) : null}
-          {active.images?.length && !active.imagesWide ? <PhotoRow images={active.images} /> : null}
+          {active.images?.length && !active.imagesWide && !active.imagesAfter ? <PhotoRow images={active.images} /> : null}
         </div>
         {renderAside ? <div className={styles.aside}>{renderAside(active)}</div> : null}
       </div>
