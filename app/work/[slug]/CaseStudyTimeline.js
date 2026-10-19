@@ -72,11 +72,13 @@ export default function CaseStudyTimeline({
 
       <div className={styles.detailWrap}>
         <div className={styles.detail} aria-live="polite">
-          <p className={styles.detailSummary}>
-            {active.summary.split(/\*\*(.+?)\*\*/g).map((part, i) =>
-              i % 2 ? <strong key={i}>{part}</strong> : part
-            )}
-          </p>
+          {active.summary.split('\n\n').map((para, k) => (
+            <p key={k} className={styles.detailSummary} style={k ? { marginTop: '1.1em' } : undefined}>
+              {para.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+                i % 2 ? <strong key={i}>{part}</strong> : part
+              )}
+            </p>
+          ))}
           {active.bullets?.length ? (
             <ul className={styles.bullets}>
               {active.bullets.map((b) => (
