@@ -31,6 +31,21 @@ body {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+.reveal-lines .line {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(6px);
+  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
+  transition-delay: calc(0.3s + var(--i, 0) * 0.8s);
+}
+.reveal-lines.is-visible .line {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-lines .line { opacity: 1; transform: none; filter: none; transition: none; }
+}
 .reveal-card {
   opacity: 0;
   transform: translateY(110px) scale(0.96);

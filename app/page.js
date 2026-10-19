@@ -78,7 +78,7 @@ export default function Home() {
 
   // Reveal elements on scroll into view (fade + rise)
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
+    const els = document.querySelectorAll('.reveal, .reveal-lines');
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -375,16 +375,16 @@ export default function Home() {
           }}>
             What I do
           </h2>
-          <p className="reveal" style={{
+          <p className="reveal-lines" style={{
             fontSize: 'clamp(18px,2vw,20px)',
             lineHeight: 1.5,
             color: '#1C1917',
             margin: '0 0 32px -0.108em',
             maxWidth: '152ch',
           }}>
-            <span style={{ display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
-            <span style={{ display: 'block', marginBottom: '28px' }}>I like finding where products and workflows underperform.</span>
-            <span style={{ display: 'block' }}>Then I fix them where it costs time and money for the business.</span>
+            <span className="line" style={{ '--i': 0, display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
+            <span className="line" style={{ '--i': 1, display: 'block', marginBottom: '28px' }}>I like finding where products and workflows underperform.</span>
+            <span className="line" style={{ '--i': 2, display: 'block' }}>Then I fix them where it costs time and money for the business.</span>
           </p>
         </div>
       </section>
