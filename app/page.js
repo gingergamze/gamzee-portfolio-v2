@@ -97,9 +97,9 @@ export default function Home() {
   // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
   //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
   const stories = [
+    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
     { img: '/work-experience-workshop.jpg', label: 'Work Experience', fit: 'cover', pos: 'center center', text: 'Banking, Consulting Agency, Manufacturing Company, Small to Medium-Sized Construction Engineering Company' },
     { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
-    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
     { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes and tools by tailor made digital solutions, managing product teams and product roadmaps' },
     { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with poor cross-functional collaboration, inefficient workflows and complex processes because of their domain' },
   ];
