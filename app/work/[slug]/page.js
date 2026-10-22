@@ -48,8 +48,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const work = getWorkBySlug(slug);
-  const fullTitle = work ? [work.title, work.titleSuffix].filter(Boolean).join(' - ') : '';
-  return { title: work ? `${fullTitle} — Gamze Bozkurt` : 'Case study' };
+  if (!work) return { title: 'Case study' };
+  const title = `${work.navLabel || work.title} UX case study`;
+  const description = `${work.tagline}. A UX case study by Gamze Bozkurt, product designer and UX researcher in Amsterdam.`;
+  const url = `/work/${work.slug}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    // Pages that are still being written stay out of search results.
+    robots: work.underConstruction ? { index: false, follow: false } : { index: true, follow: true },
+    openGraph: { type: 'article', url, title: `${title} | Gamze Bozkurt`, description, images: [{ url: '/og-image.png', width: 1200, height: 630 }] },
+    twitter: { card: 'summary_large_image', title: `${title} | Gamze Bozkurt`, description, images: ['/og-image.png'] },
+  };
 }
 
 export default async function CaseStudyPage({ params }) {
@@ -186,6 +197,7 @@ export default async function CaseStudyPage({ params }) {
               type={work.prototype.type}
               title={`${work.title} prototype`}
               hotspots={[]}
+              height={work.prototype.height}
             />
           </div>
         ) : heroVisual}
@@ -352,7 +364,7 @@ export default async function CaseStudyPage({ params }) {
       ))}
 
       {/* PROTOTYPE — shown only when `prototype.src` is set in works.js */}
-      {work.prototype?.src && (
+      {work.prototype?.src && (work.beforeAfter?.length || !swapped || work.heroImage) && (
         <section id="prototype" style={{ background: work.client === 'ASML' ? '#0F238C' : '#1C1917', marginTop: 'clamp(56px,8vh,104px)' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,9vh,112px) var(--cs-x)' }}>
             {work.beforeAfter?.length ? (
@@ -409,7 +421,7 @@ export default async function CaseStudyPage({ params }) {
         paragraphs={[
           'In the ASML environment I learned how to navigate ambiguity and complexity in a technical project. It was a place where nothing was clear, but there was a lot of space to show the value of UX. My team appreciated the improvements because UX was a new and different discipline. I did not need to sell UX. People were already into it.',
           { sub: 'What I would do differently?' },
-          'There was so much technical information that I felt overloaded. Next time I would manage it better.',
+          'The most significant thing I would do differently is **managing communication**. Communication with stakeholders who have a technical background was the biggest challenge. I thought I could learn the technical language by listening. I was wrong. I felt overloaded by technical information. **Next time I would use visuals and analogies from day one.** For example, I would encourage team members to use whiteboards more and keep the key message as the priority before we lose ourselves in the technical terms.',
         ]}
         image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience: me on the left' }}
       />

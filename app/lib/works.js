@@ -37,8 +37,8 @@ export const works = [
       'First finding the real problems, then designing logical workflows and interactions that follow how workers really work and understand.',
     ],
     stats: [
-      { value: '100%', trend: 'down', label: 'Reduced language complexity ', note: '90% of workers found the language simpler', big: '90%', text: 'of workers found the language simpler' },
-      { value: '35s → 15s', trend: 'up', label: ' Faster access to start operations', note: 'Starting takes 30 sec, down from 90 sec', big: '30 sec', text: 'down from 90 sec' },
+      { value: '90%', trend: 'down', label: 'Clearer tool language', note: '90% of ASML workers found the language clearer than the previous version', big: '90%', text: 'of ASML workers found the language clearer than the previous version' },
+      { value: '30 sec', trend: 'up', label: 'Finding the starting point is faster', note: 'Finding the starting point takes 30 sec, down from 90 sec', big: '30 sec', text: 'down from 90 sec' },
       { value: '50% ', trend: 'down', label: 'Reduced steps to complete a task ', note: 'Tasks now need 50% fewer steps', big: '50%', text: 'fewer steps per task' },
     ],
     // Before / after story under the metrics. Add `image` to show a visual.
@@ -218,7 +218,8 @@ export const works = [
     prototype: {
       title: 'Prototype',
       type: 'embed',
-      src: '',
+      src: '/prototypes/commonality/parts-overlap-explorer.html',
+      height: 1400,
       note: '',
     },
     highlights: [],

@@ -12,7 +12,9 @@ export default function TextSection({ title, paragraphs, image }) {
       letterSpacing: '-0.01em', color: '#1C1917', margin: '40px 0 12px', zoom: 1,
     }}>{t.sub}</h3>
   ) : (
-    <p key={i} style={{ ...body, margin: i ? '1em 0 0' : 0 }}>{t}</p>
+    <p key={i} style={{ ...body, margin: i ? '1em 0 0' : 0 }}>
+      {t.split('**').map((part, j) => (j % 2 ? <strong key={j} style={{ fontWeight: 700, color: '#1C1917' }}>{part}</strong> : part))}
+    </p>
   ));
 
   return (

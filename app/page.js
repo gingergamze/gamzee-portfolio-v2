@@ -306,8 +306,20 @@ export default function Home() {
           }}>
             For <span className={`hero-rotator${heroPhraseVisible ? ' is-visible' : ''}`}>{HERO_PHRASES[heroPhraseIndex]}</span>
           </h1>
+          <p className="hero-intro" style={{
+            margin: '28px 0 0 -0.1em',
+            maxWidth: '40ch',
+            fontFamily: 'var(--font-work-sans)',
+            fontWeight: 400,
+            fontSize: 'clamp(16px, 1.5vw, 19px)',
+            lineHeight: 1.55,
+            letterSpacing: '-0.005em',
+            color: '#554E48',
+          }}>
+            Product designer and UX researcher in Amsterdam. I design internal tools, workflows and data-rich enterprise products.
+          </p>
           <div className="scroll-cue" style={{
-            marginTop: '80px',
+            marginTop: '56px',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',

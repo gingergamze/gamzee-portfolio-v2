@@ -34,7 +34,7 @@ function DotIcon() {
   );
 }
 
-export default function PrototypeFrame({ src, title, type = "embed", hotspots = [] }) {
+export default function PrototypeFrame({ src, title, type = "embed", hotspots = [], height = DESKTOP_H }) {
   const boxRef = useRef(null);
   const frameRef = useRef(null);
   const [scale, setScale] = useState(0.6);
@@ -69,7 +69,7 @@ export default function PrototypeFrame({ src, title, type = "embed", hotspots = 
     <div
       ref={boxRef}
       style={{
-        position: "relative", width: "100%", height: `${DESKTOP_H * scale}px`,
+        position: "relative", width: "100%", height: `${height * scale}px`,
         overflow: "hidden", borderRadius: "24px", isolation: "isolate",
         // Matches the prototype's own header and page colours, so no white
         // shows at the rounded corners or sub-pixel edges.
@@ -108,7 +108,7 @@ export default function PrototypeFrame({ src, title, type = "embed", hotspots = 
               : open.wide
               ? { top: 12, left: "50%", transform: "translateX(-50%)" }
               : {
-                  top: Math.max(12, Math.min(open.y * scale - 20, DESKTOP_H * scale - 24)),
+                  top: Math.max(12, Math.min(open.y * scale - 20, height * scale - 24)),
                   ...(open.x > DESKTOP_W / 2 ? { right: `${(1 - open.x / DESKTOP_W) * 100 + 3}%` } : { left: `${(open.x / DESKTOP_W) * 100 + 3}%` }),
                 }),
             maxHeight: narrow ? "60vh" : "calc(100% - 24px)", overflowY: "auto",
@@ -162,7 +162,7 @@ export default function PrototypeFrame({ src, title, type = "embed", hotspots = 
         onLoad={(e) => hideScrollbars(e.currentTarget)}
         style={{
           position: "absolute", top: 0, left: 0, border: 0,
-          width: `${DESKTOP_W}px`, height: `${DESKTOP_H}px`,
+          width: `${DESKTOP_W}px`, height: `${height}px`,
           transform: `scale(${scale})`, transformOrigin: "top left",
         }}
       />
