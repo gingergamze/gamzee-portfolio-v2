@@ -129,7 +129,7 @@ export const works = [
     // others (default 1) — e.g. weight: 3 makes a stage three times longer.
     processTimeline: {
       stages: [
-        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took longer than expected: the project had run for 7 years, with too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was real.** **I clustered the problems and validated them with other parties.** Once they were in manageable sizes, I had the argument I needed for stakeholders and business owners.', outputs: [], story: {
+        { id: 'problem-discovery', phase: 'Discovery', label: 'Problem discovery', duration: '2 days', summary: 'Problem discovery took longer than expected: the project had run for 7 years, with too many stories and stakeholders. I collected the pieces to find the right problem. **Not every problem I heard was real.** **I clustered the problems and validated them with other parties.** Once they were in manageable groups, I had the arguments I needed for stakeholders and business owners.', outputs: [], story: {
           heardLabel: 'What I heard',
           quotes: [
             'The tool looks bad, we need to improve it.',
@@ -164,10 +164,10 @@ export const works = [
           'The right information was **not shown at the right time.**',
           'Tasks took **too many steps** to complete.',
         ],
-        outputs: [], weight: 1.5 },
-        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'I enjoyed implementing UI improvements and then testing them. ASML is a huge organization, so it was fun to find testers from many operational lines. For most ASML workers, seeing a prototype and taking part in a usability test was their first time. They appreciated it because I was improving their own tool.\n\nThe test results became a powerful way to convince the business owners of my design direction. **For example, some people in different departments told me that they did not understand the wording because they use a different term.** So we found out that there was a difference in business language between departments. I presented all the hidden problems through usability tests. **Tests and development also made a remarkable difference to tool adoption.**', outputs: [], imagesAfter: 1, images: [
+        outputs: [], wentWell: 'There was plenty of low-hanging fruit. I could show impact to the product team.', challenging: 'The mission of the tool was still not clear overall. All the solutions pushed the tool forward a little bit. But I always felt the solution had to be different from UI.', weight: 1.5 },
+        { id: 'design-test-development', phase: 'Construction', label: 'Design, test & development', duration: '6 weeks', summary: 'I enjoyed implementing UI improvements and then testing them. ASML is a huge organization, so it was fun to find testers from many operational lines. For most ASML workers, seeing a prototype and taking part in a usability test was their first experience. They appreciated it because I was improving their own tool.\n\nThe test results became a powerful way to convince the business owners of my design direction. **For example, some people in different departments told me that they did not understand the wording because they used a different term.** So we found out that there was a difference in business language between departments. I presented all the hidden problems through usability tests. **Tests and development also made a remarkable difference to tool adoption.**', outputs: [], imagesAfter: 1, images: [
           { src: '/design-test-slide.jpg', alt: 'Slide: no proper opportunity to test the tool, so let users do the activities without guidance and see what goes well and what does not', natural: true },
-        ], wentWell: 'Every improvement was welcomed, because the tool had never had a UX designer\u2019s touch before.', challenging: 'The tool was built in Mendix and the platform had many UI limitations.', weight: 3 },
+        ], wentWell: 'Every improvement was welcomed because the tool had never had a UX designer\u2019s touch before.', challenging: 'The tool was built in Mendix and the platform had many UI limitations.', weight: 3 },
       ],
     },
   },

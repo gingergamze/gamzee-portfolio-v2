@@ -420,7 +420,7 @@ export default async function CaseStudyPage({ params }) {
         title="Final reflections"
         paragraphs={[
           'In the ASML environment I learned how to navigate ambiguity and complexity in a technical project. It was a place where nothing was clear, but there was a lot of space to show the value of UX. My team appreciated the improvements because UX was a new and different discipline. I did not need to sell UX. People were already into it.',
-          { sub: 'What I would do differently?' },
+          { sub: 'What would I do differently?' },
           'The most significant thing I would do differently is **managing communication**. Communication with stakeholders who have a technical background was the biggest challenge. I thought I could learn the technical language by listening. I was wrong. I felt overloaded by technical information. **Next time I would use visuals and analogies from day one.** For example, I would encourage team members to use whiteboards more and keep the key message as the priority before we lose ourselves in the technical terms.',
         ]}
         image={{ src: '/reflections-1.jpg', alt: 'The team in the cleanroom, giving thumbs up', caption: 'ASML Veldhoven Cleanroom Experience: me on the left' }}
