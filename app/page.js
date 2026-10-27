@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
 import SiteNav from './SiteNav';
-import HeroBackdrop from './HeroBackdrop';
+import SkillsMap from './SkillsMap';
 import { works } from './lib/works';
 
 const ACCENT = '#B4470E';
@@ -257,7 +257,7 @@ export default function Home() {
       <SiteNav />
 
       {/* HERO */}
-      <header style={{
+      <header className="hero" style={{
         position: 'sticky',
         top: 0,
         zIndex: 0,
@@ -270,7 +270,6 @@ export default function Home() {
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}>
-        <HeroBackdrop />
         <div style={{
           position: 'relative',
           zIndex: 1,
@@ -316,41 +315,43 @@ export default function Home() {
             letterSpacing: '-0.005em',
             color: '#554E48',
           }}>
-            Designer with UX research, project management, CX and sales experience (10+ years)
+            Designer with UX research, project management, sales and CX experience (10+ years)
           </p>
-          <div className="scroll-cue" style={{
-            marginTop: '56px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            opacity: atTop ? 1 : 0,
-            pointerEvents: atTop ? 'auto' : 'none',
-            transition: 'opacity 0.3s ease',
-          }}>
-            <div className="scroll-arrow" style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '10px',
-              border: '0.5px solid rgba(28,25,23,0.2)',
-              display: 'grid',
-              placeItems: 'center',
-            }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span style={{
-              fontFamily: 'var(--font-work-sans)',
-              fontSize: '12px',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: '#1C1917',
-            }}>
-              Scroll Down
-            </span>
-          </div>
         </div>
+        <div className="hero-map" style={{
+          filter: scrolled ? 'blur(28px)' : 'none',
+          opacity: scrolled ? 0.35 : 1,
+          transition: 'filter 0.8s ease, opacity 0.8s ease',
+        }}>
+          <SkillsMap height="100%" wideFrom={600} fontSize={13} />
+        </div>
+        <button
+          type="button"
+          className="scroll-cue"
+          aria-label="Scroll down"
+          onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
+          style={{
+            position: 'absolute', left: 'var(--pl-hero)', bottom: 18, zIndex: 3,
+            display: 'flex', alignItems: 'center', gap: 12, background: 'none', border: 'none',
+            cursor: 'pointer', padding: 0,
+            opacity: atTop ? 1 : 0, pointerEvents: atTop ? 'auto' : 'none', transition: 'opacity 0.3s ease',
+          }}
+        >
+          <span className="scroll-arrow" style={{
+            width: 44, height: 44, borderRadius: 10, border: '0.5px solid rgba(28,25,23,0.2)',
+            display: 'grid', placeItems: 'center', background: '#fff',
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2V13M8 13L3.5 8.5M8 13L12.5 8.5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          <span style={{
+            fontFamily: 'var(--font-work-sans)', fontSize: 12, fontWeight: 800,
+            letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917',
+          }}>
+            Scroll Down
+          </span>
+        </button>
       </header>
 
       {/* WHAT I DO — sticky like the hero above it, so "Selected Work"
@@ -395,8 +396,7 @@ export default function Home() {
             maxWidth: '152ch',
           }}>
             <span className="line" style={{ '--i': 0, display: 'block', marginBottom: '28px' }}>Internal tools often cost a business more time than anyone sees.</span>
-            <span className="line" style={{ '--i': 1, display: 'block', marginBottom: '28px' }}>I specialize in <strong style={{ fontWeight: 700 }}>internal tools</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
-            <span className="line" style={{ '--i': 2, display: 'block' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong>. Then I <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
+            <span className="line" style={{ '--i': 1, display: 'block' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong> in <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong>, <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> and <strong style={{ fontWeight: 700 }}>B2B workflow</strong> products. Then I <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
           </p>
         </div>
       </section>

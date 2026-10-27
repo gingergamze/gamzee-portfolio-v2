@@ -439,3 +439,30 @@ body {
 @media (max-width: 700px) {
   .case-stats > .ib-cell { grid-column: 1 !important; grid-row: auto !important; order: var(--o); }
 }
+
+/* Hero: the interactive skills map sits bottom right under "Design & Strategy".
+   On narrower screens it flows below the text and the hero stops being sticky. */
+.hero-map {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(clamp(24px, 4vh, 48px) + 64px);
+  width: min(59vw, 840px);
+  height: min(41vh, 395px);
+  z-index: 2;
+}
+@media (max-width: 899px) {
+  header.hero { position: relative !important; }
+  header.hero { padding-top: 128px !important; padding-bottom: 40px !important; }
+  .hero-headline { margin-top: 36px !important; }
+  .scroll-cue { display: none !important; }
+  .hero-map {
+    position: relative;
+    left: auto;
+    transform: none;
+    bottom: auto;
+    width: 100%;
+    height: clamp(580px, 158vw, 660px);
+    margin-top: 20px;
+  }
+}
