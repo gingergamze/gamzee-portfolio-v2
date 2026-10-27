@@ -394,9 +394,9 @@ export default function Home() {
             margin: '0 0 32px -0.108em',
             maxWidth: '152ch',
           }}>
-            <span className="line" style={{ '--i': 0, display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience, especially for <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
+            <span className="line" style={{ '--i': 0, display: 'block', marginBottom: '28px' }}>I'm a designer with UX research and project management experience (5+ years). I also have a background in customer experience, sales and marketing (10+ years). I specialize in <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong> and <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> products.</span>
             <span className="line" style={{ '--i': 1, display: 'block', marginBottom: '28px' }}>I like finding where products and workflows underperform.</span>
-            <span className="line" style={{ '--i': 2, display: 'block' }}>Then I fix them where it costs time and money for the business.</span>
+            <span className="line" style={{ '--i': 2, display: 'block' }}>Then I fix them where they cost the business time and money.</span>
           </p>
         </div>
       </section>
