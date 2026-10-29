@@ -19,7 +19,7 @@ export default function Testimonials() {
   return (
     <div style={{ position: 'relative', zIndex: 2, padding: 'clamp(48px,7vh,88px) var(--page-x)', background: 'var(--bg)' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <a href="https://www.linkedin.com/in/gamze-serviceandproductdesignstrategist/details/recommendations/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: LINKEDIN_BLUE, letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>Recommended on LinkedIn →</a>
+        <a href="https://www.linkedin.com/in/gamze-serviceandproductdesignstrategist/details/recommendations/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: SOFT, letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>Recommended on LinkedIn <span style={{ color: LINKEDIN_BLUE }}>→</span></a>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 20, marginTop: 24 }}>
           {T.map((t) => (
             <figure key={t.name} style={{ margin: 0, padding: 24, borderRadius: 12, background: 'var(--card)', boxShadow: '0 1px 2px rgba(28,25,23,0.08), 0 8px 24px rgba(28,25,23,0.06)', border: '0.7px solid rgba(28,25,23,0.08)' }}>
