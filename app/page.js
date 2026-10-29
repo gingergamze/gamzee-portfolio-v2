@@ -371,7 +371,7 @@ export default function Home() {
         background: '#FFFFFF',
         borderRadius: '12px',
         border: '0.4px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
+        boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
       }}>
         <div style={{
           padding: 'clamp(80px,14vh,160px) var(--pl-what) clamp(120px,24vh,280px) var(--pl-what)',
@@ -412,7 +412,7 @@ export default function Home() {
         background: '#FFFFFF',
         borderRadius: '12px',
         border: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -14px 36px rgba(28,25,23,0.24), inset 0 1px 0 rgba(255,255,255,0.6)',
+        boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
         // Extra bottom padding (vs. top) so the case study cards get real
         // breathing room before the About card overlaps up beneath them.
         padding: 'clamp(60px,10vh,120px) var(--pl-work) clamp(48px,6vh,72px) var(--pl-work)',
@@ -450,7 +450,7 @@ export default function Home() {
         background: '#FFFFFF',
         borderRadius: '12px',
         border: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -18px 60px rgba(28,25,23,0.30)',
+        boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
       }}>
         {/* About me content */}
         <div style={{
