@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
 import SiteNav from './SiteNav';
 import SkillsMap from './SkillsMap';
+import Testimonials from './Testimonials';
 import { works } from './lib/works';
 
 const ACCENT = '#B4470E';
@@ -617,6 +618,8 @@ export default function Home() {
           </ul>
         </div>
       </div>
+
+      <Testimonials />
 
       {/* FOOTER — sits on the plain page background, below the About card */}
       <div style={{
