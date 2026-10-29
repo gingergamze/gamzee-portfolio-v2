@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 const GROUPS = [
   { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Prototyping', 'AI design', 'Concept development'] },
   { name: 'Products', color: '#0E9F8E', items: ['Internal tools', 'B2E software', 'B2B workflows', 'Enterprise software', 'Operational processes'] },
-  { name: 'Problems I fix', color: '#D6457F', items: ['Too many steps', 'Too many mistakes', 'Confusing navigation', 'Information overload', 'Complex tool language', 'Unclear product vision', 'Stubborn stakeholders 😊'] },
+  { name: 'Problems I fix', color: '#D6457F', items: ['Confusing navigation', 'Information overload', 'Complex tool language', 'Unclear product vision', 'Stubborn stakeholders 😊'] },
 ];
 
 const K_EDGE = 0.05;
@@ -36,7 +36,7 @@ function build() {
 }
 
 // Hand-tuned ring for a few dots whose labels would touch (wide layout only).
-const FIX = { 0: 0.6, 1: 0.78, 2: 1, 4: 0.78, 5: 0.92, 6: 0.72, 7: 0.95, 8: 0.6, 9: 1, 10: 0.8, 11: 0.72, 12: 1, 13: 0.85, 14: 0.65, 15: 0.98, 16: 0.56, 17: 1 };
+const FIX = { 0: 0.6, 1: 0.78, 2: 1, 4: 0.78, 5: 0.92, 6: 0.72, 7: 0.86, 8: 0.6, 9: 1, 10: 0.8, 12: 0.92, 14: 0.58, 15: 1 };
 
 // Phones: the three groups are stacked under each other and linked in a chain.
 // Each group's dots spread around its own center dot.
@@ -141,7 +141,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     nodes.forEach((n, i) => { n.ph = i * 2.399; n.amp = n.type === 'leaf' ? 3.2 : n.type === 'hub' ? 1.6 : 0; n.ox = 0; n.oy = 0; });
     let drag = null, hover = null, pointer = { x: 0, y: 0 };
-    const family = getComputedStyle(el).fontFamily;
+    let family = getComputedStyle(el).fontFamily;
 
     const startLoop = () => { if (!running && visible) { running = true; last = 0; raf = requestAnimationFrame(frame); } };
     const wake = () => { awake = true; startLoop(); };
@@ -360,6 +360,14 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
         draw();
       },
     };
+    // Touch: the page must stay scrollable. Only a finger that lands on a dot blocks scrolling,
+    // so that dot can be pulled. Anywhere else a swipe scrolls the page as usual.
+    const onTouchStart = (e) => {
+      const t = e.touches[0];
+      if (!t) return;
+      if (pick(toLocal({ clientX: t.clientX, clientY: t.clientY }), 30)) e.preventDefault();
+    };
+    cv.addEventListener('touchstart', onTouchStart, { passive: false });
     cv.addEventListener('pointerdown', down);
     cv.addEventListener('pointermove', move);
     cv.addEventListener('pointerup', up);
@@ -372,11 +380,15 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     resize();
     startLoop();
     if (document.fonts?.ready) document.fonts.ready.then(draw);
+    const onFonts = () => { family = getComputedStyle(el).fontFamily; draw(); };
+    document.fonts?.addEventListener?.('loadingdone', onFonts);
 
     return () => {
       cancelAnimationFrame(raf);
+      document.fonts?.removeEventListener?.('loadingdone', onFonts);
       io.disconnect();
       ro.disconnect();
+      cv.removeEventListener('touchstart', onTouchStart);
       cv.removeEventListener('pointerdown', down);
       cv.removeEventListener('pointermove', move);
       cv.removeEventListener('pointerup', up);
@@ -392,7 +404,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           ref={canvas}
           role="img"
           aria-label={`Interactive map. ${GROUPS.map((g) => `${g.name}: ${g.items.join(', ')}`).join('. ')}.`}
-          style={{ position: 'absolute', display: 'block', touchAction: 'none' }}
+          style={{ position: 'absolute', display: 'block', touchAction: 'pan-y' }}
         />
       </div>
       {narrow && (

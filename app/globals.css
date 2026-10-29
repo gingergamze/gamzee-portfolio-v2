@@ -466,3 +466,12 @@ body {
     margin-top: 20px;
   }
 }
+
+/* One font for everything: Public Sans. --font-display points to the body font. */
+html { --font-display: var(--font-work-sans); }
+
+/* Calm and precise: medium weight for headings, labels and numbers, normal letter spacing. */
+[style*="font-display"], h1, h2, h3, p.hero-kicker {
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}

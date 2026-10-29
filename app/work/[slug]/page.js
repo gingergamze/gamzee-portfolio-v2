@@ -218,7 +218,7 @@ export default async function CaseStudyPage({ params }) {
         {/* Main column — description, then Problem / Solution */}
         <div className="cs-main" style={{ order: 2, display: 'flex', flexDirection: 'column', gap: 'clamp(64px,9vh,112px)' }}>
           <div>
-            <div style={{ ...T.label, lineHeight: 1, marginTop: '-0.075em', marginBottom: '18px' }}>
+            <div style={{ ...T.label, lineHeight: 1, marginTop: '-0.1em', marginBottom: '18px' }}>
               About
             </div>
             <p className="cs-copy" style={{ ...T.body, maxWidth: '100ch' }}>
