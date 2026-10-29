@@ -2,7 +2,7 @@
   --tl-bg: #fcf7eb;
   --tl-ink: #1c1917;
   --tl-muted: #7c756e;
-  --tl-accent: #d04d03;
+  --tl-accent: var(--accent);
   --tl-line: rgba(28, 25, 23, 0.2);
   --tl-rule: rgba(28, 25, 23, 0.1);
   color: var(--tl-ink);

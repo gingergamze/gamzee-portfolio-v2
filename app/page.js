@@ -8,7 +8,7 @@ import SkillsMap from './SkillsMap';
 import Testimonials from './Testimonials';
 import { works } from './lib/works';
 
-const ACCENT = '#B4470E';
+const ACCENT = 'var(--accent-deep)';
 
 // Hero subheadline rotator — "For" stays fixed, this cycles and loops.
 const HERO_PHRASES = ['complex workflows', 'operational processes and tools', 'data-rich products'];
@@ -59,6 +59,35 @@ export default function Home() {
     schedule();
     return () => clearTimeout(timer);
   }, []);
+
+  // The hero pins the skills map to the bottom of the screen. On short screens
+  // (Windows laptops at 125–150% scaling) there is no room left for it under the
+  // text, so the hero stacks instead: text first, then the map at full size.
+  const heroRef = useRef(null);
+  const [heroStack, setHeroStack] = useState(false);
+  const textBottomMax = useRef(0);
+  const measureHero = (reset) => {
+    const hero = heroRef.current;
+    const intro = hero && hero.querySelector('.hero-intro');
+    if (!intro) return;
+    if (window.innerWidth < 900) { setHeroStack(false); return; }
+    if (reset) textBottomMax.current = 0;
+    // Rotating phrases can wrap to a second line; keep the tallest seen so the layout never flips back and forth.
+    const bottom = intro.getBoundingClientRect().bottom - hero.getBoundingClientRect().top;
+    textBottomMax.current = Math.max(textBottomMax.current, bottom);
+    const vh = window.innerHeight;
+    const mapH = Math.min(0.41 * vh, 395);
+    const mapTop = vh - (Math.min(Math.max(24, 0.04 * vh), 48) + 64) - mapH;
+    setHeroStack(mapH < 300 || textBottomMax.current - mapTop > 120);
+  };
+  useEffect(() => {
+    const onResize = () => measureHero(true);
+    onResize();
+    window.addEventListener('resize', onResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  useEffect(() => { measureHero(false); }, [heroPhraseIndex]);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 600px)');
@@ -236,7 +265,7 @@ export default function Home() {
                             {st.value}
                           </div>
                         ) : (
-                          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#d04d03', flexShrink: 0 }} />
+                          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
                         )}
                         <div style={{ fontFamily: 'var(--font-work-sans)', fontSize: '14px', fontWeight: 500, color: '#3D3631', lineHeight: 1.4 }}>
                           {st.label}
@@ -258,12 +287,12 @@ export default function Home() {
       <SiteNav />
 
       {/* HERO */}
-      <header className="hero" style={{
+      <header ref={heroRef} className={heroStack ? 'hero hero-stack' : 'hero'} style={{
         position: 'sticky',
         top: 0,
         zIndex: 0,
         minHeight: '100vh',
-        background: '#FFFFFF',
+        background: 'var(--bg)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -291,7 +320,7 @@ export default function Home() {
             fontSize: 'clamp(42px, 10.5vw, 140px)',
             lineHeight: 1,
             letterSpacing: '-0.03em',
-            color: '#d04d03',
+            color: 'var(--accent)',
           }}>
             Design & Strategy
           </p>
@@ -369,7 +398,7 @@ export default function Home() {
         marginRight: 'var(--card-m-what)',
         minHeight: '0vh',
         boxSizing: 'border-box',
-        background: '#FFFFFF',
+        background: 'var(--card)',
         borderRadius: '12px',
         border: '0.4px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
@@ -410,7 +439,7 @@ export default function Home() {
         marginTop: 'clamp(-60px,-8vh,-40px)',
         marginLeft: 'var(--card-m-work)',
         marginRight: 'var(--card-m-work)',
-        background: '#FFFFFF',
+        background: 'var(--card)',
         borderRadius: '12px',
         border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
@@ -448,7 +477,7 @@ export default function Home() {
         marginTop: 'clamp(-60px,-8vh,-40px)',
         marginLeft: 'var(--card-m-about)',
         marginRight: 'var(--card-m-about)',
-        background: '#FFFFFF',
+        background: 'var(--card)',
         borderRadius: '12px',
         border: '0.7px solid rgba(28,25,23,0.1)',
         boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
@@ -490,7 +519,7 @@ export default function Home() {
               fontWeight: 700,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: '#d04d03',
+              color: 'var(--accent)',
               marginBottom: '12px',
               transition: 'opacity 0.3s ease',
             }}>
@@ -596,7 +625,7 @@ export default function Home() {
         position: 'relative',
         zIndex: 2,
         padding: 'clamp(48px,7vh,88px) var(--page-x) 0',
-        background: '#FFFFFF',
+        background: 'var(--bg)',
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px' }}>
           <div style={{ fontSize: '13px', color: 'rgba(28,25,23,0.6)', letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 500 }}>
@@ -621,12 +650,13 @@ export default function Home() {
 
       <Testimonials />
 
+
       {/* FOOTER — sits on the plain page background, below the About card */}
       <div style={{
         position: 'relative',
         zIndex: 2,
         padding: 'clamp(40px,6vh,72px) var(--page-x)',
-        background: '#FFFFFF',
+        background: 'var(--bg)',
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', gap: '24px' }}>

@@ -16,7 +16,7 @@ function Frame({ src, alt, tag, accent }) {
     <figure style={{ margin: 0 }}>
       <figcaption style={{
         display: 'inline-block', marginBottom: '12px', fontFamily: SANS, fontSize: '12px', fontWeight: 700,
-        letterSpacing: '0.12em', textTransform: 'uppercase', color: accent ? '#FFA066' : 'rgba(255,255,255,0.7)',
+        letterSpacing: '0.12em', textTransform: 'uppercase', color: accent ? 'var(--accent-light)' : 'rgba(255,255,255,0.7)',
       }}>
         {tag}
       </figcaption>

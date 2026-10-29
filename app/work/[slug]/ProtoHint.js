@@ -8,7 +8,7 @@ export default function ProtoHint() {
       color: 'rgba(255,255,255,0.85)',
     }}>
       <span aria-hidden="true" style={{
-        width: 8, height: 8, borderRadius: '50%', background: '#FFA066',
+        width: 8, height: 8, borderRadius: '50%', background: 'var(--accent-light)',
         animation: 'hintPulse 1.8s ease-out infinite',
       }} />
       Click through the prototype

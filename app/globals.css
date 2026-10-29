@@ -60,7 +60,7 @@ body {
   box-shadow: 0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08);
 }
 body {
-  background: #F4F1EA;
+  background: var(--bg);
 }
 
 @keyframes spin-slow {
@@ -434,7 +434,7 @@ body {
 .impact-band[data-dark="true"] h2 { color: #fff !important; }
 .impact-band[data-dark="true"] .ib-label { color: #fff !important; }
 .impact-band[data-dark="true"] .ib-text { color: rgba(255,255,255,0.78) !important; }
-.impact-band[data-dark="true"] .case-stats strong { color: #FFA066 !important; }
+.impact-band[data-dark="true"] .case-stats strong { color: var(--accent-light) !important; }
 
 @media (max-width: 700px) {
   .case-stats > .ib-cell { grid-column: 1 !important; grid-row: auto !important; order: var(--o); }
@@ -450,6 +450,20 @@ body {
   width: min(59vw, 840px);
   height: min(41vh, 395px);
   z-index: 2;
+}
+/* Short desktop screens: set by page.js when the pinned map would not fit under the text */
+@media (min-width: 900px) {
+  header.hero.hero-stack { position: relative !important; padding-bottom: 56px !important; }
+  header.hero.hero-stack .scroll-cue { display: none !important; }
+  header.hero.hero-stack .hero-map {
+    position: relative;
+    left: auto;
+    transform: none;
+    bottom: auto;
+    width: min(100%, 840px);
+    height: clamp(400px, 36vw, 460px);
+    margin: 72px auto 0;
+  }
 }
 @media (max-width: 899px) {
   header.hero { position: relative !important; }
@@ -475,4 +489,9 @@ html { --font-display: var(--font-work-sans); }
   font-weight: 500 !important;
   letter-spacing: -0.01em !important;
 }
+
+
+/* Palette (accent, deep accent for small text, light accent for dark photos, page background, map colours) */
+:root { --accent:#d04d03; --accent-deep:#B4470E; --accent-light:#FFA066; --bg:#E5E8E1; --card:#FFFFFF; --map-2:#0E9F8E; --map-3:#D6457F; }
+
 

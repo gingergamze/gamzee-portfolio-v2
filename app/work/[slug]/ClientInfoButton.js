@@ -27,7 +27,7 @@ export default function ClientInfoButton({ description }) {
       >
         <span style={{
           display: 'grid', placeItems: 'center', width: '14px', height: '14px',
-          borderRadius: '50%', background: '#d04d03', color: '#FFFFFF',
+          borderRadius: '50%', background: 'var(--accent)', color: '#FFFFFF',
           fontSize: '10px', fontWeight: 800, fontStyle: 'italic', lineHeight: 1,
           textTransform: 'none', letterSpacing: 0, fontFamily: 'Georgia, serif',
         }}>

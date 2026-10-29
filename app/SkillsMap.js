@@ -145,6 +145,14 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
     const startLoop = () => { if (!running && visible) { running = true; last = 0; raf = requestAnimationFrame(frame); } };
     const wake = () => { awake = true; startLoop(); };
+    const applyPalette = () => {
+      const cs = getComputedStyle(document.documentElement);
+      const c = [cs.getPropertyValue('--accent').trim() || '#D04D03', cs.getPropertyValue('--map-2').trim() || '#0E9F8E', cs.getPropertyValue('--map-3').trim() || '#D6457F'];
+      nodes.forEach((n) => { n.color = n.group < 0 ? c[0] : c[n.group]; });
+      wake();
+    };
+    applyPalette();
+    window.addEventListener('palette', applyPalette);
 
     const resize = () => {
       const r = el.getBoundingClientRect();
@@ -385,6 +393,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener('palette', applyPalette);
       document.fonts?.removeEventListener?.('loadingdone', onFonts);
       io.disconnect();
       ro.disconnect();

@@ -1,6 +1,6 @@
 const FONT = 'var(--font-work-sans)';
 const DISPLAY = 'var(--font-display)';
-const ORANGE = '#d04d03';
+const ORANGE = 'var(--accent)';
 
 const label = { fontFamily: FONT, fontWeight: 600, fontSize: 'clamp(16px,1.4vw,18px)', lineHeight: 1.45, letterSpacing: '-0.005em', color: '#1C1917' };
 const text = { fontFamily: FONT, fontSize: 'clamp(15px,1.3vw,17px)', lineHeight: 1.5, color: '#554E48' };

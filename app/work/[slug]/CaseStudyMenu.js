@@ -46,7 +46,7 @@ export default function CaseStudyMenu({ prev, next }) {
         <Link href={prev.href} style={item}>Previous work</Link>
         <Link href={next.href} style={item}>Next work</Link>
         <button type="button" onClick={() => window.dispatchEvent(new Event('open-contact'))}
-          style={{ ...item, background: '#d04d03', color: '#fff' }}>Contact</button>
+          style={{ ...item, background: 'var(--accent)', color: '#fff' }}>Contact</button>
       </nav>
     </>
   );

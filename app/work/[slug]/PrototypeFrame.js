@@ -87,7 +87,7 @@ export default function PrototypeFrame({ src, title, type = "embed", hotspots = 
             position: "absolute", zIndex: 2, width: 28, height: 28, marginLeft: -14, marginTop: -14,
             left: `${(h.x / DESKTOP_W) * 100}%`, top: `${h.y * scale}px`,
             borderRadius: "50%", border: "2px solid #fff", cursor: "pointer",
-            background: openIdx === i ? "#1C1917" : "#d04d03", color: "#fff",
+            background: openIdx === i ? "#1C1917" : "var(--accent)", color: "#fff",
             fontFamily: "var(--font-work-sans)", fontWeight: 700, fontSize: 13, padding: 0,
             boxShadow: "0 3px 12px rgba(0,0,0,.35)",
           }}
@@ -120,7 +120,7 @@ export default function PrototypeFrame({ src, title, type = "embed", hotspots = 
             position: "absolute", top: 10, right: 12, border: 0, background: "none", cursor: "pointer",
             fontSize: 22, lineHeight: 1, color: "#7c756e",
           }}>×</button>
-          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "#d04d03", marginBottom: 6 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 6 }}>
             Design decision
           </div>
           <h3 style={{ margin: "0 0 10px", fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20, lineHeight: 1.2, letterSpacing: "-0.02em", paddingRight: 20 }}>

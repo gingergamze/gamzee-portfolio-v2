@@ -57,7 +57,7 @@ export default function WorkLockedPage() {
       <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: 'clamp(40px,6vh,64px)' }}>
         <img src="/sun.png" alt="Gamze" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: '#d04d03', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
+          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
           <div style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em' }}>Design products, services and strategies</div>
         </div>
       </Link>
@@ -93,7 +93,7 @@ export default function WorkLockedPage() {
             onChange={(e) => { setPassword(e.target.value); if (status === 'error') setStatus('idle'); }}
             style={{
               width: '100%', boxSizing: 'border-box', padding: '13px 16px', borderRadius: '10px',
-              border: status === 'error' ? '1px solid #B4470E' : '1px solid rgba(28,25,23,0.15)',
+              border: status === 'error' ? '1px solid var(--accent-deep)' : '1px solid rgba(28,25,23,0.15)',
               background: '#FFFFFF', fontSize: '15px', fontFamily: 'inherit', color: '#1C1917', outline: 'none',
             }}
           />
@@ -111,7 +111,7 @@ export default function WorkLockedPage() {
             {status === 'checking' ? 'Checking…' : 'Unlock'}
           </button>
           {status === 'error' && (
-            <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
+            <p style={{ fontSize: '13px', color: 'var(--accent-deep)', margin: '4px 0 0' }}>
               That password isn't right — try again.
             </p>
           )}
@@ -128,7 +128,7 @@ export default function WorkLockedPage() {
           aria-expanded={askOpen}
           style={{
             width: '100%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
-            padding: '14px 20px', borderRadius: '10px', background: '#d04d03', color: '#FFFFFF', border: 'none',
+            padding: '14px 20px', borderRadius: '10px', background: 'var(--accent)', color: '#FFFFFF', border: 'none',
             fontFamily: 'var(--font-work-sans)', fontSize: '14px', fontWeight: 700, letterSpacing: '0.04em',
             textTransform: 'uppercase', cursor: 'pointer', marginBottom: '16px',
             boxShadow: '0 6px 18px rgba(208,77,3,0.28)',
@@ -167,14 +167,14 @@ export default function WorkLockedPage() {
               <button
                 type="submit"
                 disabled={askStatus === 'sending'}
-                style={{ padding: '12px 18px', borderRadius: '10px', border: 'none', background: '#d04d03', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', opacity: askStatus === 'sending' ? 0.6 : 1 }}
+                style={{ padding: '12px 18px', borderRadius: '10px', border: 'none', background: 'var(--accent)', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer', opacity: askStatus === 'sending' ? 0.6 : 1 }}
               >
                 {askStatus === 'sending' ? 'Sending…' : 'Request access'}
               </button>
               {askStatus === 'error' && (
-                <p style={{ fontSize: '13px', color: '#B4470E', margin: '2px 0 0' }}>
+                <p style={{ fontSize: '13px', color: 'var(--accent-deep)', margin: '2px 0 0' }}>
                   Something went wrong. You can also email me at{' '}
-                  <a href={`mailto:${CONTACT_EMAIL}?subject=Case%20study%20access%20request`} style={{ color: '#B4470E', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
+                  <a href={`mailto:${CONTACT_EMAIL}?subject=Case%20study%20access%20request`} style={{ color: 'var(--accent-deep)', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
                 </p>
               )}
             </form>

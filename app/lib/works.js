@@ -173,7 +173,7 @@ export const works = [
   },
   {
     slug: 'Commonality',
-    underConstruction: true,
+    underConstruction: process.env.NODE_ENV === 'production', // open locally while building; remove this line when ready to publish
     navLabel: 'ASML Commonality',
     title: 'ASML',
     confidential: true,
@@ -258,7 +258,7 @@ export const works = [
   },
   {
     slug: 'sintek-procurement-platform',
-    underConstruction: true,
+    underConstruction: process.env.NODE_ENV === 'production', // open locally while building; remove this line when ready to publish
     navLabel: 'Sintek',
     title: 'Sintek BV',
     confidential: true,

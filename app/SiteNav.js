@@ -69,7 +69,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
 
   const navRow = (
     <nav style={{
-      background: variant === 'floating' ? (scrolled ? 'rgba(255,255,255,0.92)' : 'transparent') : (isDark ? 'transparent' : '#FFFFFF'),
+      background: variant === 'floating' ? (scrolled ? 'var(--bg)' : 'transparent') : (isDark ? 'transparent' : 'var(--bg)'),
       backdropFilter: variant === 'floating' && scrolled ? 'blur(16px)' : 'none',
       WebkitBackdropFilter: variant === 'floating' && scrolled ? 'blur(16px)' : 'none',
       border: 'none',
@@ -84,7 +84,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
       <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
         <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0, marginLeft: '-4.6px', marginRight: '4.6px' }} />
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: '#d04d03', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
+          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
           <div className="nav-subtitle" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: isDark ? 'rgba(255,255,255,0.6)' : '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Design products, services and strategies</div>
         </div>
       </Link>
@@ -117,7 +117,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
               edge case) can ever visually render behind/through the fixed nav */}
           <div style={{
             position: 'fixed', top: 0, left: 0, right: 0, height: '104px',
-            background: '#FFFFFF', zIndex: 99, opacity: 1, pointerEvents: 'none',
+            background: 'var(--bg)', zIndex: 99, opacity: 1, pointerEvents: 'none',
           }} />
           <div style={{
             position: 'fixed', top: '20px', left: '50%',
@@ -287,9 +287,9 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
                   </button>
 
                   {contactStatus === 'error' && (
-                    <p style={{ fontSize: '13px', color: '#B4470E', margin: '4px 0 0' }}>
+                    <p style={{ fontSize: '13px', color: 'var(--accent-deep)', margin: '4px 0 0' }}>
                       Something went wrong. You can also email me directly at{' '}
-                      <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#B4470E', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
+                      <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--accent-deep)', textDecoration: 'underline' }}>{CONTACT_EMAIL}</a>.
                     </p>
                   )}
                 </form>
