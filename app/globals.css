@@ -492,6 +492,6 @@ html { --font-display: var(--font-work-sans); }
 
 
 /* Palette (accent, deep accent for small text, light accent for dark photos, page background, map colours) */
-:root { --accent:#d04d03; --accent-deep:#B4470E; --accent-light:#FFA066; --bg:#E5E8E1; --card:#FFFFFF; --map-2:#0E9F8E; --map-3:#D6457F; }
+:root { --accent:#d04d03; --accent-deep:#B4470E; --accent-light:#FFA066; --bg:#FFFFFF; --card:#FFFFFF; --map-2:#0E9F8E; --map-3:#D6457F; }
 
 
