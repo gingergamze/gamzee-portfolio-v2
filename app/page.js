@@ -345,7 +345,7 @@ export default function Home() {
             letterSpacing: '-0.005em',
             color: '#554E48',
           }}>
-            Designer with UX research, project management, sales and CX experience (10+ years)
+            Product builder with design, research, project management and CX experience (10+ years)
           </p>
         </div>
         <div className="hero-map" style={{

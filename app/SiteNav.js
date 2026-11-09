@@ -85,7 +85,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
         <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0, marginLeft: '-4.6px', marginRight: '4.6px' }} />
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
           <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
-          <div className="nav-subtitle" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: isDark ? 'rgba(255,255,255,0.6)' : '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Design products, services and strategies</div>
+          <div className="nav-subtitle" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: isDark ? 'rgba(255,255,255,0.6)' : '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Design, Build, Manage</div>
         </div>
       </Link>
       <div className="nav-contact-wrap" style={{ display: 'flex', gap: '16px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
