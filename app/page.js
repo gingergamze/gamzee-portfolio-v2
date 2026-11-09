@@ -345,7 +345,9 @@ export default function Home() {
             letterSpacing: '-0.005em',
             color: '#554E48',
           }}>
-            Product builder with design, research, project management and CX experience (10+ years)
+            <span style={{ display: 'block' }}>Product builder with design, research,</span>
+            <span style={{ display: 'block' }}>project management and CX experience</span>
+            <span style={{ display: 'block' }}>(10+ years)</span>
           </p>
         </div>
         <div className="hero-map" style={{
