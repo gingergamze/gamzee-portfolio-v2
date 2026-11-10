@@ -58,7 +58,7 @@ export default function WorkLockedPage() {
         <img src="/sun.png" alt="Gamze" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block' }} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em' }}>Product Design, Build, Manage</div>
+          <div style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em' }}>Product Lead</div>
         </div>
       </Link>
 

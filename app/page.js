@@ -317,12 +317,12 @@ export default function Home() {
             // for real presence.
             fontFamily: 'var(--font-display)',
             fontWeight: 800,
-            fontSize: 'clamp(42px, 10.5vw, 140px)',
+            fontSize: 'clamp(34px, 8.4vw, 112px)',
             lineHeight: 1,
             letterSpacing: '-0.03em',
             color: 'var(--accent)',
           }}>
-            Design & Strategy
+            Design, Build, Manage
           </p>
           <h1 className="hero-headline" style={{
             margin: '68px 0 0 -0.0976em',
