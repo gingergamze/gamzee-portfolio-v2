@@ -39,7 +39,7 @@ export const works = [
     stats: [
       { value: '90%', trend: 'down', label: 'Clearer tool language', note: '90% of ASML workers found the language clearer than the previous version', big: '90%', text: 'of ASML workers found the language clearer than the previous version' },
       { value: '30 sec', trend: 'up', label: 'Finding the starting point is faster', note: 'Finding the starting point takes 30 sec, down from 90 sec', big: '30 sec', text: 'down from 90 sec' },
-      { value: '50% ', trend: 'down', label: 'Reduced steps to complete a task ', note: 'Tasks now need 50% fewer steps', big: '50%', text: 'fewer steps per task' },
+      { value: '50%', trend: 'down', label: 'Reduced steps to complete a task', note: 'Tasks now need 50% fewer steps', big: '50%', text: 'fewer steps per task' },
     ],
     // Before / after story under the metrics. Add `image` to show a visual.
     impactStory: [
@@ -182,7 +182,7 @@ export const works = [
     tagline: 'Redesigned an analysis tool that helps engineers to make better chip machines',
     role: 'Role',
     year: '2022-2024',
-    domain: 'internal analysis tool',
+    domain: 'Internal analysis tool',
     desc: 'A short description of the project — the problem, what you designed and the outcome.',
     tags: ['Internal Analysis Tool', 'Decision Support Tool', 'Data Tool'],
     type: 'image',
@@ -201,7 +201,7 @@ export const works = [
       'A short statement of how the design solved it.',
     ],
     stats: [
-      { value: '25%', trend: 'up', label: 'Improved information hiyearchy' },
+      { value: '25%', trend: 'up', label: 'Improved information hierarchy' },
       { value: '1 week', trend: 'down', label: 'Reduced cognitive complexity' },
     ],
     // Before / after story under the metrics. Add `image` to show a visual.
@@ -265,19 +265,19 @@ export const works = [
     logo: '/sinteklogo.png',
     logoHeight: '15px',
     bgColor: '#D96B2C',
-    tagline: 'Building a tailor made internal workflow tool for procurement',
+    tagline: 'Building a tailor-made internal workflow tool for procurement',
     role: 'Lead Product Designer',
-    year: '2024- Ongoing',
+    year: '2024 – Ongoing',
     domain: 'Enterprise',
     desc: 'An enterprise-grade internal procurement and supply-chain platform. Consolidated fragmented vendor data into one operational source of truth.',
-    tags: ['Enterprise UX', 'Procurement tool', 'Internal tool', 'Tailor-made software'],
+    tags: ['Enterprise UX', 'Procurement Tool', 'Internal Tool', 'Tailor-Made Software'],
     type: 'image',
     media: '/project-three-robotics.jpg',
     client: 'Sintek',
     clientDescription: 'Sintek BV is a Dutch engineering and construction company delivering industrial and infrastructure projects.',
     deliverables: ['Product design', 'Design system', 'UX research'],
-    timeline: '2024- Current',
-    team: ['Full Stack Developer', 'Construction Project  Engineer'],
+    timeline: '2024 – Current',
+    team: ['Full Stack Developer', 'Construction Project Engineer'],
     problem: 'Fragmented vendor data and no single source of truth.',
     solution: 'One procurement platform and a design system built for daily use.',
     designChallenge: [
@@ -288,8 +288,8 @@ export const works = [
     ],
     stats: [
       { value: '25%', trend: 'down', label: 'Improved workflow consistency' },
-      { value: '1 week', trend: 'up', label: 'Increased visibility during procurement process' },
-      { value: '>95%', trend: 'up', label: ' Fixed old fashioned manuel processes ' },
+      { value: '1 week', trend: 'up', label: 'Increased visibility during the procurement process' },
+      { value: '>95%', trend: 'up', label: 'Fixed old-fashioned manual processes' },
     ],
     // Before / after story under the metrics. Add `image` to show a visual.
     impactStory: [
