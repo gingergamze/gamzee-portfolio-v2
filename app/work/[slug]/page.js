@@ -300,7 +300,7 @@ export default async function CaseStudyPage({ params }) {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {work.team.map((member) => (
-                <div key={member} style={{ fontFamily: 'var(--font-work-sans)', fontSize: '15px', color: '#3D3631' }}>
+                <div key={member} style={T.metaValue}>
                   {member}
                 </div>
               ))}
