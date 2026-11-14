@@ -13,6 +13,7 @@ import HeroTour from './HeroTour';
 import HeroNote from './HeroNote';
 import ImpactBlock from './ImpactBlock';
 import ImpactBand from './ImpactBand';
+import CaseHeadline from './CaseHeadline';
 
 // Shared type system for the case study text — one label style, one body
 // style, one meta style, so every section reads the same.
@@ -217,14 +218,19 @@ export default async function CaseStudyPage({ params }) {
       }}>
         {/* Main column — description, then Problem / Solution */}
         <div className="cs-main" style={{ order: 2, display: 'flex', flexDirection: 'column', gap: 'clamp(64px,9vh,112px)' }}>
-          <div>
-            <div style={{ ...T.label, lineHeight: 1, marginTop: '-0.1em', marginBottom: '18px' }}>
-              About
+          {work.headline ? (
+            // Some case studies open with a question instead of the About text.
+            <CaseHeadline headline={work.headline} tagline={work.headlineDeck === false ? '' : work.tagline} />
+          ) : (
+            <div>
+              <div style={{ ...T.label, lineHeight: 1, marginTop: '-0.1em', marginBottom: '18px' }}>
+                About
+              </div>
+              <p className="cs-copy" style={{ ...T.body, maxWidth: '100ch' }}>
+                {work.desc}
+              </p>
             </div>
-            <p className="cs-copy" style={{ ...T.body, maxWidth: '100ch' }}>
-              {work.desc}
-            </p>
-          </div>
+          )}
 
           {/* Overview photo — moved down from the hero so it reads as part
               of the story, right after the opening description. */}

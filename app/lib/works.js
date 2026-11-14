@@ -4,6 +4,9 @@ export const works = [
   {
     slug: 'asml-risk-assessment',
     navLabel: 'ASML Workflow',
+    // Opens the case study with this question instead of the About text.
+    headline: 'How can ASML reduce production errors?',
+    headlineDeck: false, // no supporting line under the headline
     title: 'ASML',
     confidential: true,
     logo: '/asmllogo.png',
