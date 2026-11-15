@@ -113,7 +113,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
           {/* TOP MASK — always opaque so nothing (a stray huge glyph, a future
               edge case) can ever visually render behind/through the fixed nav */}
           <div style={{
-            position: 'fixed', top: 0, left: 0, right: 0, height: '104px',
+            position: 'fixed', top: 0, left: 0, right: 0, height: '124px',
             background: isDark ? 'rgba(255,255,255,0)' : 'var(--bg)', transition: 'none', zIndex: 99, opacity: 1, pointerEvents: 'none',
           }} />
           <div style={{

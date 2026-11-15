@@ -276,7 +276,8 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           else {
             ctx.textAlign = 'center';
             const half = ctx.measureText(n.label).width / 2 + 4;
-            tx = Math.max(-padX + half, Math.min(w + padX - half, tx));
+            const lim = model.vertical ? 4 : padX;
+            tx = Math.max(-lim + half, Math.min(w + lim - half, tx));
           }
           ctx.strokeText(n.label, tx, ty); ctx.fillText(n.label, tx, ty);
         } else {

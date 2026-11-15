@@ -466,8 +466,7 @@ body {
   }
 }
 @media (max-width: 899px) {
-  header.hero { position: relative !important; }
-  header.hero { padding-top: 128px !important; padding-bottom: 40px !important; }
+  header.hero { padding-top: 152px !important; padding-bottom: 40px !important; }
   .hero-headline { margin-top: 36px !important; }
   .scroll-cue { display: none !important; }
   .hero-map {
