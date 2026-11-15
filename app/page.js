@@ -310,7 +310,7 @@ export default function Home() {
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
             <span style={{ display: 'block', marginBottom: '10px' }}>Inefficiencies in Enterprise Apps cost time and money.</span>
-            <span style={{ display: 'block' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong> in <strong style={{ fontWeight: 700 }}>Enterprise B2B</strong> products.</span>
+            <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong> in <strong style={{ fontWeight: 700 }}>Enterprise B2B</strong> products.</span>
             <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
           </p>
         </div>
@@ -320,7 +320,7 @@ export default function Home() {
           aria-label="Scroll down"
           onClick={() => window.scrollBy({ top: window.innerHeight, behavior: 'smooth' })}
           style={{
-            position: 'absolute', left: 'var(--pl-hero)', bottom: 18, zIndex: 3,
+            position: 'absolute', left: 'var(--pl-hero)', bottom: 88, zIndex: 3,
             display: 'flex', alignItems: 'center', gap: 12, background: 'none', border: 'none',
             cursor: 'pointer', padding: 0,
             opacity: atTop ? 1 : 0, pointerEvents: atTop ? 'auto' : 'none', transition: 'opacity 0.3s ease',
