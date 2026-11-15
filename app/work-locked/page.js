@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import BrandLockup from '../BrandLockup';
 import { CONTACT_EMAIL, sendToInbox } from '../lib/contact';
 
 // Served by middleware.js in place of any /work/<slug> page the visitor
@@ -55,11 +56,7 @@ export default function WorkLockedPage() {
       background: '#FFFFFF', padding: '24px',
     }}>
       <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', marginBottom: 'clamp(40px,6vh,64px)' }}>
-        <img src="/sun.png" alt="Gamze" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: '#7C756E', letterSpacing: '0.02em' }}>Product Lead</div>
-        </div>
+        <BrandLockup dark={false} />
       </Link>
 
       <div style={{ width: '100%', maxWidth: '380px', textAlign: 'center' }}>

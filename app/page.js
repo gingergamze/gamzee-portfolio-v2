@@ -1,17 +1,19 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
 import SiteNav from './SiteNav';
 import SkillsMap from './SkillsMap';
+import HeroVideo from './HeroVideo';
 import Testimonials from './Testimonials';
 import { works } from './lib/works';
 
 const ACCENT = 'var(--accent-deep)';
 
 // Hero subheadline rotator — "For" stays fixed, this cycles and loops.
-const HERO_PHRASES = ['complex workflows', 'operational processes and tools', 'data-rich products'];
+const HERO_PHRASES = ['complex workflows', 'operational processes and tools', 'data-rich products', 'enterprise products'];
 const HERO_HOLD_MS = 2200;
 const HERO_HOLD_EXTRA_MS = { 'operational processes and tools': 500 };
 const HERO_TRANSITION_MS = 550;
@@ -20,8 +22,6 @@ export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [atTop, setAtTop] = useState(true);
-  const [activeCard, setActiveCard] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   // Which Selected Work card is hovered — tracked in React state (not pure
   // CSS :hover) so it resets cleanly when this page remounts after a
   // click-through-and-back navigation, instead of staying "stuck" showing
@@ -63,39 +63,6 @@ export default function Home() {
   // The hero pins the skills map to the bottom of the screen. On short screens
   // (Windows laptops at 125–150% scaling) there is no room left for it under the
   // text, so the hero stacks instead: text first, then the map at full size.
-  const heroRef = useRef(null);
-  const [heroStack, setHeroStack] = useState(false);
-  const textBottomMax = useRef(0);
-  const measureHero = (reset) => {
-    const hero = heroRef.current;
-    const intro = hero && hero.querySelector('.hero-intro');
-    if (!intro) return;
-    if (window.innerWidth < 900) { setHeroStack(false); return; }
-    if (reset) textBottomMax.current = 0;
-    // Rotating phrases can wrap to a second line; keep the tallest seen so the layout never flips back and forth.
-    const bottom = intro.getBoundingClientRect().bottom - hero.getBoundingClientRect().top;
-    textBottomMax.current = Math.max(textBottomMax.current, bottom);
-    const vh = window.innerHeight;
-    const mapH = Math.min(0.41 * vh, 395);
-    const mapTop = vh - (Math.min(Math.max(24, 0.04 * vh), 48) + 64) - mapH;
-    setHeroStack(mapH < 300 || textBottomMax.current - mapTop > 120);
-  };
-  useEffect(() => {
-    const onResize = () => measureHero(true);
-    onResize();
-    window.addEventListener('resize', onResize);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-  useEffect(() => { measureHero(false); }, [heroPhraseIndex]);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 600px)');
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -124,15 +91,6 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Per-photo framing: fit = 'cover' (fills, crops) or 'contain' (whole photo, no crop)
-  //                    pos = 'center top' / 'center center' / 'center 30%' etc. (only affects 'cover')
-  const stories = [
-    { img: '/amsterdam.jpeg', label: 'Feels Home', fit: 'cover', pos: 'center center', text: 'Dutch citizen and living in Amsterdam' },
-    { img: '/work-experience-workshop.jpg', label: 'Work Experience', fit: 'cover', pos: 'center center', text: 'Banking, Consulting Agency, Manufacturing Company, Small to Medium-Sized Construction Engineering Company' },
-    { img: '/propic.png', label: 'Background', fit: 'cover', pos: 'center 20%', zoom: 1.7, text: 'Communication, Business Management and Data Driven Design' },
-    { img: '/board.png', label: 'Specialization', fit: 'cover', pos: '3% top', zoom: 1.3, text: 'Improving operational processes and tools by tailor made digital solutions, managing product teams and product roadmaps' },
-    { img: '/ofis.JPG', label: 'Like Fixing', fit: 'cover', pos: 'center 10%', text: 'Organizations struggling with poor cross-functional collaboration, inefficient workflows and complex processes because of their domain' },
-  ];
 
   // Selected Work card — "showcase" style: a colored visual panel on top
   // (placeholder for whatever mockups/photos get dropped in later) with a
@@ -284,15 +242,17 @@ export default function Home() {
 
   return (
     <>
-      <SiteNav />
+      <SiteNav theme="dark" />
 
       {/* HERO */}
-      <header ref={heroRef} className={heroStack ? 'hero hero-stack' : 'hero'} style={{
+      <header className="hero" style={{
         position: 'sticky',
         top: 0,
         zIndex: 0,
         minHeight: '100vh',
-        background: 'var(--bg)',
+        // Dark while the video is up; plain page colour once the cards cover it, so nothing dark shows in the gaps beside them
+        background: scrolled ? 'var(--bg)' : '#0E1320',
+        transition: 'none',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
@@ -300,14 +260,15 @@ export default function Home() {
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}>
+        <HeroVideo off={scrolled} />
         <div style={{
           position: 'relative',
           zIndex: 1,
           // Once the cards have risen over the hero, blur what's left of it
           // so the red kicker doesn't read through the gaps beside the cards
           filter: scrolled ? 'blur(28px)' : 'none',
-          opacity: scrolled ? 0.35 : 1,
-          transition: 'filter 0.8s ease, opacity 0.8s ease',
+          opacity: scrolled ? 0 : 1,
+          transition: 'none',
         }}>
           <p className="hero-kicker" style={{
             margin: '0 0 24px -0.066em',
@@ -320,7 +281,8 @@ export default function Home() {
             fontSize: 'clamp(34px, 8.4vw, 112px)',
             lineHeight: 1,
             letterSpacing: '-0.03em',
-            color: 'var(--accent)',
+            color: '#FFFFFF',
+            textShadow: '0 2px 26px rgba(0,0,0,0.45)',
           }}>
             Design, Build, Manage
           </p>
@@ -331,31 +293,26 @@ export default function Home() {
             fontSize: 'clamp(22px, 5vw, 44px)',
             lineHeight: 1.15,
             letterSpacing: '-0.02em',
-            color: '#3D3631',
+            color: '#FFFFFF',
+            textShadow: '0 2px 22px rgba(0,0,0,0.45)',
           }}>
             For <span className={`hero-rotator${heroPhraseVisible ? ' is-visible' : ''}`}>{HERO_PHRASES[heroPhraseIndex]}</span>
           </h1>
           <p className="hero-intro" style={{
             margin: '28px 0 0 -0.1em',
-            maxWidth: '40ch',
+            maxWidth: '56ch',
             fontFamily: 'var(--font-work-sans)',
             fontWeight: 400,
-            fontSize: 'clamp(16px, 1.5vw, 19px)',
+            fontSize: 'clamp(15px, 1.3vw, 18px)',
             lineHeight: 1.55,
             letterSpacing: '-0.005em',
-            color: '#554E48',
+            color: 'rgba(255,255,255,0.92)',
+            textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span style={{ display: 'block' }}>Product builder with design, research,</span>
-            <span style={{ display: 'block' }}>project management and CX experience</span>
-            <span style={{ display: 'block' }}>(10+ years)</span>
+            <span style={{ display: 'block', marginBottom: '10px' }}>Inefficiencies in Enterprise Apps cost time and money.</span>
+            <span style={{ display: 'block' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong> in <strong style={{ fontWeight: 700 }}>Enterprise B2B</strong> products.</span>
+            <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
           </p>
-        </div>
-        <div className="hero-map" style={{
-          filter: scrolled ? 'blur(28px)' : 'none',
-          opacity: scrolled ? 0.35 : 1,
-          transition: 'filter 0.8s ease, opacity 0.8s ease',
-        }}>
-          <SkillsMap height="100%" wideFrom={600} fontSize={13} />
         </div>
         <button
           type="button"
@@ -379,7 +336,8 @@ export default function Home() {
           </span>
           <span style={{
             fontFamily: 'var(--font-work-sans)', fontSize: 12, fontWeight: 800,
-            letterSpacing: '0.14em', textTransform: 'uppercase', color: '#1C1917',
+            letterSpacing: '0.14em', textTransform: 'uppercase', color: '#FFFFFF',
+            textShadow: '0 1px 10px rgba(0,0,0,0.5)',
           }}>
             Scroll Down
           </span>
@@ -392,8 +350,7 @@ export default function Home() {
           sections just scrolling away at the same rate with only a small
           overlap between them. */}
       <section className="reveal reveal-card" style={{
-        position: 'sticky',
-        top: 0,
+        position: 'relative',
         zIndex: 1,
         marginTop: 0,
         marginLeft: 'var(--card-m-what)',
@@ -406,7 +363,7 @@ export default function Home() {
         boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
       }}>
         <div style={{
-          padding: 'clamp(80px,14vh,160px) var(--pl-what) clamp(120px,24vh,280px) var(--pl-what)',
+          padding: 'clamp(80px,14vh,160px) var(--pl-what) clamp(72px,12vh,140px) var(--pl-what)',
         }}>
           <h2 className="reveal" style={{
             fontFamily: 'var(--font-display)',
@@ -424,12 +381,16 @@ export default function Home() {
             fontSize: 'clamp(18px,2vw,20px)',
             lineHeight: 1.5,
             color: '#1C1917',
-            margin: '0 0 32px -0.108em',
+            margin: '0 0 clamp(40px,6vh,72px) -0.108em',
             maxWidth: '152ch',
           }}>
-            <span className="line" style={{ '--i': 0, display: 'block', marginBottom: '28px' }}>Internal tools often cost a business more time than anyone sees.</span>
-            <span className="line" style={{ '--i': 1, display: 'block' }}>I find where <strong style={{ fontWeight: 700 }}>the work slows down</strong> in <strong style={{ fontWeight: 700 }}>Internal Tools/Software</strong>, <strong style={{ fontWeight: 700 }}>Business-to-Employee (B2E)</strong> and <strong style={{ fontWeight: 700 }}>B2B workflow</strong> products. Then I <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
+            <span className="line" style={{ '--i': 0, display: 'block' }}>I’m a product builder with a design, research, project management and CX background.</span>
+            <span className="line" style={{ '--i': 1, display: 'block', marginTop: '6px', fontWeight: 700 }}>10+ years</span>
           </p>
+          {/* The skills map: design, products and the problems I fix */}
+          <div className="what-map" style={{ position: 'relative', width: '100%', margin: '0 auto', height: 'clamp(470px, 38vw, 560px)' }}>
+            <SkillsMap height="100%" wideFrom={600} fontSize={14} spanDeg={88} sideMargin={190} />
+          </div>
         </div>
       </section>
 
@@ -472,154 +433,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ABOUT ME + FOOTER — shared video background */}
-      <section className="reveal reveal-card" style={{
-        position: 'relative',
-        zIndex: 3,
-        marginTop: 'clamp(-60px,-8vh,-40px)',
-        marginLeft: 'var(--card-m-about)',
-        marginRight: 'var(--card-m-about)',
-        background: 'var(--card)',
-        borderRadius: '12px',
-        border: '0.7px solid rgba(28,25,23,0.1)',
-        boxShadow: '0 -2px 6px rgba(28,25,23,0.08), 0 -8px 24px rgba(28,25,23,0.08)',
-      }}>
-        {/* About me content */}
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '2000px',
-          margin: '0',
-          padding: 'clamp(60px,10vh,120px) var(--pl-about) clamp(80px,14vh,160px) var(--pl-about)',
-        }}>
-          {/* Not sticky: the deck below only advances via the prev/next
-              buttons (no scroll-linked story), so pinning these while the
-              deck scrolled underneath just meant its top edge kept getting
-              covered by these opaque panels — a real bug, not a style choice. */}
-          <h2 style={{
-            fontFamily: 'var(--font-display)',
-            fontOpticalSizing: 'auto',
-            fontWeight: 700,
-            fontSize: 'clamp(20px, 9vw, 60px)',
-            letterSpacing: '-0.02em',
-            lineHeight: 0.99,
-            color: '#1C1917',
-            margin: '0 0 64px -0.011em',
-            padding: '8px 0',
-          }}>
-            About
-          </h2>
-          <div style={{
-            minHeight: '5em',
-            marginBottom: '40px',
-            paddingBottom: '8px',
-          }}>
-            <div style={{
-              fontFamily: 'var(--font-work-sans)',
-              fontOpticalSizing: 'auto',
-              fontSize: '13px',
-              fontWeight: 700,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'var(--accent)',
-              marginBottom: '12px',
-              transition: 'opacity 0.3s ease',
-            }}>
-              {stories[activeCard].label}
-            </div>
-            <p style={{
-              fontSize: 'clamp(18px,2vw,20px)',
-              lineHeight: 1.5,
-              color: '#1C1917',
-              margin: 0,
-              maxWidth: 'none',
-              whiteSpace: isMobile ? 'normal' : 'nowrap',
-              transition: 'opacity 0.3s ease',
-            }}>
-              {stories[activeCard].text}
-            </p>
-          </div>
-
-          {/* STORY DECK — pile fans both ways, centered like the Selected Work photo */}
-          <div style={{ width: 'fit-content', margin: '0 auto', marginTop: '80px', position: 'relative', zIndex: 1, isolation: 'isolate' }}>
-          <div style={{
-            position: 'relative',
-            height: isMobile ? '190px' : '320px',
-            marginBottom: '20px',
-            width: isMobile ? '170px' : '300px',
-            margin: isMobile ? '0' : '0 auto 20px',
-          }}>
-            {stories.map((card, i) => {
-              const offset = i - activeCard;
-              const abs = Math.abs(offset);
-              const cardSize = isMobile ? 170 : 300;
-              const offsetStep = isMobile ? 22 : 48;
-              return (
-                <div
-                  key={i}
-                  onClick={() => setActiveCard(i)}
-                  className={offset === 0 && activeCard === 0 ? 'deck-nudge' : undefined}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: `${cardSize}px`,
-                    height: `${cardSize}px`,
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    background: '#FFFFFF',
-                    border: '1px solid rgba(28,25,23,0.12)',
-                    boxShadow: offset === 0 ? '0 12px 34px rgba(28,25,23,0.18)' : '0 6px 20px rgba(28,25,23,0.10)',
-                    transform: `translateX(${offset * offsetStep}px) translateY(${abs * 4}px) scale(${1 - abs * 0.05}) rotate(${offset * 1.5}deg)`,
-                    opacity: offset === 0 ? 1 : Math.max(0, 0.35 - abs * 0.12),
-                    zIndex: 20 - abs,
-                    transformOrigin: 'center center',
-                    transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease, box-shadow 0.45s ease',
-                    cursor: 'pointer',
-                    pointerEvents: abs > 3 ? 'none' : 'auto',
-                  }}
-                >
-                  {/* Image — fills the whole card */}
-                  <div style={{ height: '100%', width: '100%', overflow: 'hidden' }}>
-                    <img src={card.img} alt={card.label} style={{ width: '100%', height: '100%', objectFit: card.fit || 'cover', objectPosition: card.pos || 'center center', transform: card.zoom ? `scale(${card.zoom})` : 'none', transformOrigin: card.pos || 'center center', display: 'block' }} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Deck controls — centered under the photos */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', width: isMobile ? '170px' : '380px' }}>
-            <button
-              onClick={() => setActiveCard((v) => (v - 1 + stories.length) % stories.length)}
-              aria-label="Previous story"
-              className="deck-arrow-btn"
-              style={{
-                width: '30px', height: '30px', borderRadius: '8px',
-                border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
-                cursor: 'pointer', display: 'grid', placeItems: 'center',
-              }}
-            >
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-
-            <button
-              onClick={() => setActiveCard((v) => (v + 1) % stories.length)}
-              aria-label="Next story"
-              className="deck-arrow-btn"
-              style={{
-                width: '30px', height: '30px', borderRadius: '8px',
-                border: '1px solid rgba(28,25,23,0.2)', background: 'transparent',
-                cursor: 'pointer', display: 'grid', placeItems: 'center',
-              }}
-            >
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-          </div>
-          </div>
-
-        </div>
-      </section>
 
       {/* TOOLS — a first, quieter footer band above the real footer. Logos are
           all the same size (28px square) and colour. */}

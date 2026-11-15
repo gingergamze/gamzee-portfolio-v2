@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 // Interactive map: pull any dot and the lines stretch, so the dots linked to it
 // move too. Springs keep every dot attached to its group and to the center.
 const GROUPS = [
-  { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Prototyping', 'AI design', 'Concept development'] },
+  { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Journey maps', 'Prototyping', 'AI design', 'Concept development'] },
+  { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog'] },
   { name: 'Products', color: '#0E9F8E', items: ['Internal tools', 'B2E software', 'B2B workflows', 'Enterprise software', 'Operational processes'] },
   { name: 'Problems I fix', color: '#D6457F', items: ['Confusing navigation', 'Information overload', 'Complex tool language', 'Unclear product vision', 'Stubborn stakeholders 😊'] },
 ];
@@ -35,10 +36,11 @@ function build() {
   return { nodes, edges };
 }
 
-// Hand-tuned ring for a few dots whose labels would touch (wide layout only).
-const FIX = { 0: 0.6, 1: 0.78, 2: 1, 4: 0.78, 5: 0.92, 6: 0.72, 7: 0.86, 8: 0.6, 9: 1, 10: 0.8, 12: 0.92, 14: 0.58, 15: 1 };
+// How far from the centre each dot sits (0 to 1) in the wide layout. Worked out so that no two labels touch
+// at laptop and desktop widths. Used when the map has exactly this many dots.
+const WIDE_RINGS = [0.7, 0.7, 0.8, 1.0, 1.0, 1.0, 1.0, 0.45, 0.85, 0.65, 0.5, 1.0, 0.75, 1.0, 0.45, 1.0, 0.8, 0.75, 0.7, 0.75, 0.75];
 
-// Phones: the three groups are stacked under each other and linked in a chain.
+// Phones: the groups are stacked under each other and linked in a chain.
 // Each group's dots spread around its own center dot.
 function layoutVertical(model, w, h) {
   const { nodes, edges } = model;
@@ -72,15 +74,15 @@ function layoutVertical(model, w, h) {
   model.rx = rx; model.ry = ry; model.cx = cx; model.cy = h; model.vertical = true;
 }
 
-function layout(model, w, h, wideFrom) {
+function layout(model, w, h, wideFrom, opts = {}) {
   const { nodes, edges } = model;
   const narrow = w < wideFrom;
   model.vertical = false;
   edges.forEach((e) => { if (e.trunk) e.a = 0; });
   if (narrow) { layoutVertical(model, w, h); return; }
-  const span = narrow ? 54 : 76;
+  const span = narrow ? 54 : (opts.span || 76);
   const levels = narrow ? [1, 0.8, 0.6] : [1, 0.72, 0.9, 0.6];
-  const margin = narrow ? 46 : Math.min(170, w * 0.16);
+  const margin = narrow ? 46 : opts.margin ? Math.min(opts.margin, w * 0.22) : Math.min(170, w * 0.16);
   const cx = w / 2;
   const cy = h - 8;
   const rx = Math.max(60, (w / 2 - margin) / Math.sin((span * Math.PI) / 180));
@@ -100,7 +102,7 @@ function layout(model, w, h, wideFrom) {
   let prevGroup = leaves[0].group;
   leaves.forEach((n, k) => {
     if (n.group !== prevGroup) { deg += gap; prevGroup = n.group; }
-    place(n, !narrow && FIX[k] ? FIX[k] : levels[k % levels.length], deg);
+    place(n, !narrow && total === WIDE_RINGS.length ? WIDE_RINGS[k] : levels[k % levels.length], deg);
     n.side = !narrow && Math.abs(deg) > 38 ? Math.sign(deg) : 0;
     deg += step;
   });
@@ -112,17 +114,17 @@ function layout(model, w, h, wideFrom) {
   nodes[0].hx = cx; nodes[0].hy = cy;
   // Make room between the three groups: the left one moves left and the right one moves right.
   const shift = narrow ? Math.min(26, w * 0.08) : Math.min(80, w * 0.09);
+  // Groups fan out from the middle: the outer ones move the most.
   nodes.forEach((n) => {
     if (n.type === 'root' || !shift) return;
-    if (n.group === 0) n.hx -= shift;
-    if (n.group === GROUPS.length - 1) n.hx += shift;
+    n.hx += (n.group - (GROUPS.length - 1) / 2) * shift * (GROUPS.length > 3 ? 0.8 : 1);
   });
   nodes.forEach((n) => { n.x = n.hx; n.y = n.hy; n.vx = 0; n.vy = 0; });
   edges.forEach((e) => { e.rest = Math.hypot(nodes[e.a].hx - nodes[e.b].hx, nodes[e.a].hy - nodes[e.b].hy); });
   model.rx = rx; model.ry = ry; model.cx = cx; model.cy = cy;
 }
 
-export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels = 'auto', wideFrom = 760, fontSize }) {
+export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels = 'auto', wideFrom = 760, fontSize, spanDeg, sideMargin }) {
   const wrap = useRef(null);
   const stage = useRef(null);
   const canvas = useRef(null);
@@ -145,9 +147,14 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
     const startLoop = () => { if (!running && visible) { running = true; last = 0; raf = requestAnimationFrame(frame); } };
     const wake = () => { awake = true; startLoop(); };
+    // Label / halo / ring colours can be overridden with CSS variables (used when the map sits on a dark video).
+    let labelColor = '#554E48', labelStroke = '#fff', ringColor = 'rgba(28,25,23,0.07)';
     const applyPalette = () => {
       const cs = getComputedStyle(document.documentElement);
-      const c = [cs.getPropertyValue('--accent').trim() || '#D04D03', cs.getPropertyValue('--map-2').trim() || '#0E9F8E', cs.getPropertyValue('--map-3').trim() || '#D6457F'];
+      labelColor = cs.getPropertyValue('--map-label').trim() || '#554E48';
+      labelStroke = cs.getPropertyValue('--map-stroke').trim() || '#fff';
+      ringColor = cs.getPropertyValue('--map-ring').trim() || 'rgba(28,25,23,0.07)';
+      const c = [cs.getPropertyValue('--accent').trim() || '#D04D03', cs.getPropertyValue('--map-4').trim() || '#4F6BD9', cs.getPropertyValue('--map-2').trim() || '#0E9F8E', cs.getPropertyValue('--map-3').trim() || '#D6457F'];
       nodes.forEach((n) => { n.color = n.group < 0 ? c[0] : c[n.group]; });
       wake();
     };
@@ -164,7 +171,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
       cv.width = Math.round((w + padX * 2) * dpr); cv.height = Math.round((h + padTop) * dpr);
       cv.style.width = `${w + padX * 2}px`; cv.style.height = `${h + padTop}px`;
       cv.style.left = `${-padX}px`; cv.style.top = `${-padTop}px`;
-      layout(model, w, h, wideFrom);
+      layout(model, w, h, wideFrom, { span: spanDeg, margin: sideMargin });
       draw();
     };
 
@@ -212,7 +219,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
       // faint rings around the center
       ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(28,25,23,0.07)';
+      ctx.strokeStyle = ringColor;
       (model.vertical ? [] : [0.27, 0.64, 1]).forEach((m) => {
         ctx.beginPath();
         ctx.ellipse(model.cx, model.cy, model.rx * m, model.ry * m, 0, Math.PI, Math.PI * 2);
@@ -262,8 +269,8 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
         if (n.type === 'leaf' && labels === 'active' && ag !== n.group) return;
         if (n.type === 'leaf') {
           ctx.font = `400 ${model.vertical ? (w < 340 ? 10 : 11) : fontSize ?? (small ? 11 : w < 900 ? 13 : 14)}px ${family}`;
-          ctx.fillStyle = '#554E48';
-          ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.lineJoin = 'round';
+          ctx.fillStyle = labelColor;
+          ctx.lineWidth = 4; ctx.strokeStyle = labelStroke; ctx.lineJoin = 'round';
           let tx = n.x, ty = n.y - 11;
           if (n.side) { ctx.textAlign = n.side > 0 ? 'left' : 'right'; tx = n.x + n.side * 9; ty = n.y + 3; }
           else {
@@ -273,7 +280,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           }
           ctx.strokeText(n.label, tx, ty); ctx.fillText(n.label, tx, ty);
         } else {
-          ctx.font = `700 ${fontSize ? fontSize + 1 : small ? 12 : 15}px ${family}`;
+          ctx.font = `700 ${fontSize ? fontSize + 6 : small ? 15 : 19}px ${family}`;
           const leftHub = n.type === 'hub' && n.deg < -12;
           const rightHub = n.type === 'hub' && n.deg > 12;
           ctx.textAlign = leftHub ? 'right' : 'left';
@@ -282,7 +289,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           if (model.vertical) ctx.textAlign = 'center';
           const tx = model.vertical ? n.x : leftHub ? n.x - 4 : rightHub ? n.x + 4 : n.x + 10;
           const ty = model.vertical ? n.y - 64 : leftHub || rightHub ? n.y + 22 : n.y - 8;
-          ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.lineJoin = 'round';
+          ctx.lineWidth = 4; ctx.strokeStyle = labelStroke; ctx.lineJoin = 'round';
           ctx.strokeText(n.label, tx, ty); ctx.fillText(n.label, tx, ty);
         }
       });

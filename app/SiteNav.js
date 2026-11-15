@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CONTACT_EMAIL, sendToInbox } from './lib/contact';
+import BrandLockup from './BrandLockup';
 
 // Shared site navigation + contact modal — the SAME component renders on
 // the homepage and on every case study page, so branding/links/behavior
@@ -21,8 +22,9 @@ import { CONTACT_EMAIL, sendToInbox } from './lib/contact';
 // Any "Contact" trigger elsewhere in the app (e.g. the footer button) can
 // open this same modal by dispatching: window.dispatchEvent(new Event('open-contact'))
 export default function SiteNav({ variant = 'floating', backHref, theme = 'light' }) {
-  const isDark = theme === 'dark';
   const [scrolled, setScrolled] = useState(false);
+  // Over a dark hero (theme 'dark' on the floating nav) the text is white until the page is scrolled.
+  const isDark = theme === 'dark' && !(variant === 'floating' && scrolled);
   const [contactOpen, setContactOpen] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
   const [contactStatus, setContactStatus] = useState('idle'); // idle | sending | success | error
@@ -69,9 +71,8 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
 
   const navRow = (
     <nav style={{
-      background: variant === 'floating' ? (scrolled ? 'var(--bg)' : 'transparent') : (isDark ? 'transparent' : 'var(--bg)'),
-      backdropFilter: variant === 'floating' && scrolled ? 'blur(16px)' : 'none',
-      WebkitBackdropFilter: variant === 'floating' && scrolled ? 'blur(16px)' : 'none',
+      background: variant === 'floating' ? (scrolled ? 'var(--bg)' : 'rgba(255,255,255,0)') : (isDark ? 'rgba(255,255,255,0)' : 'var(--bg)'),
+      transition: 'none',
       border: 'none',
       borderRadius: 0,
       padding: variant === 'floating' ? '14px max(10px, calc(var(--page-x) - max(20px, (100vw - 2000px) / 2) - 47px)) 14px max(10px, calc(var(--page-x) - max(20px, (100vw - 2000px) / 2) - 32px))' : '20px clamp(24px,5vw,72px)',
@@ -81,12 +82,8 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
       boxShadow: 'none',
       transition: 'all 0.3s ease',
     }}>
-      <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '14px', textDecoration: 'none', paddingLeft: '0px' }}>
-        <img src="/sun.png" alt="Gamze" className="sun-spin" style={{ borderRadius: '10px', width: '44px', height: '44px', objectFit: 'cover', display: 'block', flexShrink: 0, marginLeft: '-4.6px', marginRight: '4.6px' }} />
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', marginTop: '6px' }}>
-          <div style={{ fontFamily: 'var(--font-work-sans)', fontWeight: 700, fontSize: '20px', color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.01em' }}>Gamze Bozkurt</div>
-          <div className="nav-subtitle" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', color: isDark ? 'rgba(255,255,255,0.6)' : '#7C756E', letterSpacing: '0.02em', lineHeight: 1.3 }}>Product Lead</div>
-        </div>
+      <Link href="/" className="nav-logo" aria-label="Gamze Bozkurt, Product Lead" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', paddingLeft: '0px', marginTop: '4px' }}>
+        <BrandLockup dark={isDark} />
       </Link>
       <div className="nav-contact-wrap" style={{ display: 'flex', gap: '16px', alignItems: 'center', alignSelf: 'flex-start', marginTop: '6px' }}>
         <button
@@ -117,7 +114,7 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
               edge case) can ever visually render behind/through the fixed nav */}
           <div style={{
             position: 'fixed', top: 0, left: 0, right: 0, height: '104px',
-            background: 'var(--bg)', zIndex: 99, opacity: 1, pointerEvents: 'none',
+            background: isDark ? 'rgba(255,255,255,0)' : 'var(--bg)', transition: 'none', zIndex: 99, opacity: 1, pointerEvents: 'none',
           }} />
           <div style={{
             position: 'fixed', top: '20px', left: '50%',
