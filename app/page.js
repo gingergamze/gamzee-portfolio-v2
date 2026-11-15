@@ -8,6 +8,7 @@ import SiteNav from './SiteNav';
 import SkillsMap from './SkillsMap';
 import HeroVideo from './HeroVideo';
 import Testimonials from './Testimonials';
+import AboutStory from './AboutStory';
 import { works } from './lib/works';
 
 const ACCENT = 'var(--accent-deep)';
@@ -464,6 +465,7 @@ export default function Home() {
       </div>
 
       <Testimonials />
+      <AboutStory />
 
 
       {/* FOOTER — sits on the plain page background, below the About card */}
