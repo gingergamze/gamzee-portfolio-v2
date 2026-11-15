@@ -10,13 +10,16 @@ import { useEffect, useRef, useState } from 'react';
 //   team-collaboration.mp4 https://www.pexels.com/video/team-collaboration-in-modern-office-setting-35402300/
 // People who prefer reduced motion get the still picture of the first clip, and nothing is played.
 
-// For now only the dual-monitor clip is shown. The other saved clips (in /public/hero) can be added back to this list:
-//   woman-pointing, team-collaboration (shows faces), colleagues-behind
+// Your own background video (38 seconds, saved smaller so the page stays fast).
+// Other saved clips in /public/hero (dual-monitor, woman-pointing, colleagues-behind, team-collaboration) can be added back to this list.
 const CLIPS = [
-  { src: '/hero/dual-monitor.mp4', poster: '/hero/dual-monitor.jpg' },
+  { src: '/hero/background.mp4', poster: '/hero/background.jpg' },
 ];
 const SHOW_MS = 7000;
 const DIM = 0.42; // how dark the layer over the video is, so the white text stays readable
+
+// Size and place of the video on the right side of the hero (width in vw)
+const WIDTH_VW = 52, RIGHT_VW = 4, TOP = '60%';
 
 export default function HeroVideo({ off = false }) {
   const box = useRef(null);
@@ -55,14 +58,13 @@ export default function HeroVideo({ off = false }) {
   }, [still, off]); // eslint-disable-line
 
   return (
-    <div ref={box} aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, background: '#0E1320', opacity: off ? 0 : 1, transition: 'none' }}>
+    <div ref={box} aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, background: '#000', opacity: off ? 0 : 1, transition: 'none' }}>
       {CLIPS.map((c, i) => (
         <video key={c.src} ref={vids[i]} muted loop playsInline preload={i === 0 ? 'auto' : 'metadata'} poster={c.poster}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: front === i ? 1 : 0, transition: 'opacity 0.9s ease' }}>
+          style={{ position: 'absolute', width: `${WIDTH_VW}vw`, aspectRatio: '4 / 3', objectFit: 'contain', mixBlendMode: 'screen', right: `${RIGHT_VW}vw`, top: TOP, transform: 'translateY(-50%)', opacity: front === i ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           {!still && <source src={c.src} type="video/mp4" />}
         </video>
       ))}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, rgba(0,0,0,${DIM + 0.1}), rgba(0,0,0,${DIM}))` }} />
     </div>
   );
 }

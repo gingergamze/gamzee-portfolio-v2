@@ -284,7 +284,7 @@ export default function Home() {
             color: '#FFFFFF',
             textShadow: '0 2px 26px rgba(0,0,0,0.45)',
           }}>
-            Design, Build, Manage
+            <span style={{ color: '#FFA066' }}>Design</span>, <span style={{ color: '#5FD3C0' }}>Build</span>, <span style={{ color: '#9DB4FF' }}>Manage</span>
           </p>
           <h1 className="hero-headline" style={{
             margin: '68px 0 0 -0.0976em',
