@@ -6,18 +6,21 @@ import { useEffect, useRef, useState } from 'react';
 // Both are free-to-use stock clips from Pexels (no credit needed):
 //   woman-pointing.mp4    https://www.pexels.com/video/a-woman-pointing-her-finger-on-the-laptop-screen-15288943/
 //   colleagues-behind.mp4 https://www.pexels.com/video/back-view-of-women-working-together-on-a-laptop-15288936/
+//   dual-monitor.mp4      https://www.pexels.com/video/dual-monitor-computer-set-up-8347241/
+//   team-collaboration.mp4 https://www.pexels.com/video/team-collaboration-in-modern-office-setting-35402300/
 // People who prefer reduced motion get the still picture of the first clip, and nothing is played.
 
+// For now only the dual-monitor clip is shown. The other saved clips (in /public/hero) can be added back to this list:
+//   woman-pointing, team-collaboration (shows faces), colleagues-behind
 const CLIPS = [
-  { src: '/hero/woman-pointing.mp4', poster: '/hero/woman-pointing.jpg' },
-  { src: '/hero/colleagues-behind.mp4', poster: '/hero/colleagues-behind.jpg' },
+  { src: '/hero/dual-monitor.mp4', poster: '/hero/dual-monitor.jpg' },
 ];
 const SHOW_MS = 7000;
 const DIM = 0.42; // how dark the layer over the video is, so the white text stays readable
 
 export default function HeroVideo({ off = false }) {
   const box = useRef(null);
-  const vids = [useRef(null), useRef(null)];
+  const vids = [useRef(null), useRef(null), useRef(null), useRef(null)];
   const [front, setFront] = useState(0);
   const [still, setStill] = useState(false);
 
@@ -37,11 +40,11 @@ export default function HeroVideo({ off = false }) {
     play(0);
     const tick = () => {
       if (!visible) return;
-      cur = 1 - cur;
+      cur = (cur + 1) % CLIPS.length;
       play(cur);
       setTimeout(() => setFront(cur), 300);
     };
-    timer = setInterval(tick, SHOW_MS);
+    if (CLIPS.length > 1) timer = setInterval(tick, SHOW_MS);
     // Save battery: pause while the hero is off screen
     const io = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting;
