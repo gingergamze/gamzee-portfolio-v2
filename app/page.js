@@ -14,10 +14,21 @@ import { works } from './lib/works';
 const ACCENT = 'var(--accent-deep)';
 
 // Hero subheadline rotator — "For" stays fixed, this cycles and loops.
-const HERO_PHRASES = ['complex workflows', 'operational processes and tools', 'data-rich products', 'enterprise products'];
+const HERO_PHRASES = ['end-to-end business processes', 'operational processes and internal tools', 'data-rich products', 'enterprise products',' B2B products'];
 const HERO_HOLD_MS = 2200;
 const HERO_HOLD_EXTRA_MS = { 'operational processes and tools': 500 };
 const HERO_TRANSITION_MS = 550;
+
+
+// Time and money icons at the end of the first intro sentence (colour emoji; size is set in globals.css)
+function TmEmoji({ kind }) {
+  return (
+    <span className="tm-w tm-emoji">
+      <span aria-hidden="true" className={kind === 'time' ? 'tm-time' : undefined}>{kind === 'time' ? '⏱️' : '💰'}</span>
+      <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>{kind}</span>
+    </span>
+  );
+}
 
 export default function Home() {
   const router = useRouter();
@@ -176,12 +187,30 @@ export default function Home() {
         </div>
 
         {/* Headline — the descriptive project title. */}
-        <h3 className="work-card-title" style={{
-          fontWeight: 400, fontSize: 'clamp(18px,2vw,20px)',
-          lineHeight: 1.5, color: '#1C1917', margin: '0 0 24px',
-        }}>
-          {w.tagline}
-        </h3>
+        {w.cardLine ? (
+          <>
+            {/* Bold line under the logo, then the original line stays below it */}
+            <h3 className="work-card-title work-card-bold" style={{
+              fontWeight: 700, fontSize: 'clamp(18px,2vw,20px)',
+              lineHeight: 1.5, color: '#1C1917', margin: '0 0 10px',
+            }}>
+              {w.cardLine}
+            </h3>
+            <p style={{
+              fontWeight: 400, fontSize: 'clamp(18px,2vw,20px)',
+              lineHeight: 1.5, color: '#1C1917', margin: '0 0 24px',
+            }}>
+              {w.tagline}
+            </p>
+          </>
+        ) : (
+          <h3 className="work-card-title" style={{
+            fontWeight: 400, fontSize: 'clamp(18px,2vw,20px)',
+            lineHeight: 1.5, color: '#1C1917', margin: '0 0 24px',
+          }}>
+            {w.tagline}
+          </h3>
+        )}
 
         {/* Tag pills — plain grey, mono caps; pushed to the card bottom so
             they line up across side-by-side cards. */}
@@ -300,7 +329,7 @@ export default function Home() {
             For <span className={`hero-rotator${heroPhraseVisible ? ' is-visible' : ''}`}>{HERO_PHRASES[heroPhraseIndex]}</span>
           </h1>
           <p className="hero-intro" style={{
-            margin: '28px 0 0 -0.1em',
+            margin: '76px 0 0 -0.1em',
             maxWidth: '56ch',
             fontFamily: 'var(--font-work-sans)',
             fontWeight: 400,
@@ -310,9 +339,9 @@ export default function Home() {
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span style={{ display: 'block', marginBottom: '10px' }}>Inefficiencies in Enterprise Apps cost time and money.</span>
-            <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 800 }}>the work slows down</strong> in <strong style={{ fontWeight: 800 }}>Enterprise B2B</strong> products.</span>
-            <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 800 }}>fix it</strong>.</span>
+            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses <TmEmoji kind="time" /> and <TmEmoji kind="money" /></span>
+            <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>the work slows down</strong> in these products.</span>
+            <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>fix it</strong>.</span>
           </p>
         </div>
         <button

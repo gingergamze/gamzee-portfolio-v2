@@ -3,6 +3,8 @@
 export const works = [
   {
     slug: 'asml-risk-assessment',
+    // Bold line under the logo on the home page card
+    cardLine: 'Driving Product Improvement Through User-Centred Design',
     navLabel: 'ASML Workflow',
     // Opens the case study with this question instead of the About text.
     headline: 'How can ASML reduce production errors?',
@@ -176,6 +178,8 @@ export const works = [
   },
   {
     slug: 'Commonality',
+    // Bold line under the logo on the home page card
+    cardLine: 'Introducing a User-Centred Approach',
     underConstruction: process.env.NODE_ENV === 'production', // open locally while building; remove this line when ready to publish
     navLabel: 'ASML Commonality',
     title: 'ASML',
@@ -261,6 +265,8 @@ export const works = [
   },
   {
     slug: 'sintek-procurement-platform',
+    // Bold line under the logo on the home page card
+    cardLine: 'Modernisation & Digital Transformation',
     underConstruction: process.env.NODE_ENV === 'production', // open locally while building; remove this line when ready to publish
     navLabel: 'Sintek',
     title: 'Sintek BV',

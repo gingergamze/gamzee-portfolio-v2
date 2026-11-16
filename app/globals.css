@@ -223,6 +223,7 @@ body {
   padding-bottom: max(190px, calc(300px - 8vw));
 }
 .work-card-title { min-height: 0; }
+.work-card-bold { font-weight: 700 !important; }
 @media (max-width: 900px) {
   .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-bottom: 0; }
   /* Two rows here: the panel can't float over the row below, so it opens
@@ -499,3 +500,20 @@ html { --font-display: var(--font-work-sans); }
 @media (max-width: 899px) {
   .what-map { height: clamp(780px, 205vw, 880px) !important; }
 }
+
+/* First intro sentence stays on one line (runs to the right) on screens wide enough for it */
+@media (min-width: 760px) { .hero-intro { max-width: none !important; } .hero-intro-line1 { white-space: nowrap; } }
+
+/* Time and money icons in the first intro sentence: lift a little on hover */
+.tm-w { transition: transform 0.2s ease; display: inline-block; }
+.tm-w:hover { transform: translateY(-2px) scale(1.08); }
+
+/* Time and money icons: big on laptops, smaller on phones so they do not push into the other lines */
+.tm-emoji { font-size: 3.6em; margin: -1.3em 0.14em; line-height: 1; vertical-align: -0.2em; }
+@media (max-width: 759px) { .tm-emoji { font-size: 2.1em; margin: -0.5em 0.12em; vertical-align: -0.25em; } }
+
+.tm-emoji > span[aria-hidden] { display: inline-block; width: 1.05em; text-align: center; }
+.tm-time { transform: scale(0.95); }
+
+/* Phones: the bulb video sits at the bottom of the hero, under the text, so it never covers it */
+@media (max-width: 759px) { .hero-bulb { width: 62vw !important; top: auto !important; bottom: 28px !important; right: 6vw !important; transform: none !important; } }

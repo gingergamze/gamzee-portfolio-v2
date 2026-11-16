@@ -60,7 +60,7 @@ export default function HeroVideo({ off = false }) {
   return (
     <div ref={box} aria-hidden="true" style={{ position: 'absolute', inset: 0, zIndex: 0, background: '#000', opacity: off ? 0 : 1, transition: 'none' }}>
       {CLIPS.map((c, i) => (
-        <video key={c.src} ref={vids[i]} muted loop playsInline preload={i === 0 ? 'auto' : 'metadata'} poster={c.poster}
+        <video className="hero-bulb" key={c.src} ref={vids[i]} muted loop playsInline preload={i === 0 ? 'auto' : 'metadata'} poster={c.poster}
           style={{ position: 'absolute', width: `${WIDTH_VW}vw`, aspectRatio: '4 / 3', objectFit: 'contain', mixBlendMode: 'screen', right: `${RIGHT_VW}vw`, top: TOP, transform: 'translateY(-50%)', opacity: front === i ? 1 : 0, transition: 'opacity 0.9s ease' }}>
           {!still && <source src={c.src} type="video/mp4" />}
         </video>
