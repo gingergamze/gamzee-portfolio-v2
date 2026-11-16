@@ -85,19 +85,47 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Phones: the bulb video sits right under the intro text, and takes the space that is left in the hero.
+  useEffect(() => {
+    const hero = document.querySelector('header.hero');
+    const intro = document.querySelector('.hero-intro');
+    if (!hero || !intro) return undefined;
+    const apply = () => {
+      if (window.innerWidth >= 760) { hero.style.removeProperty('--bulb-top'); hero.style.removeProperty('--bulb-w'); return; }
+      const h = hero.getBoundingClientRect();
+      const i = intro.getBoundingClientRect();
+      const top = i.bottom - h.top + 24;
+      const room = h.height - top - 16;
+      // Very small screens: no room left under the text, so the bulb is left out instead of being cut off
+      const w = room < 110 ? 0 : Math.min(window.innerWidth * 0.62, 340, room / 0.75);
+      hero.style.setProperty('--bulb-top', `${top}px`);
+      hero.style.setProperty('--bulb-w', `${w}px`);
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(hero);
+    ro.observe(intro.parentElement);
+    window.addEventListener('resize', apply);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+    return () => { ro.disconnect(); window.removeEventListener('resize', apply); };
+  }, []);
+
   // Reveal elements on scroll into view (fade + rise)
   useEffect(() => {
     const els = document.querySelectorAll('.reveal, .reveal-lines');
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          // Reveal when a third of the element is on screen, or when it already fills a third of the screen
+          // (a tall card on a short phone can never reach a third of its own height).
+          const tall = entry.rootBounds && entry.intersectionRect.height >= entry.rootBounds.height * 0.3;
+          if (entry.isIntersecting && (entry.intersectionRatio >= 0.35 || tall)) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.35 }
+      { threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
     );
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
