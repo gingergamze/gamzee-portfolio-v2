@@ -131,6 +131,8 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
   const apiRef = useRef(null);
   const [narrow, setNarrow] = useState(false);
   const [activeG, setActiveG] = useState(null);
+  // Only with ?debug=1 in the address: a small line under the map that says what the map is doing (for checking on a phone).
+  const [diag, setDiag] = useState('');
 
   useEffect(() => {
     const el = stage.current;
@@ -139,7 +141,10 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     const model = build();
     const { nodes, edges } = model;
     let w = 0, h = 0, dpr = 1, padX = 0, padTop = 0;
-    let raf = 0, last = 0, acc = 0, awake = false, running = false, visible = true;
+    let raf = 0, last = 0, acc = 0, awake = false, running = false, visible = true, frames = 0;
+    const debug = typeof location !== 'undefined' && /[?&]debug=1/.test(location.search);
+    const onErr = (e) => { if (debug) setDiag(`error: ${(e && (e.message || (e.reason && e.reason.message))) || 'unknown'}`); };
+    if (debug) { window.addEventListener('error', onErr); window.addEventListener('unhandledrejection', onErr); }
     const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     nodes.forEach((n, i) => { n.ph = i * 2.399; n.amp = n.type === 'leaf' ? 3.2 : n.type === 'hub' ? 1.6 : 0; n.ox = 0; n.oy = 0; });
     let drag = null, hover = null, pointer = { x: 0, y: 0 };
@@ -173,6 +178,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
       cv.style.left = `${-padX}px`; cv.style.top = `${-padTop}px`;
       layout(model, w, h, wideFrom, { span: spanDeg, margin: sideMargin });
       draw();
+      if (debug) setDiag(`map ${Math.round(w)}x${Math.round(h)} dpr ${dpr} canvas ${cv.width}x${cv.height} frames ${frames}`);
     };
 
     const step = () => {
@@ -312,6 +318,8 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
         }
       }
       draw(t);
+      frames += 1;
+      if (debug && frames % 60 === 1) setDiag(`map ${Math.round(w)}x${Math.round(h)} dpr ${dpr} canvas ${cv.width}x${cv.height} frames ${frames}`);
       if (motion || awake || drag) raf = requestAnimationFrame(frame);
       else running = false;
     }
@@ -401,6 +409,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener('error', onErr); window.removeEventListener('unhandledrejection', onErr);
       window.removeEventListener('palette', applyPalette);
       document.fonts?.removeEventListener?.('loadingdone', onFonts);
       io.disconnect();
@@ -421,9 +430,10 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           ref={canvas}
           role="img"
           aria-label={`Interactive map. ${GROUPS.map((g) => `${g.name}: ${g.items.join(', ')}`).join('. ')}.`}
-          style={{ position: 'absolute', display: 'block', touchAction: 'pan-y' }}
+          style={{ position: 'absolute', display: 'block', touchAction: 'pan-y', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}
         />
       </div>
+      {diag && <p style={{ margin: '6px 0 0', fontSize: 11, color: '#999', textAlign: 'center', wordBreak: 'break-word' }}>{diag}</p>}
       {narrow && (
         <p style={{ margin: '10px 0 0', fontSize: 14, lineHeight: 1.5, color: '#7C756E', textAlign: 'center' }}>
           Pull a dot to play.
