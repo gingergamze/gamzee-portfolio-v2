@@ -133,6 +133,16 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
   const [activeG, setActiveG] = useState(null);
   // Only with ?debug=1 in the address: a small line under the map that says what the map is doing (for checking on a phone).
   const [diag, setDiag] = useState('');
+  // If the map cannot draw on someone's device, a plain list of the same skills is shown instead of an empty space.
+  const [fallback, setFallback] = useState(false);
+
+  // In the plain-list fallback the map's reserved height is not needed
+  useEffect(() => {
+    const box = wrap.current && wrap.current.parentElement;
+    if (!box) return undefined;
+    if (fallback) { box.style.setProperty('height', 'auto', 'important'); wrap.current.style.height = 'auto'; }
+    return undefined;
+  }, [fallback]);
 
   useEffect(() => {
     const el = stage.current;
@@ -141,7 +151,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     const model = build();
     const { nodes, edges } = model;
     let w = 0, h = 0, dpr = 1, padX = 0, padTop = 0;
-    let raf = 0, last = 0, acc = 0, awake = false, running = false, visible = true, frames = 0;
+    let raf = 0, last = 0, acc = 0, awake = false, running = false, visible = true, frames = 0, drawnOnce = false;
     const debug = typeof location !== 'undefined' && /[?&]debug=1/.test(location.search);
     const onErr = (e) => { if (debug) setDiag(`error: ${(e && (e.message || (e.reason && e.reason.message))) || 'unknown'}`); };
     if (debug) { window.addEventListener('error', onErr); window.addEventListener('unhandledrejection', onErr); }
@@ -170,7 +180,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
       const r = el.getBoundingClientRect();
       if (r.height < 120) return;
       setNarrow(r.width < wideFrom);
-      w = Math.max(280, r.width); h = r.height; dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = Math.max(280, r.width); h = r.height; dpr = Math.min(window.devicePixelRatio || 1, 3); // iPhones are 3x: drawing at 2x would be stretched and look soft
       // The canvas is larger than the map so pulled dots and labels are never cut off.
       padX = w < wideFrom ? 40 : 140; padTop = 70;
       cv.width = Math.round((w + padX * 2) * dpr); cv.height = Math.round((h + padTop) * dpr);
@@ -211,7 +221,14 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
         n.oy = motion ? n.amp * Math.cos(t * 0.0005 + n.ph * 1.3) : 0;
         n.x += n.ox; n.y += n.oy;
       });
-      drawBody();
+      try {
+        if (debug && /[?&]nomap=1/.test(location.search)) throw new Error('nomap test');
+        drawBody();
+        drawnOnce = true;
+      } catch (err) {
+        setFallback(true);
+        if (debug) setDiag(`error: ${err && err.message}`);
+      }
       nodes.forEach((n) => { n.x -= n.ox; n.y -= n.oy; });
     };
 
@@ -403,12 +420,14 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     ro.observe(el);
     resize();
     startLoop();
+    const fallbackTimer = setTimeout(() => { if (!drawnOnce) setFallback(true); }, 4000);
     if (document.fonts?.ready) document.fonts.ready.then(draw);
     const onFonts = () => { family = getComputedStyle(el).fontFamily; draw(); };
     document.fonts?.addEventListener?.('loadingdone', onFonts);
 
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(fallbackTimer);
       window.removeEventListener('error', onErr); window.removeEventListener('unhandledrejection', onErr);
       window.removeEventListener('palette', applyPalette);
       document.fonts?.removeEventListener?.('loadingdone', onFonts);
@@ -425,7 +444,7 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
 
   return (
     <div ref={wrap} style={{ position: 'relative', width: '100%', height, display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-work-sans), system-ui, sans-serif' }}>
-      <div ref={stage} style={{ position: 'relative', flex: 1, minHeight: 0 }}>
+      <div ref={stage} style={{ position: 'relative', flex: 1, minHeight: 0, display: fallback ? 'none' : 'block' }}>
         <canvas
           ref={canvas}
           role="img"
@@ -433,6 +452,16 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
           style={{ position: 'absolute', display: 'block', touchAction: 'pan-y', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}
         />
       </div>
+      {fallback && (
+        <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'grid', gap: 14 }}>
+          {GROUPS.map((g) => (
+            <li key={g.name}>
+              <div style={{ fontWeight: 700, fontSize: 17, color: g.color, marginBottom: 4 }}>{g.name}</div>
+              <div style={{ fontSize: 14, lineHeight: 1.6, color: '#554E48' }}>{g.items.join(' · ')}</div>
+            </li>
+          ))}
+        </ul>
+      )}
       {diag && <p style={{ margin: '6px 0 0', fontSize: 11, color: '#999', textAlign: 'center', wordBreak: 'break-word' }}>{diag}</p>}
       {narrow && (
         <p style={{ margin: '10px 0 0', fontSize: 14, lineHeight: 1.5, color: '#7C756E', textAlign: 'center' }}>
