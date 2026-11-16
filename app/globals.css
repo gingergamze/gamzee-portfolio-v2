@@ -502,7 +502,7 @@ html { --font-display: var(--font-work-sans); }
 }
 
 /* First intro sentence stays on one line (runs to the right) on screens wide enough for it */
-@media (min-width: 760px) { .hero-intro { max-width: none !important; } .hero-intro-line1 { white-space: nowrap; } }
+@media (min-width: 1000px) { .hero-intro { max-width: none !important; } .hero-intro-line1 { white-space: nowrap; } }
 
 /* Time and money icons in the first intro sentence: lift a little on hover */
 .tm-w { transition: transform 0.2s ease; display: inline-block; }
@@ -510,10 +510,19 @@ html { --font-display: var(--font-work-sans); }
 
 /* Time and money icons: big on laptops, smaller on phones so they do not push into the other lines */
 .tm-emoji { font-size: 3.6em; margin: -1.3em 0.14em; line-height: 1; vertical-align: -0.2em; }
+@media (max-width: 999px) { .tm-emoji { font-size: 2.4em; margin: -0.7em 0.12em; vertical-align: -0.22em; } }
 @media (max-width: 759px) { .tm-emoji { font-size: 2.1em; margin: -0.5em 0.12em; vertical-align: -0.25em; } }
 
 .tm-emoji > span[aria-hidden] { display: inline-block; width: 1.05em; text-align: center; }
 .tm-time { transform: scale(0.95); }
 
-/* Phones: the bulb video sits at the bottom of the hero, under the text, so it never covers it */
-@media (max-width: 759px) { .hero-bulb { width: 62vw !important; top: auto !important; bottom: 28px !important; right: 6vw !important; transform: none !important; } }
+/* Smaller screens: the bulb video sits at the bottom right of the hero, under the text, so it never covers it */
+@media (max-width: 1349px) { .hero-bulb { width: min(38vw, 350px, 52vh) !important; top: auto !important; bottom: 18px !important; right: 5vw !important; transform: none !important; } }
+@media (max-width: 759px) { .hero-bulb { width: 62vw !important; bottom: 28px !important; right: 6vw !important; } }
+
+/* Short laptop screens: the scroll-down button sits lower (and disappears on very short ones) so it never covers the intro text */
+@media (min-width: 900px) and (max-height: 760px) { .scroll-cue { bottom: 22px !important; } }
+@media (min-width: 900px) and (max-height: 640px) { .scroll-cue { display: none !important; } }
+
+/* Where the first sentence wraps, give its icon line a little more room before the next sentence */
+@media (max-width: 999px) { .hero-intro-line1 { margin-bottom: 24px !important; } }

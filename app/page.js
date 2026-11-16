@@ -104,6 +104,31 @@ export default function Home() {
   }, []);
 
 
+  // Selected Work: the title and the description of each card get the same height as the tallest one in their row,
+  // so the logos, descriptions and tag pills line up across the cards at every screen size.
+  useEffect(() => {
+    const grid = document.querySelector('.work-grid');
+    if (!grid) return undefined;
+    const apply = () => {
+      const lists = ['.work-card-title', '.work-card-tagline'].map((q) => [...grid.querySelectorAll(q)]);
+      lists.forEach((l) => l.forEach((e) => { e.style.minHeight = ''; }));
+      const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+      if (cols < 2) return;
+      lists.forEach((l) => {
+        for (let i = 0; i < l.length; i += cols) {
+          const row = l.slice(i, i + cols);
+          const max = Math.max(...row.map((e) => parseFloat(getComputedStyle(e).height) || 0));
+          row.forEach((e) => { e.style.minHeight = `${max}px`; });
+        }
+      });
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(grid);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+    return () => ro.disconnect();
+  }, []);
+
   // Selected Work card — "showcase" style: a colored visual panel on top
   // (placeholder for whatever mockups/photos get dropped in later) with a
   // white info block below carrying logo, headline, metrics and tags.
@@ -196,7 +221,7 @@ export default function Home() {
             }}>
               {w.cardLine}
             </h3>
-            <p style={{
+            <p className="work-card-tagline" style={{
               fontWeight: 400, fontSize: 'clamp(18px,2vw,20px)',
               lineHeight: 1.5, color: '#1C1917', margin: '0 0 24px',
             }}>
@@ -339,7 +364,7 @@ export default function Home() {
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses <TmEmoji kind="time" /> and <TmEmoji kind="money" /></span>
+            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses <span style={{ whiteSpace: 'nowrap' }}><TmEmoji kind="time" /> and <TmEmoji kind="money" /></span></span>
             <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>the work slows down</strong> in these products.</span>
             <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>fix it</strong>.</span>
           </p>
