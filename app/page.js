@@ -20,16 +20,6 @@ const HERO_HOLD_EXTRA_MS = { 'operational processes and tools': 500 };
 const HERO_TRANSITION_MS = 550;
 
 
-// Time and money icons at the end of the first intro sentence (colour emoji; size is set in globals.css)
-function TmEmoji({ kind }) {
-  return (
-    <span className="tm-w tm-emoji">
-      <span aria-hidden="true" className={kind === 'time' ? 'tm-time' : undefined}>{kind === 'time' ? '⏱️' : '💰'}</span>
-      <span style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>{kind}</span>
-    </span>
-  );
-}
-
 export default function Home() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
@@ -392,7 +382,7 @@ export default function Home() {
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses <span style={{ whiteSpace: 'nowrap' }}><TmEmoji kind="time" /> and <TmEmoji kind="money" /></span></span>
+            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses time and money</span>
             <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>the work slows down</strong> in these products.</span>
             <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>fix it</strong>.</span>
           </p>
