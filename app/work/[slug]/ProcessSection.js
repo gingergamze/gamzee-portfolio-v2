@@ -43,9 +43,9 @@ function Reflection({ stage }) {
   );
 }
 
-export default function ProcessSection({ stages }) {
+export default function ProcessSection({ stages, accent }) {
   return (
-    <div id="process" style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,8vh,104px) var(--cs-x) 0' }}>
+    <div id="process" style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(56px,8vh,104px) var(--cs-x) 0', ...(accent ? { '--accent': accent } : {}) }}>
       <div style={{ marginBottom: 'clamp(44px,7vh,72px)' }}>
         <h2 style={{
           fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(24px,2.4vw,32px)', zoom: 1,

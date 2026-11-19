@@ -336,7 +336,7 @@ export default async function CaseStudyPage({ params }) {
 
       {/* PROCESS TIMELINE — interactive block timeline of the
           design process, right under the metrics. */}
-      <ProcessSection stages={work.processTimeline.stages} />
+      <ProcessSection stages={work.processTimeline.stages} accent={work.client === 'ASML' ? '#0F238C' : undefined} />
 
 
       {/* HIGHLIGHTS — title + copy on the left, a large image inside a
