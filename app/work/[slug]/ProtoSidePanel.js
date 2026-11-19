@@ -74,9 +74,9 @@ export default function ProtoSidePanel() {
       </div>
     );
     return (
-      <div key={i.t} style={{ marginBottom: big ? 34 : 28 }}>
-        <div style={{ fontSize: tSize, fontWeight: 800, color: titleColor, marginBottom: 6 }}>{i.t}</div>
-        <div style={{ fontSize: dSize, lineHeight: 1.55, color: bodyColor }}>{i.d}</div>
+      <div key={i.t} className="psp-item" style={{ marginBottom: big ? 34 : 28 }}>
+        <div className="psp-t" style={{ fontSize: tSize, fontWeight: 800, color: titleColor, marginBottom: 6 }}>{i.t}</div>
+        <div className="psp-d" style={{ fontSize: dSize, lineHeight: 1.55, color: bodyColor }}>{i.d}</div>
       </div>
     );
   });
@@ -116,16 +116,16 @@ export default function ProtoSidePanel() {
               <div style={{ fontSize: 22, fontWeight: 800 }}>What you are looking at</div>
             </div>
           ) : (
-            <div style={{ padding: '30px 30px 0', position: 'relative' }}>
+            <div className="psp-head" style={{ padding: '30px 30px 0', position: 'relative' }}>
               <Close onClick={() => setOpen(false)} dark={dark} />
               {eyebrow}
               {(look === 'plain' || big) && <div style={{ height: 14 }} />}
             </div>
           )}
-          <div style={{ padding: look === 'header' ? '28px 30px 8px' : '14px 30px 8px', overflow: 'auto' }}>{items}</div>
+          <div className="psp-body" style={{ padding: look === 'header' ? '28px 30px 8px' : '14px 30px 8px', overflow: 'auto' }}>{items}</div>
         </aside>
       </div>
-      <style>{`@media (max-width:760px){.psp-handle{left:-14px !important;width:24px !important;border-radius:12px !important}}@media (max-width:640px){.psp-side{max-width:92% !important}.psp-side div[style*="190px"]{grid-template-columns:1fr !important;gap:6px !important}}`}</style>
+      <style>{`@media (max-width:760px){.psp-handle{left:-14px !important;width:24px !important;border-radius:12px !important}}@media (max-width:640px){.psp-side{max-width:82% !important}.psp-head{padding:12px 14px 0 !important}.psp-head>div{font-size:9px !important;margin-bottom:2px !important}.psp-body{padding:4px 14px 4px !important}.psp-t{font-size:13.5px !important;margin-bottom:1px !important}.psp-d{font-size:12px !important;line-height:1.35 !important}.psp-item{margin-bottom:9px !important}.psp-side button[aria-label=Close]{top:8px !important;right:8px !important;width:26px !important;height:26px !important;font-size:16px !important}.psp-side div[style*="190px"]{grid-template-columns:1fr !important;gap:6px !important}}`}</style>
 
       <style>{`@keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(255,160,102,.6)}100%{box-shadow:0 0 0 12px rgba(255,160,102,0)}}`}</style>
     </>
