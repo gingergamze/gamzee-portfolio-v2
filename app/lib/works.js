@@ -274,7 +274,7 @@ export const works = [
     logo: '/sinteklogo.png',
     logoHeight: '15px',
     bgColor: '#D96B2C',
-    tagline: 'Building a tailor-made internal workflow tool for procurement',
+    tagline: 'Built a tailor-made internal workflow tool for procurement',
     role: 'Lead Product Designer',
     year: '2024 – Ongoing',
     domain: 'Enterprise',
