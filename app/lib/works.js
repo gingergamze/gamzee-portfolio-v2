@@ -20,7 +20,7 @@ export const works = [
     // still heroImage shows first, and for people who prefer reduced motion).
     heroTour: '/prototypes/asml-redesign/qbtm-navigator.html',
     // Small line under the hero picture (optional).
-    heroNote: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are made up for demonstration.',
+    heroNote: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are changed for demonstration.',
     role: 'Product Designer & UX Researcher',
     year: '2024',
     domain: 'Internal workflow management tool',
@@ -96,7 +96,7 @@ export const works = [
           wide: true,
         },
       ],
-      note: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are made up for demonstration.',
+      note: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are changed for demonstration.',
     },
     highlights: [],
     challenge: [

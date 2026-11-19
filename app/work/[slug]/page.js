@@ -7,6 +7,7 @@ import TextSection from './TextSection';
 import CaseStudyFooter from './CaseStudyFooter';
 import PrototypeFrame from './PrototypeFrame';
 import ProtoHint from './ProtoHint';
+import ProtoSidePanel from './ProtoSidePanel';
 import BeforeAfter from './BeforeAfter';
 import CaseStudyMenu from './CaseStudyMenu';
 import HeroTour from './HeroTour';
@@ -191,7 +192,8 @@ export default async function CaseStudyPage({ params }) {
             and sidebar/page-coloured space below, so its content keeps clear
             of the rounded corners instead of looking squeezed against them. */}
         {swapped ? (
-          <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
+            {work.slug === 'asml-risk-assessment' && <ProtoSidePanel />}
             <ProtoHint />
             <PrototypeFrame
               src={work.prototype.src}
