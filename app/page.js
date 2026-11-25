@@ -382,7 +382,7 @@ export default function Home() {
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses time and money</span>
+            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses time and money.</span>
             <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>the work slows down</strong> in these products.</span>
             <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>fix it</strong>.</span>
           </p>
