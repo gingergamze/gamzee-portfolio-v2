@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 // Interactive map: pull any dot and the lines stretch, so the dots linked to it
 // move too. Springs keep every dot attached to its group and to the center.
 const GROUPS = [
-  { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Journey maps', 'Prototyping', 'AI design', 'Concept development'] },
-  { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog'] },
+  { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Journey maps', 'Prototyping', 'AI design', 'Human AI interaction', 'Concept development'] },
+  { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog', 'Priorities'] },
   { name: 'Products', color: '#0E9F8E', items: ['Internal tools', 'B2E software', 'B2B workflows', 'Enterprise software', 'Operational processes'] },
   { name: 'Problems I fix', color: '#D6457F', items: ['Confusing navigation', 'Information overload', 'Complex tool language', 'Unclear product vision', 'Stubborn stakeholders 😊'] },
 ];
@@ -38,7 +38,7 @@ function build() {
 
 // How far from the centre each dot sits (0 to 1) in the wide layout. Worked out so that no two labels touch
 // at laptop and desktop widths. Used when the map has exactly this many dots.
-const WIDE_RINGS = [0.7, 0.7, 0.8, 1.0, 1.0, 1.0, 1.0, 0.45, 0.85, 0.65, 0.5, 1.0, 0.75, 1.0, 0.45, 1.0, 0.8, 0.75, 0.7, 0.75, 0.75];
+const WIDE_RINGS = [0.7, 0.7, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 0.45, 0.85, 0.65, 0.5, 0.85, 1.0, 0.75, 1.0, 0.45, 1.0, 0.8, 0.75, 0.7, 0.75, 0.75];
 
 // Phones: the groups are stacked under each other and linked in a chain.
 // Each group's dots spread around its own center dot.
