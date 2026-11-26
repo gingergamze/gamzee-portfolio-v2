@@ -388,7 +388,7 @@ export default function Home() {
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span className="hero-intro-p" style={{ '--i': 0, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>Full-time work in product teams that build data-rich business tools.</span>
+            <span className="hero-intro-p" style={{ '--i': 0, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>Full-time leadership work in product teams that build data-rich business tools.</span>
             <span className="hero-intro-p" style={{ '--i': 1, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>I design, guide team members and decide what comes next.</span>
             <span className="hero-intro-p" style={{ '--i': 2, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>Experience in leading design, research, project management and CX.</span>
             <span className="hero-intro-p" style={{ '--i': 3, display: 'block', maxWidth: '36em', fontWeight: 700 }}>10+ years</span>
