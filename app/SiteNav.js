@@ -102,6 +102,13 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
         >
           LinkedIn
         </a>
+        <Link
+          href="/path"
+          className="nav-contact"
+          style={{ fontFamily: 'var(--font-work-sans)', fontSize: '12px', fontWeight: 600, color: isDark ? '#FFFFFF' : '#1C1917', textDecoration: 'none', padding: '8px 4px', letterSpacing: '0.04em', textTransform: 'uppercase' }}
+        >
+          Path
+        </Link>
       </div>
     </nav>
   );
