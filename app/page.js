@@ -382,15 +382,16 @@ export default function Home() {
             maxWidth: '56ch',
             fontFamily: 'var(--font-work-sans)',
             fontWeight: 400,
-            fontSize: 'clamp(15px, 1.3vw, 18px)',
+            fontSize: 'clamp(18px, 2vw, 20px)',
             lineHeight: 1.55,
             letterSpacing: '-0.005em',
             color: 'rgba(255,255,255,0.92)',
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
-            <span className="hero-intro-line1" style={{ display: 'block', marginBottom: '10px' }}>Inefficient workflows and confusing interactions cost businesses time and money.</span>
-            <span style={{ display: 'block', marginBottom: '10px' }}>I find where <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>the work slows down</strong> in these products.</span>
-            <span style={{ display: 'block' }}>Then I <strong style={{ fontWeight: 900, fontSize: '1.2em' }}>fix it</strong>.</span>
+            <span className="hero-intro-p" style={{ '--i': 0, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>Full-time work in product teams that build data-rich business tools.</span>
+            <span className="hero-intro-p" style={{ '--i': 1, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>I design, guide team members and decide what comes next.</span>
+            <span className="hero-intro-p" style={{ '--i': 2, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>Experience in leading design, research, project management and CX.</span>
+            <span className="hero-intro-p" style={{ '--i': 3, display: 'block', maxWidth: '36em', fontWeight: 700 }}>10+ years</span>
           </p>
         </div>
         <button
@@ -463,8 +464,8 @@ export default function Home() {
             margin: '0 0 clamp(40px,6vh,72px) -0.108em',
             maxWidth: '152ch',
           }}>
-            <span className="line" style={{ '--i': 0, display: 'block' }}>I’m a product builder with a design, research, project management and CX background.</span>
-            <span className="line" style={{ '--i': 1, display: 'block', marginTop: '6px', fontWeight: 700 }}>10+ years</span>
+            <span className="line" style={{ '--i': 0, display: 'block' }}>Unclear product strategy, inefficient workflows and confusing interactions cost businesses time and money.</span>
+            <span className="line" style={{ '--i': 1, display: 'block', marginTop: '6px' }}>I find <strong style={{ fontWeight: 700 }}>where the problem is</strong> and help to <strong style={{ fontWeight: 700 }}>fix it</strong>.</span>
           </p>
           {/* The skills map: design, products and the problems I fix */}
           <div className="what-map" style={{ position: 'relative', width: '100%', margin: '0 auto', height: 'clamp(470px, 38vw, 560px)' }}>

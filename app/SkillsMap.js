@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 // move too. Springs keep every dot attached to its group and to the center.
 const GROUPS = [
   { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Journey maps', 'Prototyping', 'AI design', 'Human AI interaction', 'Concept development'] },
-  { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog', 'Priorities'] },
+  { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog', 'Priorities', 'Product team'] },
   { name: 'Products', color: '#0E9F8E', items: ['Internal tools', 'B2E software', 'B2B workflows', 'Enterprise software', 'Operational processes'] },
   { name: 'Problems I fix', color: '#D6457F', items: ['Confusing navigation', 'Information overload', 'Complex tool language', 'Unclear product vision', 'Stubborn stakeholders 😊'] },
 ];
@@ -38,7 +38,7 @@ function build() {
 
 // How far from the centre each dot sits (0 to 1) in the wide layout. Worked out so that no two labels touch
 // at laptop and desktop widths. Used when the map has exactly this many dots.
-const WIDE_RINGS = [0.7, 0.7, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 0.45, 0.85, 0.65, 0.5, 0.85, 1.0, 0.75, 1.0, 0.45, 1.0, 0.8, 0.75, 0.7, 0.75, 0.75];
+const WIDE_RINGS = [0.7, 0.7, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0, 0.45, 0.85, 0.65, 0.5, 0.85, 1.0, 1.0, 0.75, 1.0, 0.45, 1.0, 0.8, 0.75, 0.7, 0.75, 0.75];
 
 // Phones: the groups are stacked under each other and linked in a chain.
 // Each group's dots spread around its own center dot.
@@ -145,6 +145,8 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
   }, [fallback]);
 
   useEffect(() => {
+    // Anything unexpected (an old in-app browser that lacks a feature) shows the plain list instead of an empty space.
+    try {
     const el = stage.current;
     const cv = canvas.current;
     const ctx = cv.getContext('2d');
@@ -302,7 +304,21 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
             const lim = model.vertical ? 4 : padX;
             tx = Math.max(-lim + half, Math.min(w + lim - half, tx));
           }
-          ctx.strokeText(n.label, tx, ty); ctx.fillText(n.label, tx, ty);
+          if (model.vertical && ctx.measureText(n.label).width > w / 2 - 34) {
+            // A long name does not fit beside its dot on a narrow phone: write it on two lines.
+            const words = n.label.split(' ');
+            let best = 1, bd = Infinity;
+            for (let k = 1; k < words.length; k += 1) {
+              const d = Math.abs(ctx.measureText(words.slice(0, k).join(' ')).width - ctx.measureText(words.slice(k).join(' ')).width);
+              if (d < bd) { bd = d; best = k; }
+            }
+            [words.slice(0, best).join(' '), words.slice(best).join(' ')].forEach((part, li) => {
+              const yy = ty + (li ? 6 : -6);
+              ctx.strokeText(part, tx, yy); ctx.fillText(part, tx, yy);
+            });
+          } else {
+            ctx.strokeText(n.label, tx, ty); ctx.fillText(n.label, tx, ty);
+          }
         } else {
           ctx.font = `700 ${fontSize ? fontSize + 6 : small ? 15 : 19}px ${family}`;
           const leftHub = n.type === 'hub' && n.deg < -12;
@@ -414,25 +430,35 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
     cv.addEventListener('pointerup', up);
     cv.addEventListener('pointercancel', up);
     cv.addEventListener('pointerleave', leave);
-    const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) startLoop(); });
-    io.observe(el);
-    const ro = new ResizeObserver(resize);
-    ro.observe(el);
+    const io = typeof IntersectionObserver === 'function' ? new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) startLoop(); }) : null;
+    if (io) io.observe(el);
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(resize) : null;
+    if (ro) ro.observe(el); else window.addEventListener('resize', resize);
+    if (debug && /[?&]crash=1/.test(location.search)) throw new Error('crash test');
     resize();
     startLoop();
-    const fallbackTimer = setTimeout(() => { if (!drawnOnce) setFallback(true); }, 4000);
+    // Some in-app browsers block canvas drawing: it looks fine to the code but stays empty. Check that the centre dot really has ink.
+    const hasInk = () => {
+      try {
+        const n0 = nodes[0];
+        const px = ctx.getImageData(Math.round((n0.x + padX) * dpr), Math.round((n0.y + padTop) * dpr), 1, 1).data;
+        return px[3] > 0;
+      } catch (e) { return true; }
+    };
+    const checkTimer = setTimeout(() => { if (drawnOnce && !hasInk()) setFallback(true); }, 1500);
+    const fallbackTimer = setTimeout(() => { if (!drawnOnce || !hasInk()) setFallback(true); }, 4000);
     if (document.fonts?.ready) document.fonts.ready.then(draw);
     const onFonts = () => { family = getComputedStyle(el).fontFamily; draw(); };
     document.fonts?.addEventListener?.('loadingdone', onFonts);
 
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(fallbackTimer);
+      clearTimeout(fallbackTimer); clearTimeout(checkTimer);
       window.removeEventListener('error', onErr); window.removeEventListener('unhandledrejection', onErr);
       window.removeEventListener('palette', applyPalette);
       document.fonts?.removeEventListener?.('loadingdone', onFonts);
-      io.disconnect();
-      ro.disconnect();
+      if (io) io.disconnect();
+      if (ro) ro.disconnect(); else window.removeEventListener('resize', resize);
       cv.removeEventListener('touchstart', onTouchStart);
       cv.removeEventListener('pointerdown', down);
       cv.removeEventListener('pointermove', move);
@@ -440,6 +466,10 @@ export default function SkillsMap({ height = 'clamp(600px, 62vw, 680px)', labels
       cv.removeEventListener('pointercancel', up);
       cv.removeEventListener('pointerleave', leave);
     };
+    } catch (err) {
+      setFallback(true);
+      return undefined;
+    }
   }, []);
 
   return (
