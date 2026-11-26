@@ -32,7 +32,7 @@ export const works = [
     clientDescription: 'ASML is a Dutch company and the world\'s leading supplier of photolithography systems used to manufacture computer chips.',
     deliverables: ['Data design system', 'Interaction design', 'Prototype'],
     timeline: '2022-2024',
-    team: ['UX Designer', 'Business Analyst', 'Process Engineer', 'Project Manager', 'Change Manager', 'Developer'],
+    team: ['Business Analyst', 'Process Engineer', 'Project Manager', 'Change Manager', 'Developer'],
     problem: 'Getting complaints from clients because of production mistakes.',
     solution: 'An internal tool was built to reduce production mistakes, but adoption remained low.',
     designChallenge: [
