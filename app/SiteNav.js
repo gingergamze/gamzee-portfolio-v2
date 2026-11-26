@@ -198,39 +198,9 @@ export default function SiteNav({ variant = 'floating', backHref, theme = 'light
               </div>
             ) : (
               <>
-                <h3 style={{ fontFamily: 'var(--font-work-sans)', fontOpticalSizing: 'auto', fontWeight: 700, fontSize: '26px', letterSpacing: '-0.02em', color: '#1C1917', margin: '0 0 8px' }}>
+                <h3 style={{ fontFamily: 'var(--font-work-sans)', fontOpticalSizing: 'auto', fontWeight: 700, fontSize: '26px', letterSpacing: '-0.02em', color: '#1C1917', margin: '0 0 24px' }}>
                   Let's talk
                 </h3>
-                <p style={{ fontSize: '14px', lineHeight: 1.5, color: '#7C756E', margin: '0 0 10px' }}>
-                  Send a message — it goes straight to {CONTACT_EMAIL}.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={copyEmail}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    margin: '0 0 24px', padding: '6px 12px', borderRadius: '999px',
-                    border: '1px solid rgba(28,25,23,0.15)', background: emailCopied ? '#1C1917' : 'transparent',
-                    color: emailCopied ? '#FFFFFF' : '#1C1917',
-                    fontFamily: 'var(--font-work-sans)', fontSize: '11px', fontWeight: 600,
-                    letterSpacing: '0.04em', textTransform: 'uppercase', cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {emailCopied ? (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 4.5" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      Copied
-                    </>
-                  ) : (
-                    <>
-                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="#1C1917" strokeWidth="1.3"/><path d="M2.5 10.5V3.5C2.5 2.94772 2.94772 2.5 3.5 2.5H10.5" stroke="#1C1917" strokeWidth="1.3" strokeLinecap="round"/></svg>
-                      Copy email instead
-                    </>
-                  )}
-                </button>
-
                 <form onSubmit={submitContact} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <input
                     required
