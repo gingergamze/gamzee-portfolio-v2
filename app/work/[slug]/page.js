@@ -304,7 +304,7 @@ export default async function CaseStudyPage({ params }) {
 
           <div>
             <div style={T.metaLabel}>
-              Team
+              The team I worked with
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {work.team.map((member) => (

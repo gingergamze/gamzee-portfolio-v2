@@ -21,7 +21,7 @@ export const works = [
     heroTour: '/prototypes/asml-redesign/qbtm-navigator.html',
     // Small line under the hero picture (optional).
     heroNote: 'This prototype is confidential work for ASML. None of the data in it is real. All names, numbers and items are changed for demonstration.',
-    role: 'Product Designer & UX Researcher',
+    role: 'Lead Product Designer & Researcher',
     year: '2024',
     domain: 'Internal workflow management tool',
     desc: 'Recurring production mistakes and customer complaints became an ongoing challenge. ASML’s solution seemed simple: build an internal tool to help workers reduce production errors. However, the tool struggled to gain adoption because the user experience was overlooked during its development.',
