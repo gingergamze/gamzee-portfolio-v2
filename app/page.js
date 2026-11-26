@@ -369,7 +369,13 @@ export default function Home() {
             color: '#FFFFFF',
             textShadow: '0 2px 22px rgba(0,0,0,0.45)',
           }}>
-            For <span className={`hero-rotator${heroPhraseVisible ? ' is-visible' : ''}`}>{HERO_PHRASES[heroPhraseIndex]}</span>
+            {/* All phrases are laid in one grid cell (invisible) so the headline always keeps the height of the longest phrase and the text below never moves */}
+            <span style={{ display: 'grid' }}>
+              {HERO_PHRASES.map((ph) => (
+                <span key={ph} aria-hidden="true" style={{ gridArea: '1 / 1', visibility: 'hidden' }}>For <span className="hero-rotator is-visible">{ph}</span></span>
+              ))}
+              <span style={{ gridArea: '1 / 1' }}>For <span className={`hero-rotator${heroPhraseVisible ? ' is-visible' : ''}`}>{HERO_PHRASES[heroPhraseIndex]}</span></span>
+            </span>
           </h1>
           <p className="hero-intro" style={{
             margin: '76px 0 0 -0.1em',
