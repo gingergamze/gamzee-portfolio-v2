@@ -117,7 +117,7 @@ export default async function CaseStudyPage({ params }) {
         <div style={{ maxWidth: '520px', margin: '0 auto', padding: 'clamp(96px,18vh,200px) 24px', textAlign: 'center' }}>
           <div aria-hidden="true" style={{ fontSize: '56px', lineHeight: 1, marginBottom: '20px' }}>🚧</div>
           <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(28px,4vw,40px)', letterSpacing: '-0.02em', lineHeight: 1.1, color: '#1C1917', margin: '0 0 14px', zoom: 1 }}>Under construction</h1>
-          <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '17px', lineHeight: 1.6, color: '#554E48', margin: '0 0 28px' }}>This case study is not ready yet. Please check back soon.</p>
+          <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '17px', lineHeight: 1.6, color: '#554E48', margin: '0 0 28px' }}>This case study is coming soon.</p>
           <a href="/" style={{ fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, color: 'var(--accent)', textDecoration: 'none', letterSpacing: '0.04em', textTransform: 'uppercase' }}>&larr; Back to home</a>
         </div>
       </main>

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 // Interactive map: pull any dot and the lines stretch, so the dots linked to it
 // move too. Springs keep every dot attached to its group and to the center.
-const GROUPS = [
+export const GROUPS = [
   { name: 'Design', color: '#D04D03', items: ['UX research strategy', 'Information architecture', 'Interaction design', 'Journey maps', 'Prototyping', 'AI design', 'Human AI interaction', 'Concept development'] },
   { name: 'Manage', color: '#4F6BD9', items: ['Product roadmap', 'Project timeline', 'Product strategy with vision', 'Product backlog', 'Priorities', 'Product team'] },
   { name: 'Products', color: '#0E9F8E', items: ['Internal tools', 'B2E software', 'B2B workflows', 'Enterprise software', 'Operational processes'] },

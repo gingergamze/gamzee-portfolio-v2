@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ChatWidget from './ChatWidget';
 import SiteNav from './SiteNav';
-import SkillsMap from './SkillsMap';
+import SkillsGraph from './SkillsGraph';
 import HeroVideo from './HeroVideo';
 import Testimonials from './Testimonials';
 import AboutStory from './AboutStory';
@@ -183,7 +183,7 @@ export default function Home() {
         )}
         {w.underConstruction && (
           <span style={{
-            position: 'absolute', top: '14px', right: '14px', zIndex: 1,
+            position: 'absolute', bottom: '14px', right: '14px', zIndex: 1,
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             fontFamily: 'var(--font-work-sans)', fontSize: '11px', fontWeight: 700,
             letterSpacing: '0.06em', textTransform: 'uppercase', color: '#1C1917',
@@ -191,7 +191,7 @@ export default function Home() {
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
           }}>
             <span aria-hidden="true" style={{ fontSize: '14px', lineHeight: 1 }}>🚧</span>
-            Under construction
+            <span style={{ display: 'block', lineHeight: 1.35 }}>Under construction<br />Coming soon</span>
           </span>
         )}
         {w.type === 'video' ? (
@@ -468,9 +468,7 @@ export default function Home() {
             <span className="line" style={{ '--i': 1, display: 'block', marginTop: '6px' }}>I bring clarity and efficiency to product teams. I help my team to focus on the most important thing at that time. I also lead design decisions that generate user adoption and company revenue.</span>
           </p>
           {/* The skills map: design, products and the problems I fix */}
-          <div className="what-map" style={{ position: 'relative', width: '100%', margin: '0 auto', height: 'clamp(470px, 38vw, 560px)' }}>
-            <SkillsMap height="100%" wideFrom={600} fontSize={14} spanDeg={88} sideMargin={190} />
-          </div>
+          <SkillsGraph />
         </div>
       </section>
 
@@ -582,7 +580,7 @@ export default function Home() {
           >
             <div aria-hidden="true" style={{ fontSize: '48px', lineHeight: 1, marginBottom: '16px' }}>🚧</div>
             <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '24px', letterSpacing: '-0.02em', lineHeight: 1.15, color: '#1C1917', margin: '0 0 12px', zoom: 1 }}>Under construction</h3>
-            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.6, color: '#554E48', margin: '0 0 24px' }}>This case study is not ready yet. Please check back soon.</p>
+            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.6, color: '#554E48', margin: '0 0 24px' }}>This case study is coming soon.</p>
             <button
               type="button" autoFocus onClick={() => setConstructionOpen(false)}
               style={{ border: 0, cursor: 'pointer', borderRadius: '10px', padding: '12px 24px', background: '#1C1917', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}
