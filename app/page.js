@@ -464,7 +464,9 @@ export default function Home() {
             maxWidth: '152ch',
           }}>
             <span className="line" style={{ '--i': 0, display: 'block' }}>Unclear product strategy, inefficient workflows and confusing interactions cost businesses time and money.</span>
-            <span className="line" style={{ '--i': 1, display: 'block', marginTop: '6px' }}>I bring clarity and efficiency to product teams. I help my team to focus on the most important thing at that time. I also lead design decisions that generate user adoption and company revenue.</span>
+            <span className="line" style={{ '--i': 1, display: 'block', marginTop: '12px' }}>I bring clarity and efficiency to product teams.</span>
+            <span className="line" style={{ '--i': 2, display: 'block', marginTop: '12px' }}>I help my team focus on the right problem at the right time, because if we miss it, even good work can take us in the wrong direction.</span>
+            <span className="line" style={{ '--i': 3, display: 'block', marginTop: '12px' }}>I also lead design decisions that generate user adoption and company revenue.</span>
           </p>
           {/* The skills map: design, products and the problems I fix */}
           <SkillsGraph />
