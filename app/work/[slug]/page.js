@@ -52,7 +52,7 @@ export async function generateMetadata({ params }) {
   const work = getWorkBySlug(slug);
   if (!work) return { title: 'Case study' };
   const title = `${work.navLabel || work.title} UX case study`;
-  const description = `${work.tagline}. A UX case study by Gamze Bozkurt, product designer and UX researcher in Amsterdam.`;
+  const description = `${work.tagline}. A UX case study by Gamze Bozkurt, product lead in Amsterdam.`;
   const url = `/work/${work.slug}`;
   return {
     title,

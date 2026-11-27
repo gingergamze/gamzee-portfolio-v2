@@ -36,7 +36,7 @@ export const metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     locale: "en_NL",
-    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Gamze Bozkurt — Product Designer & UX Researcher" }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Gamze Bozkurt — Product Lead" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -52,7 +52,7 @@ const personJsonLd = {
   "@type": "Person",
   name: SITE_NAME,
   url: SITE_URL,
-  jobTitle: "Product Designer & UX Researcher",
+  jobTitle: "Product Lead",
   description: SITE_DESCRIPTION,
   address: { "@type": "PostalAddress", addressLocality: "Amsterdam", addressCountry: "NL" },
   knowsAbout: ["UX research", "Product design", "Internal tools", "Enterprise UX", "Workflow design", "Project management", "Service design"],
