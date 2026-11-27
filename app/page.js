@@ -190,8 +190,7 @@ export default function Home() {
             background: '#FFFFFF', padding: '6px 11px', borderRadius: '999px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
           }}>
-            <span aria-hidden="true" style={{ fontSize: '14px', lineHeight: 1 }}>🚧</span>
-            <span style={{ display: 'block', lineHeight: 1.35 }}>Under construction<br />Coming soon</span>
+            Coming soon
           </span>
         )}
         {w.type === 'video' ? (
@@ -574,13 +573,12 @@ export default function Home() {
           style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(28,25,23,0.55)', display: 'grid', placeItems: 'center', padding: '24px' }}
         >
           <div
-            role="dialog" aria-modal="true" aria-label="Under construction"
+            role="dialog" aria-modal="true" aria-label="Coming soon"
             onClick={(e) => e.stopPropagation()}
             style={{ background: '#FFFFFF', borderRadius: '20px', padding: 'clamp(28px,4vw,44px)', maxWidth: '420px', width: '100%', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}
           >
-            <div aria-hidden="true" style={{ fontSize: '48px', lineHeight: 1, marginBottom: '16px' }}>🚧</div>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '24px', letterSpacing: '-0.02em', lineHeight: 1.15, color: '#1C1917', margin: '0 0 12px', zoom: 1 }}>Under construction</h3>
-            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.6, color: '#554E48', margin: '0 0 24px' }}>This case study is coming soon.</p>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '24px', letterSpacing: '-0.02em', lineHeight: 1.15, color: '#1C1917', margin: '0 0 12px', zoom: 1 }}>Coming soon</h3>
+            <p style={{ fontFamily: 'var(--font-work-sans)', fontSize: '16px', lineHeight: 1.6, color: '#554E48', margin: '0 0 24px' }}>This case study is not ready yet.</p>
             <button
               type="button" autoFocus onClick={() => setConstructionOpen(false)}
               style={{ border: 0, cursor: 'pointer', borderRadius: '10px', padding: '12px 24px', background: '#1C1917', color: '#FFFFFF', fontFamily: 'var(--font-work-sans)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}
