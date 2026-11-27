@@ -14,7 +14,7 @@ import { works } from './lib/works';
 const ACCENT = 'var(--accent-deep)';
 
 // Hero subheadline rotator — "For" stays fixed, this cycles and loops.
-const HERO_PHRASES = ['end-to-end business processes', 'operational processes and internal tools', 'data-rich products', 'enterprise products',' B2B products'];
+const HERO_PHRASES = ['end-to-end business processes', 'operational processes', 'internal analysis tools', 'data-rich products', 'enterprise products',' B2B products'];
 const HERO_HOLD_MS = 2200;
 const HERO_HOLD_EXTRA_MS = { 'operational processes and tools': 500 };
 const HERO_TRANSITION_MS = 550;
@@ -389,7 +389,7 @@ export default function Home() {
             textShadow: '0 1px 14px rgba(0,0,0,0.5)',
           }}>
             <span className="hero-intro-p" style={{ '--i': 0, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>My full-time job is leading within product teams that build data-rich business tools.</span>
-            <span className="hero-intro-p" style={{ '--i': 1, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>I guide team members, decide what comes next and design too. I’m <span style={{ whiteSpace: 'nowrap' }}>AI-native</span> and I use AI with critical thinking.</span>
+            <span className="hero-intro-p" style={{ '--i': 1, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>I guide team members, decide what comes next and shape design. And I use AI with critical thinking.</span>
             <span className="hero-intro-p" style={{ '--i': 2, display: 'block', marginBottom: '14px', maxWidth: '36em' }}>My leadership experience covers design, research, project management and CX.</span>
             <span className="hero-intro-p" style={{ '--i': 3, display: 'block', maxWidth: '36em', fontWeight: 700 }}>10+ years.</span>
           </p>
