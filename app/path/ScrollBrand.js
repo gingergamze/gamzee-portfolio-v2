@@ -1,35 +1,33 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import BrandLockup from '../BrandLockup';
 
-// Name and role stay visible after scrolling down, on a white strip behind the floating menu.
+// Keeps the name and role in place while scrolling: the header logo is pinned, and a
+// white strip fades in behind it once the page content moves underneath.
 export default function ScrollBrand() {
-  const [shown, setShown] = useState(false);
+  const [strip, setStrip] = useState({ on: false, h: 0 });
 
   useEffect(() => {
-    // same point at which the floating menu appears
-    const onScroll = () => setShown(window.scrollY > 420);
+    const onScroll = () => {
+      const logo = document.querySelector('.nav-logo');
+      setStrip({ on: window.scrollY > 40, h: logo ? Math.round(logo.getBoundingClientRect().bottom) + 12 : 100 });
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, []);
 
   return (
     <>
-      <div className="path-brand" aria-hidden={!shown} style={{ opacity: shown ? 1 : 0, visibility: shown ? 'visible' : 'hidden', transform: `translateY(${shown ? 0 : -12}px)` }}>
-        <Link href="/" aria-label="Gamze Bozkurt, Product Lead" style={{ textDecoration: 'none', display: 'inline-block' }}>
-          <BrandLockup />
-        </Link>
-      </div>
+      <div aria-hidden="true" className="path-strip" style={{ height: strip.h, opacity: strip.on ? 1 : 0 }} />
       <style>{`
-        .path-brand{position:fixed;top:0;left:0;right:0;z-index:45;box-sizing:border-box;padding:12px var(--cs-x,24px);background:#fff;border-bottom:1px solid rgba(28,25,23,.08);transition:opacity .3s ease,transform .3s ease,visibility .3s}
-        @media (max-width:600px){.path-brand{padding:10px 24px}.path-brand a>div{zoom:.95 !important}}
-        @media (min-width:601px) and (max-width:899px){.path-brand a>div{zoom:1 !important}}
-        /* tablets: the menu moves to the right so it does not cover the name */
-        @media (min-width:601px) and (max-width:899px){nav[aria-label="Case study navigation"]{left:calc(100% - 12px) !important;translate:-50% 0;width:max-content !important}}
-        @media (prefers-reduced-motion:reduce){.path-brand{transition:none}}
+        .path-strip{position:fixed;top:0;left:0;right:0;z-index:5;pointer-events:none;box-sizing:border-box;background:#fff;border-bottom:1px solid rgba(28,25,23,.08);transition:opacity .25s ease}
+        /* with no top/left set, a fixed element stays exactly where it first appears */
+        .nav-logo{position:fixed;z-index:6}
+        .nav-contact-wrap{margin-left:auto}
+        nav:has(> .nav-logo){min-height:116px;box-sizing:border-box}
+        @media (max-width:600px){nav:has(> .nav-logo){min-height:104px}}
       `}</style>
     </>
   );

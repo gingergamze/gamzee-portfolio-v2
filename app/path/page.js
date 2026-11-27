@@ -1,7 +1,6 @@
 import SiteNav from '../SiteNav';
 import ScrollBrand from './ScrollBrand';
-import CaseStudyMenu from '../work/[slug]/CaseStudyMenu';
-import { works } from '../lib/works';
+import PathMenu from './PathMenu';
 
 export const metadata = {
   title: 'Path',
@@ -94,8 +93,7 @@ export default function PathPage() {
     <>
       <SiteNav variant="static" />
       <ScrollBrand />
-      {/* the same floating menu as the case studies, shown after scrolling down */}
-      <CaseStudyMenu plain prev={{ href: `/work/${works[works.length - 1].slug}` }} next={{ href: `/work/${works[0].slug}` }} />
+      <PathMenu />
       <main style={{ background: '#FFFFFF', padding: 'clamp(28px,5vw,64px) var(--cs-x, 24px) clamp(48px,8vw,96px)', fontFamily: F, color: INK }}>
         <div style={{ maxWidth: '1500px', margin: '0 auto' }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(34px,5.4vw,76px)', letterSpacing: '-0.02em', lineHeight: 1.1, margin: '0 0 clamp(24px,4vw,56px)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0 0.3em', zoom: 1 }}>
